@@ -5,6 +5,22 @@ File format conversion tools.
 
 # SETUP
 
+To generate the man pages, `pandoc` must be installed.  On Mac go to
+
+    http://johnmacfarlane.net/pandoc/installing.html
+
+and download the installer.  On Ubuntu there is a package:
+
+    $ sudo apt-get install pandoc
+
+The run these:
+
+    $ sudo make setup.ruby
+
+    $ sudo make setup.perl
+
+Then run this, assuming the install directory is writable:
+
     $ make install
 
 # HOW TO RUN

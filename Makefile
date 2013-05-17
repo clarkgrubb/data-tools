@@ -30,19 +30,19 @@ clean:
 	-find . -name '*.html' | xargs rm
 	-rm TAGS
 
-sudo.setup.ruby:
+setup.ruby:
 	gem install nokogiri
 
 # On Mac OS X, might have to replace 'cpan' with 'cpan5.12':
 #
-sudo.setup.perl:
+setup.perl:
 	cpan -i Text::CSV
 	cpan -i Text::Iconv
 	cpan -i Spreadsheet::XLSX
 
-sudo.setup: sudo.setup.ruby sudo.setup.perl
+setup: setup.ruby setup.perl
 
-sudo.install: sudo.install-man
+install: install-man
 	ln -sf $(PWD)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(PWD)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(PWD)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
@@ -54,14 +54,14 @@ sudo.install: sudo.install-man
 	ln -sf $(PWD)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(PWD)/weekdays.sh $(LOCAL_INSTALL_DIR)/weekdays
 
-sudo.install-man: man
+install-man: man
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	return 1; \
 	fi
 	for target in $(MAN1_TARGETS); \
 	do \
-	sudo cp $$target $(LOCAL_MAN_DIR)/man1; \
+	cp $$target $(LOCAL_MAN_DIR)/man1; \
 	done
 
 pep8:
