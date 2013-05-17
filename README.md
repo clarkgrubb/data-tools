@@ -13,7 +13,7 @@ and download the installer.  On Ubuntu there is a package:
 
     $ sudo apt-get install pandoc
 
-The run these:
+Then run these:
 
     $ sudo make setup.ruby
 
