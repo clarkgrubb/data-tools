@@ -64,6 +64,11 @@ install-man: man
 	cp $$target $(LOCAL_MAN_DIR)/man1; \
 	done
 
+data/UnicodeData.txt:
+	curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > $@
+
+download: data/UnicodeData.txt
+
 pep8:
 	pep8 *.py
 
