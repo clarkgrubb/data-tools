@@ -5,7 +5,7 @@
 
 # NAME
 
-set-intersect - lines which are in both files
+set-intersect - find lines common to two files
 
 # SYNOPSIS
 

@@ -5,7 +5,7 @@
 
 # NAME
 
-set-diff - lines in first file which are not in the second
+set-diff - find lines in first file which are not in the second
 
 # SYNOPSIS
 
