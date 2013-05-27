@@ -21,8 +21,6 @@ INVALID_CODE_POINT = -1
 # white square
 UNPRINTABLE_CODE_POINT = "25A1".to_i(16)
 
-# awk -F';' 'BEGIN{OFS=""} $3 ~ /^C/ {print "\"", $1, "\""}' < /tmp/UnicodeData.txt | tr '\n' ','
-
 # http://en.wikipedia.org/wiki/UTF-8#Description
 
 MASK1 = 0b10000000
