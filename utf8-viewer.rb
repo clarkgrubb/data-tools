@@ -164,7 +164,11 @@ class ByteStream
   def next
     s = _next
     @offset += 1
-    s ? s.ord : nil
+    if RUBY_VERSION.match(/^1\.8/)
+      s ? s[0] : nil
+    else
+      s ? s.ord : nil
+    end
   end
 end
 
