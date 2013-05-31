@@ -48,7 +48,6 @@ install: install-man
 	ln -sf $(PWD)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(PWD)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(PWD)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
-	ln -sf $(PWD)/file_count_split.py $(LOCAL_INSTALL_DIR)/file-count-split
 	ln -sf $(PWD)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	ln -sf $(PWD)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(PWD)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
