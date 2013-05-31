@@ -7,8 +7,6 @@ File format conversion tools.
 
     dom-awk            read HTML or XML into DOM object and process it with Ruby
 
-    file-count-split   split a file into a fixed number of files
-
     json-awk           read JSON objects from standard input and proces them with Ruby
 
     set-diff           find lines in first file which are not in the second
@@ -48,8 +46,6 @@ Then run this, assuming the install directory is writable:
     csv-to-tsv         [-e|-x|-r[z]] < CSV_INPUT
 
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
-
-    file-count-split   --count COUNT --file FILE --prefix PREFIX
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
 
