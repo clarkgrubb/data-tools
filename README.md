@@ -53,8 +53,6 @@ Then run this, assuming the install directory is writable:
 
     set-intersect      FILE1 FILE2
 
-    utf8-to-unicode    [-n|--name] BYTE ...
-
     utf8-viewer        [-b|-c|-n|-r] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
