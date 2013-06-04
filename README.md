@@ -3,9 +3,13 @@
 
 File format conversion tools.
 
+    csv-to-json        convert CSV to JSON
+
     csv-to-tsv         convert CSV to TSV
 
     dom-awk            read HTML or XML into DOM object and process it with Ruby
+
+    header-sort        sort file with header
 
     json-awk           read JSON objects from standard input and proces them with Ruby
 
@@ -13,19 +17,15 @@ File format conversion tools.
 
     set-intersect      find lines common to two files
 
-    utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
-    
     tsv-to-csv         convert TSV to CSV
-
-    weekdays           list weekdays in range
-
-    xlsx-to-csv        convert XLSX to CSV
-
-    csv-to-json        convert CSV to JSON
 
     tsv-to-json        convert TSV to JSON
 
-    header-sort        sort file with header
+    utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
+    
+    weekdays           list weekdays in range
+
+    xlsx-to-csv        convert XLSX to CSV
 
 # SETUP
 
@@ -49,9 +49,13 @@ Then run this, assuming the install directory is writable:
 
 # HOW TO RUN
 
+    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] < CSV_INPUT
+    
     csv-to-tsv         [-e|-x|-r[z]] < CSV_INPUT
 
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
+
+    header-sort        [OPTIONS] FILE
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
 
@@ -59,18 +63,14 @@ Then run this, assuming the install directory is writable:
 
     set-intersect      FILE1 FILE2
 
+    tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] < TSV_INPUT
+
     utf8-viewer        [-b|-c|-n|-r] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
-
-    tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] < TSV_INPUT
 
     weekdays           WEEKDAY FMT STARTDATE ENDDATE
 
     xlsx-to-csv        XLSX_FILE DIRECTORY
 
-    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] < CSV_INPUT
-    
     tsv-to-json        < TSV_INPUT
-
-    header-sort        [OPTIONS] FILE
