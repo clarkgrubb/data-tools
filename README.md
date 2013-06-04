@@ -21,6 +21,10 @@ File format conversion tools.
 
     xlsx-to-csv        convert XLSX to CSV
 
+    csv-to-json        convert CSV to JSON
+
+    tsv-to-json        convert TSV to JSON
+
 # SETUP
 
 To generate the man pages, `pandoc` must be installed.  On Mac go to
@@ -62,3 +66,7 @@ Then run this, assuming the install directory is writable:
     weekdays           WEEKDAY FMT STARTDATE ENDDATE
 
     xlsx-to-csv        XLSX_FILE DIRECTORY
+
+    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] < CSV_INPUT
+    
+    tsv-to-json        < TSV_INPUT
