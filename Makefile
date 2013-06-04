@@ -54,6 +54,7 @@ install: install-man
 	ln -sf $(PWD)/weekdays.sh $(LOCAL_INSTALL_DIR)/weekdays
 	ln -sf $(PWD)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(PWD)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
+	ln -sf $(PWD)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 
 install-man: man
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
