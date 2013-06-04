@@ -52,6 +52,8 @@ install: install-man
 	ln -sf $(PWD)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(PWD)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(PWD)/weekdays.sh $(LOCAL_INSTALL_DIR)/weekdays
+	ln -sf $(PWD)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
+	ln -sf $(PWD)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 
 install-man: man
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
