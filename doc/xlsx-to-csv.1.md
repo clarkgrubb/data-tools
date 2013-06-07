@@ -1,7 +1,7 @@
 % XLSX-TO-CSV(1)
 % Clark Grubb
 % May 4, 2013
-`
+
 # NAME
 
 xlsx-to-csv - convert .xlsx to .csv
