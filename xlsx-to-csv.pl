@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 use File::Spec;
+use Getopt::Long;
 use Spreadsheet::XLSX;
 use Text::CSV;
 use Text::Iconv;
@@ -62,8 +63,9 @@ sub open_xlsx {
 
   my $xlsx_path = shift;
 
-  my $converter = Text::Iconv->new("utf-8", "windows-1251");
-  my $xlsx = Spreadsheet::XLSX->new($xlsx_path, $converter);
+  #my $converter = Text::Iconv->new("utf-8", "windows-1251");
+  #my $xlsx = Spreadsheet::XLSX->new($xlsx_path, $converter);
+  my $xlsx = Spreadsheet::XLSX->new($xlsx_path);
 
   $xlsx;
 }
@@ -105,20 +107,42 @@ sub set_sheet_limits {
   $sheet->{MaxCol} ||= $sheet->{MinCol};
 }
 
+sub list_sheets {
+  my $xlsx_path = shift;
+
+  my $xlsx = open_xlsx($xlsx_path);
+
+  foreach my $sheet (@{$xlsx->{Worksheet}}) {
+    print $sheet->{Name} . "\n";
+  }
+}
+
 sub xlsx_to_csv {
 
   my $xlsx_path = shift;
-  my $output_dir = shift;
+  my $output_dir_or_file = shift;
+  my $sheet_to_dump = shift;
 
-  mkdir_or_die($output_dir);
+  if (!$sheet_to_dump) {
+    mkdir_or_die($output_dir_or_file);
+  }
 
   my $xlsx = open_xlsx($xlsx_path);
 
   foreach my $sheet (@{$xlsx->{Worksheet}}) {
 
+    if ($sheet_to_dump && ($sheet_to_dump ne $sheet->{Name})) {
+      next;
+    }
+
     set_sheet_limits($sheet);
-    $csv_path = safe_dir_and_filename($output_dir, $sheet->{Name});
-    $csv_writer = CSVWriter->new($csv_path);
+    if ($sheet_to_dump) {
+      $csv_writer = CSVWriter->new($output_dir_or_file);
+    }
+    else {
+      $csv_path = safe_dir_and_filename($output_dir_or_file, $sheet->{Name});
+      $csv_writer = CSVWriter->new($csv_path);
+    }
 
     foreach my $row ($sheet->{MinRow} .. $sheet->{MaxRow}) {
 
@@ -139,8 +163,37 @@ sub xlsx_to_csv {
 # safe file name code can give two different sheets
 # the same name!  Code probably silently overwrites!
 
-if ($#ARGV != 1) {
-  die "USAGE: xlsx-to-csv XLSX_FILE DIRECTORY";
+my ($list, $sheet, $help);
+
+my $usage =
+  "USAGE: $0 INPUT_FILE OUTPUT_DIR\n" .
+  "       $0 --sheet=SHEET INPUT_FILE OUTPUT_FILE\n" .
+  "       $0 --list INPUT_FILE\n" .
+  "       $0 --help\n";
+
+if (!Getopt::Long::GetOptions("list" => \$list,
+                              "sheet=s" => \$sheet,
+                              "help" => \$help)
+    || $help) {
+
+  print $usage;
+  exit 1;
 }
 
-xlsx_to_csv($ARGV[0], $ARGV[1]);
+if ($list) {
+  if ($#ARGV != 0) {
+    print("one argument is required\n");
+    print $usage;
+    exit 1;
+  }
+  list_sheets($ARGV[0]);
+  exit 0;
+}
+
+if ($#ARGV != 1) {
+  print "two arguments are required\n";
+  print $usage;
+  exit 1;
+}
+
+xlsx_to_csv($ARGV[0], $ARGV[1], $sheet);

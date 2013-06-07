@@ -73,4 +73,8 @@ Then run this, assuming the install directory is writable:
 
     xlsx-to-csv        XLSX_FILE DIRECTORY
 
+    xlsx-to-csv        --sheet=SHEET XLSX_FILE OUTPUT_FILE
+    
+    xlsx-to-csv        --list
+
     tsv-to-json        < TSV_INPUT

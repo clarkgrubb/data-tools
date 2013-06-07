@@ -8,7 +8,9 @@ xlsx-to-csv - convert .xlsx to .csv
 
 # SYNOPSIS
 
-xlsx-to-csv XLSX_FILE DIRECTORY
+xlsx-to-csv XLSX\_FILE DIRECTORY
+xlsx-to-csv --sheet=SHEET XLSX\_FILE OUTPUT\_FILE
+xlsx-to-csv --list XLSX\_FILE
 
 # DESCRIPTION
 
@@ -22,7 +24,11 @@ Before 2007 Excel used the .xls format.  `xlsx-to-csv` cannot read .xls files.
 
 # OPTIONS
 
-None
+--list
+    : list the sheets in XLSX\_FILE
+    
+--sheet
+    : only convert SHEET to a .csv file.
 
 # SEE ALSO
 
