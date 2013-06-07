@@ -18,7 +18,7 @@ Read a .xlsx file and create a .csv file in DIRECTORY for each worksheet.
 
 DIRECTORY must not already exist.
 
-.xlsx files are the format used by Excel since 2007.  The .xlsx file format is an Open Office XML file formats defined by ECMA-376.  An .xlsx file is a ZIP archive of a directory containing XML documents.
+.xlsx files are the format used by Excel since 2007.  The .xlsx file format defined by ECMA-376.  An .xlsx file is a ZIP archive of a directory containing XML documents.
 
 Before 2007 Excel used the .xls format.  `xlsx-to-csv` cannot read .xls files.
 
