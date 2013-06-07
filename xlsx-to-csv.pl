@@ -63,9 +63,8 @@ sub open_xlsx {
 
   my $xlsx_path = shift;
 
-  #my $converter = Text::Iconv->new("utf-8", "windows-1251");
-  #my $xlsx = Spreadsheet::XLSX->new($xlsx_path, $converter);
-  my $xlsx = Spreadsheet::XLSX->new($xlsx_path);
+  my $converter = Text::Iconv->new("utf-8", "windows-1251");
+  my $xlsx = Spreadsheet::XLSX->new($xlsx_path, $converter);
 
   $xlsx;
 }
