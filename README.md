@@ -23,7 +23,7 @@ File format conversion tools.
 
     utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
     
-    weekdays           list weekdays in range
+    date-seq           create a sequence of dates
 
     xlsx-to-csv        convert XLSX to CSV
 
@@ -69,7 +69,7 @@ Then run this, assuming the install directory is writable:
 
     utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
 
-    weekdays           WEEKDAY FMT STARTDATE ENDDATE
+    date-seq [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
     xlsx-to-csv        XLSX_FILE DIRECTORY
 
