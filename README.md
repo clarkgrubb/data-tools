@@ -7,6 +7,8 @@ File format conversion tools.
 
     csv-to-tsv         convert CSV to TSV
 
+    date-seq           create a sequence of dates
+
     dom-awk            read HTML or XML into DOM object and process it with Ruby
 
     header-sort        sort file with header
@@ -23,8 +25,6 @@ File format conversion tools.
 
     utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
     
-    date-seq           create a sequence of dates
-
     xlsx-to-csv        convert XLSX to CSV
 
 # SETUP
@@ -53,6 +53,8 @@ Then run this, assuming the install directory is writable:
     
     csv-to-tsv         [-e|-x|-r[z]] < CSV_INPUT
 
+    date-seq [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
+
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
 
     header-sort        [OPTIONS] FILE
@@ -68,8 +70,6 @@ Then run this, assuming the install directory is writable:
     utf8-viewer        [-b|-c|-n|-r] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
-
-    date-seq [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
     xlsx-to-csv        XLSX_FILE DIRECTORY
 
