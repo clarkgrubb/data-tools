@@ -14,7 +14,7 @@ sub new {
   my $csv = Text::CSV->new({binary=>1, eol=>$\})
     or die "Text::CSV->new() failed: " . Text::CSV->error_diag();
   my $file_handle;
-  my $eol = "\n";
+  my $eol = "\r\n";
 
   open $file_handle, ">:encoding(utf8)", $path
     or die "could not open $path for writing: $!";
@@ -109,10 +109,21 @@ sub set_sheet_limits {
 sub list_sheets {
   my $xlsx_path = shift;
 
-  my $xlsx = open_xlsx($xlsx_path);
+  # Archive::Extract module must extract the files
+  # to list them.  Calling the external tool unzip
+  # avoids creating files.
+  #
+  my @lines = qx(unzip -l $xlsx_path);
 
-  foreach my $sheet (@{$xlsx->{Worksheet}}) {
-    print $sheet->{Name} . "\n";
+  for $line (@lines) {
+
+    if ($line =~ /xl\/worksheets\/(.+)\.xml/i) {
+
+      my $sheet = $1;
+      @fields = split(/\s+/, $line);
+      my $size = $fields[1];
+      print "$sheet $size\n";
+    }
   }
 }
 
@@ -130,7 +141,7 @@ sub xlsx_to_csv {
 
   foreach my $sheet (@{$xlsx->{Worksheet}}) {
 
-    if ($sheet_to_dump && ($sheet_to_dump ne $sheet->{Name})) {
+    if ($sheet_to_dump && (lc($sheet_to_dump) ne lc($sheet->{Name}))) {
       next;
     }
 
@@ -139,7 +150,8 @@ sub xlsx_to_csv {
       $csv_writer = CSVWriter->new($output_dir_or_file);
     }
     else {
-      $csv_path = safe_dir_and_filename($output_dir_or_file, $sheet->{Name});
+      $csv_path = safe_dir_and_filename($output_dir_or_file,
+                                        $sheet->{Name});
       $csv_writer = CSVWriter->new($csv_path);
     }
 
@@ -149,6 +161,10 @@ sub xlsx_to_csv {
       $csv_writer->print_row($fields);
     }
     $csv_writer->close();
+
+    if ($sheet_to_dump) {
+      last;
+    }
   }
 }
 
@@ -162,15 +178,16 @@ sub xlsx_to_csv {
 # safe file name code can give two different sheets
 # the same name!  Code probably silently overwrites!
 
-my ($list, $sheet, $help);
+my ($list, $encoding, $sheet, $help);
 
 my $usage =
-  "USAGE: $0 INPUT_FILE OUTPUT_DIR\n" .
-  "       $0 --sheet=SHEET INPUT_FILE OUTPUT_FILE\n" .
+  "USAGE: $0 [--encoding=ENCODING] INPUT_FILE OUTPUT_DIR\n" .
+  "       $0 [--encoding=ENCODING] --sheet=SHEET INPUT_FILE [OUTPUT_FILE]\n" .
   "       $0 --list INPUT_FILE\n" .
   "       $0 --help\n";
 
 if (!Getopt::Long::GetOptions("list" => \$list,
+                              "encoding" => \$encoding,
                               "sheet=s" => \$sheet,
                               "help" => \$help)
     || $help) {
