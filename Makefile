@@ -42,7 +42,7 @@ setup.perl:
 
 setup: setup.ruby setup.perl
 
-install: install-man
+install:
 	ln -sf $(PWD)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(PWD)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(PWD)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
@@ -51,10 +51,11 @@ install: install-man
 	ln -sf $(PWD)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	ln -sf $(PWD)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(PWD)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
-	ln -sf $(PWD)/weekdays.sh $(LOCAL_INSTALL_DIR)/weekdays
 	ln -sf $(PWD)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(PWD)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(PWD)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(PWD)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
+	@echo Run 'make install-man' to install man pages.
 
 install-man: man
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
