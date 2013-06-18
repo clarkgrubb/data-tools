@@ -17,7 +17,7 @@ sub new {
   my $eol = "\n";
 
   open $file_handle, ">:encoding(utf8)", $path
-    or die "could not open $path for wrtiting: $!";
+    or die "could not open $path for writing: $!";
 
   my $self = {path=>$path,
               csv=>$csv,
