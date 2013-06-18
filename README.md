@@ -53,7 +53,7 @@ Then run this, assuming the install directory is writable:
     
     csv-to-tsv         [-e|-x|-r[z]] < CSV_INPUT
 
-    date-seq [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
+    date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
 
