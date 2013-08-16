@@ -6,7 +6,5 @@ by default sets FS and OFS to horizontal tab
 
 # TODO
 
-* FS and OFS default to tab
-* error if number of columns not the same (flag to suppress this: -W)
-* ability to trim all fields of whitespace (-s)
-* use header to create variable names? (-h)
+* error if fields not all same length (--assert-number-of-fields[=NUM] -a[=NUM])
+* ability to trim all fields of whitespace (--trim -t)

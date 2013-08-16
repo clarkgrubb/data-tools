@@ -1,34 +1,18 @@
-MAN1_SOURCE = $(wildcard doc/*.1.md)
+MAKEFLAGS += --warn-undefined-variables
+SHELL := /bin/bash
+.SHELLFLAGS := -o pipefail
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
+.SUFFIXES:
 
-MAN1_TARGETS = $(patsubst %.md,%,$(MAN1_SOURCE))
-
-LOCAL_INSTALL_DIR = /usr/local/bin
-
-LOCAL_MAN_DIR = /usr/local/share/man
-
-PWD := $(shell pwd)
-
+man1_source := $(wildcard doc/*.1.md)
+man1_targets := $(patsubst %.md,%,$(man1_source))
+LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
+LOCAL_MAN_DIR ?= /usr/local/share/man
+pwd := $(shell pwd)
 
 .PHONY: all TAGS check clean test man install install-man
-
-all: man
-
-TAGS:
-	find . -name '*.py' | xargs etags
-
-check_python:
-	find . -name 'test*.py' | xargs python
-
-check_ruby:
-	find . -name 'test*.rb' | xargs ruby
-
-check: check_python check_ruby
-
-clean:
-	-find . -name '*.pyc' | xargs rm
-	-find doc -name '*.[0-9]' | xargs rm
-	-find . -name '*.html' | xargs rm
-	-rm TAGS
+.SECONDARY:
 
 setup.ruby:
 	gem install nokogiri
@@ -42,19 +26,23 @@ setup.perl:
 
 setup: setup.ruby setup.perl
 
-install:
-	ln -sf $(PWD)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
-	ln -sf $(PWD)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
-	ln -sf $(PWD)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
-	ln -sf $(PWD)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
-	ln -sf $(PWD)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
-	ln -sf $(PWD)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
-	ln -sf $(PWD)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
-	ln -sf $(PWD)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
-	ln -sf $(PWD)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
-	ln -sf $(PWD)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
-	ln -sf $(PWD)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
-	ln -sf $(PWD)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
+build:
+	(cd tawk; make tawk)
+
+install: build
+	ln -sf $(pwd)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
+	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
+	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
+	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
+	ln -sf $(pwd)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
+	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
+	ln -sf $(pwd)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
+	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
+	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
+	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
+	ln -sf $(pwd)/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 	@echo Run 'make install-man' to install man pages.
 
 install-man: man
@@ -62,7 +50,7 @@ install-man: man
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	return 1; \
 	fi
-	for target in $(MAN1_TARGETS); \
+	for target in $(man1_targets); \
 	do \
 	cp $$target $(LOCAL_MAN_DIR)/man1; \
 	done
@@ -79,9 +67,28 @@ pep8:
 #
 #   man doc/foo.1
 #
-man: $(MAN1_TARGETS)
+man: $(man1_targets)
 
 doc/%.1: doc/%.1.md
 	pandoc -s -s -w man $< -o $@
+
+TAGS:
+	find . -name '*.py' | xargs etags
+
+all: man
+
+clean:
+	-find . -name '*.pyc' | xargs rm
+	-find doc -name '*.[0-9]' | xargs rm
+	-find . -name '*.html' | xargs rm
+	-rm TAGS
+
+check.python:
+	find . -name 'test*.py' | xargs python
+
+check.ruby:
+	find . -name 'test*.rb' | xargs ruby
+
+check: check.python check.ruby
 
 test: check
