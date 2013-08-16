@@ -30,19 +30,20 @@ build:
 	(cd tawk; make tawk)
 
 install: build
+	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(pwd)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
-	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
-	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
-	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
-	ln -sf $(pwd)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
+	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(pwd)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
-	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
-	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
-	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
-	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
+	ln -sf $(pwd)/strip_columns.py $(LOCAL_INSTALL_DIR)/strip-columns
 	ln -sf $(pwd)/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
+	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
+	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
+	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
+	ln -sf $(pwd)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	@echo Run 'make install-man' to install man pages.
 
 install-man: man
