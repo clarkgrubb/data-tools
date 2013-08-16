@@ -8,7 +8,7 @@ SHELL := /bin/bash
 man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
-LOCAL_MAN_DIR ?= /usr/local/share/man
+LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
 
 .PHONY: all TAGS check clean test man install install-man
@@ -49,7 +49,7 @@ install: build
 install-man: man
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
-	return 1; \
+	false; \
 	fi
 	for target in $(man1_targets); \
 	do \
