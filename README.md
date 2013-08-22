@@ -11,13 +11,17 @@ File format conversion tools.
 
     dom-awk            read HTML or XML into DOM object and process it with Ruby
 
-    header-sort        sort file with header
+    header-sort        sort file, keeping header in place
 
-    json-awk           read JSON objects from standard input and proces them with Ruby
+    json-awk           read JSON objects from standard input and process them with Ruby
 
     set-diff           find lines in first file which are not in the second
 
     set-intersect      find lines common to two files
+    
+    strip-columns      trim whitespace from fields of TSV file
+    
+    tawk               awk, but uses tabs for FS and OFS by default
 
     tsv-to-csv         convert TSV to CSV
 
