@@ -46,5 +46,5 @@ install:
 all: tawk
 
 check: tawk
-	./tawk '{print $$1}' test/input.tab > output.tab
+	./tawk '{print $$3}' test/input.tab > output.tab
 	diff output.tab test/expected.output.tab

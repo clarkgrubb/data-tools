@@ -1,6 +1,6 @@
-diff -rupN mawk-1.3.4-20130803/bi_vars.c mawk-1.3.4-20130803.patched/bi_vars.c
---- mawk-1.3.4-20130803/bi_vars.c	2010-12-10 09:00:00.000000000 -0800
-+++ mawk-1.3.4-20130803.patched/bi_vars.c	2013-08-16 09:02:03.707116519 -0700
+diff -rupN mawk-1.3.4-20130803.orig/bi_vars.c mawk-1.3.4-20130803/bi_vars.c
+--- mawk-1.3.4-20130803.orig/bi_vars.c	2013-08-31 13:22:51.000000000 -0700
++++ mawk-1.3.4-20130803/bi_vars.c	2013-08-31 13:23:08.000000000 -0700
 @@ -78,7 +78,7 @@ bi_vars_init(void)
      FILENAME->ptr = (PTR) new_STRING("");
  
@@ -10,15 +10,17 @@ diff -rupN mawk-1.3.4-20130803/bi_vars.c mawk-1.3.4-20130803.patched/bi_vars.c
  
      ORS->type = C_STRING;
      ORS->ptr = (PTR) new_STRING("\n");
-diff -rupN mawk-1.3.4-20130803/config.h mawk-1.3.4-20130803.patched/config.h
---- mawk-1.3.4-20130803/field.c	2012-12-07 16:01:22.000000000 -0800
-+++ mawk-1.3.4-20130803.patched/field.c	2013-08-16 09:02:13.117939248 -0700
-@@ -189,7 +189,7 @@ field_init(void)
+diff -rupN mawk-1.3.4-20130803.orig/field.c mawk-1.3.4-20130803/field.c
+--- mawk-1.3.4-20130803.orig/field.c	2013-08-31 13:22:51.000000000 -0700
++++ mawk-1.3.4-20130803/field.c	2013-08-31 13:40:41.000000000 -0700
+@@ -189,8 +189,8 @@ field_init(void)
  
      load_pfield("FS", FS);
      FS->type = C_STRING;
 -    FS->ptr = (PTR) new_STRING(" ");
+-    /* fs_shadow is already set */
 +    FS->ptr = (PTR) new_STRING("\t");
-     /* fs_shadow is already set */
++    cast_for_split(cellcpy(&fs_shadow, FS));
  
      load_pfield("OFMT", OFMT);
+     OFMT->type = C_STRING;
