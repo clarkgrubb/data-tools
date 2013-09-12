@@ -35,6 +35,7 @@ install: build
 	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(pwd)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
