@@ -13,6 +13,8 @@ File format conversion tools.
 
     header-sort        sort file, keeping header in place
 
+    highlight          highlight text matching REGEX
+
     json-awk           read JSON objects from standard input and process them with Ruby
 
     set-diff           find lines in first file which are not in the second
@@ -62,6 +64,8 @@ Then run this, assuming the install directory is writable:
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
 
     header-sort        [OPTIONS] FILE
+
+    highlight          REGEX
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
 
