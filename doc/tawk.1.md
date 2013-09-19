@@ -5,7 +5,7 @@
 
 # NAME
 
-tawk - version of awk which used tab character for FS and OFS by default
+tawk - version of awk which uses tab character for FS and OFS by default
 
 # SYNOPSIS
 
