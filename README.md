@@ -66,6 +66,8 @@ Then run this, assuming the install directory is writable:
     header-sort        [OPTIONS] FILE
 
     highlight          REGEX < INPUT
+    
+    highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... < INPUT
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
 
