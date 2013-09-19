@@ -29,6 +29,12 @@ cyan, white, and black.
 Multiple patterns can be specified, but the results when patterns overlap are
 unpredictable.
 
+# EXAMPLES
+
+Highlight which shells users are using:
+
+    highlight -r /bin/bash -g /bin/sh -b /usr/bin/zsh -m /bin/false < /etc/passwd
+
 # OPTIONS
 
 None

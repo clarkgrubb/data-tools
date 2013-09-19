@@ -72,7 +72,7 @@ if __name__ == '__main__':
     if args.blue:
         esc_seq_to_pattern[BLUE_FOREGROUND] = args.blue
     if args.magenta:
-        esc_seq_to_pattern[MAGENTA_FOREGROUND] = args.blue
+        esc_seq_to_pattern[MAGENTA_FOREGROUND] = args.magenta
     if args.cyan:
         esc_seq_to_pattern[CYAN_FOREGROUND] = args.cyan
     if args.white:
