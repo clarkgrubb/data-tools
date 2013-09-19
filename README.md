@@ -1,7 +1,7 @@
 
 # SUMMARY
 
-File format conversion tools.
+Mostly data extraction and file format conversion tools.
 
     csv-to-json        convert CSV to JSON
 
