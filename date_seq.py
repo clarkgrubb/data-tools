@@ -8,9 +8,6 @@ import sys
 import pprint
 PP = pprint.PrettyPrinter()
 
-# Using awk and grep -P
-#
-
 REGEX_INPUT_DATE = re.compile('^\d{4,14}$')
 WEEKDAY_TO_NUMBER = {
     'mon': 1,
