@@ -18,7 +18,7 @@ utf8-viewer [-b|-c|-n|-r] -a BYTE ...
 Convert UTF-8 to Unicode.  The Unicode points are hex digits.  The 
 UTF-8 bytes are read from a file, or standard input if no file is specified.
 By default eight characters are displayed per line.  With the -r flag the
-characters will be rendered next the Unicode points.
+characters will be rendered next to the Unicode points.
 
 With the -a flag each UTF-8 byte is specified as an argument on the
 command line. The format of the bytes can be binary,
