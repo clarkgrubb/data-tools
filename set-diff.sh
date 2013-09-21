@@ -11,5 +11,5 @@ sorted2=$(mktemp /tmp/set-diff-XXXXX)
 
 sort -u $1 > $sorted1
 sort -u $2 > $sorted2
-cat $sorted1 $sorted2 $sorted2 | sort | uniq -u
+comm -23 $sorted1 $sorted2
 rm $sorted1 $sorted2
