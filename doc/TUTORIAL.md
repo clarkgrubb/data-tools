@@ -21,12 +21,14 @@ Three tools are suggested.
     od -c
     cat -t
     
-`od -b` will display the input in octal bytes.  If the file is one of the many 8-bit
-extensions of ASCII, `od -c` is useful, since it renders printable ASCII.  `cat -t` will
-render ASCII control characters other than LF with ^ notation.  Some versions also use
-Emacs style M- notation for upper 8-bit bytes.
+`od -b` will display the input in octal bytes.  If the input is thought to be encoded in one of the many 8-bit
+extensions of ASCII, `od -c` is useful, since it renders printable ASCII and uses octal bytes for everything else.
+`cat -t` renders printable ASCII and newlines, and uses `^` notation for other control characters.  Some versions of `cat -t`
+use Emacs style `M-X` notation for upper 8-bit bytes.  In this case, `X` will be what `cat -t` would have used to render
+the character if the upper bit were zero, with the exception of `^J` being used for newline.
 
-    hexedit
+A binary editor can be a useful thing to have.  The repo will build a version of [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.
+
     utf8-viewer
    
  How to generate a character given a unicode point

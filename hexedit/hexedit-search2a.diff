@@ -1,0 +1,441 @@
+--- hexedit/search.c.orig	2005-11-08 17:16:47.000000000 +0100
++++ hexedit/search.c	2008-02-03 15:32:22.000000000 +0100
+@@ -16,25 +16,51 @@
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.*/
+ #include "hexedit.h"
+ 
+-static int searchA(char **string, int *sizea, char *tmp, int tmp_size);
++static int searchA(char **string, int *sizea, int *align, int *nonmatch, char *tmp, int tmp_size);
+ static void searchB(INT loc, char *string);
+ 
+ /*******************************************************************************/
+ /* Search functions */
+ /*******************************************************************************/
+-static int searchA(char **string, int *sizea, char *tmp, int tmp_size)
++static int searchA(char **string, int *sizea, int *align, int *nonmatch, char *tmp, int tmp_size)
+ {
+   char *msg = hexOrAscii ? "Hexa string to search: " : "Ascii string to search: ";
+   char **last = hexOrAscii ? &lastAskHexString : &lastAskAsciiString;
++  int count;
+ 
+   if (!ask_about_save_and_redisplay()) return FALSE;
+   if (!displayMessageAndGetString(msg, last, tmp, tmp_size)) return FALSE;
+ 
++  *nonmatch= 0;
+   *sizea = strlen(tmp);
+-  if (hexOrAscii) if (!hexStringToBinString(tmp, sizea)) return FALSE;
+-
+-  *string = malloc(*sizea);
+-  memcpy(*string, tmp, *sizea);
++  if( hexOrAscii ) {
++    if( *tmp == '!' ) {
++      *nonmatch= 1;
++      ++tmp;
++      --*sizea;
++    }
++    if (!hexSearchStringToBinString(tmp, sizea, align)) 
++      return FALSE;
++    if( (*align & 7) != 0 ) {
++      ++*sizea;
++      *string = malloc(2 * *sizea);
++      memcpy(*string, tmp, *sizea - 1);
++      memcpy(*string + *sizea, tmp + *sizea - 1, *sizea - 1);
++      *(*string + 2 * *sizea - 1)= 0;
++    }
++    else {
++      *string = malloc(2 * *sizea);
++      memcpy(*string, tmp, 2 * *sizea);
++    }
++    for( count= 0; count< *sizea; ++count )
++      (*string)[count] &= (*string)[count + *sizea];
++  }
++  else {
++    *string = malloc(2 * *sizea);
++    strcpy(*string, tmp);
++    memset(*string + *sizea, 0xFF, *sizea);
++    *align= 8;
++  }
+ 
+   nodelay(stdscr, TRUE);
+   displayTwoLineMessage("searching...", "(press any key to cancel)");
+@@ -54,19 +80,56 @@
+ 
+ void search_forward(void)
+ {
+-  char *p, *string, tmp[BLOCK_SEARCH_SIZE], tmpstr[BLOCK_SEARCH_SIZE];
+-  int quit, sizea, sizeb;
++  char *p, *p2, *string, tmp[BLOCK_SEARCH_SIZE], tmpstr[BLOCK_SEARCH_SIZE];
++  int quit, count, sizea, sizeb, align, nonmatch, bitalign, relalign, alcount, blockoffset;
+   INT blockstart;
+ 
+-  if (!searchA(&string, &sizea, tmp, sizeof(tmp))) return;
++  if (!searchA(&string, &sizea, &align, &nonmatch, tmp, sizeof(tmp))) return;
++  relalign= align< 0;
++  if( (align & 7) != 0 ) {
++    bitalign= align&7;
++    align= 1;
++  }
++  else {
++    bitalign= 0;
++    align= abs(align >> 3);
++  }
++  blockoffset= ((BLOCK_SEARCH_SIZE-sizea)/align + 1) * align;
++  if( relalign )
++    blockstart= base + cursor + align - blockoffset;
++  else
++    blockstart= ((base + cursor)/align + 1)*align - blockoffset;
+   quit = -1;
+-  blockstart = base + cursor - BLOCK_SEARCH_SIZE + sizea;
+   do {
+-    blockstart += BLOCK_SEARCH_SIZE - sizea + 1;
++    blockstart += blockoffset;
++
+     if (LSEEK_(fd, blockstart) == -1) { quit = -3; break; }
+     if ((sizeb = read(fd, tmp, BLOCK_SEARCH_SIZE)) < sizea) quit = -3;
+     else if (getch() != ERR) quit = -2;
+-    else if ((p = mymemmem(tmp, sizeb, string, sizea))) quit = p - tmp;
++    else if( bitalign ) {
++      p= NULL;
++      for( alcount= 8; alcount> 0; alcount -= bitalign ) {
++	p2= mymemmem(tmp, sizeb, string, sizea, string+sizea, 1, nonmatch);
++	if( !p || p2 < p )
++	  p= p2;
++	for( count= sizea-1; count> 0; --count ) {
++	  string[count]= ((unsigned char)string[count] >> bitalign)  |
++	    		(string[count-1] << (8-bitalign));
++	  string[sizea+count]= ((unsigned char)string[sizea+count] >> bitalign)
++	    		|  (string[sizea+count-1] << (8-bitalign));
++	}
++	((unsigned char *)string)[0] >>= bitalign;
++	((unsigned char *)string)[sizea] >>= bitalign;
++      }
++      for( count= 0; count< sizea-1; ++count ) {
++	string[count]= string[count+1];
++	string[sizea+count]= string[sizea+count+1];
++      }
++      string[sizea-1]= string[2*sizea-1]= 0;
++      if( p )
++	quit= p - tmp;
++    }
++    else if ((p = mymemmem(tmp, sizeb, string, sizea, string+sizea, align, nonmatch))) quit = p - tmp;
+ 
+     sprintf(tmpstr,"searching... 0x%08llX", (long long) blockstart);
+     nodelay(stdscr, TRUE);
+@@ -79,24 +142,66 @@
+ 
+ void search_backward(void)
+ {
+-  char *p, *string, tmp[BLOCK_SEARCH_SIZE], tmpstr[BLOCK_SEARCH_SIZE];
+-  int quit, sizea, sizeb;
++  char *p, *p2, *string, tmp[BLOCK_SEARCH_SIZE], tmpstr[BLOCK_SEARCH_SIZE];
++  int quit, count, sizea, sizeb, align, nonmatch, bitalign, relalign, alcount, blockoffset, excess;
+   INT blockstart;
+ 
+-  if (!searchA(&string, &sizea, tmp, sizeof(tmp))) return;
++  if (!searchA(&string, &sizea, &align, &nonmatch, tmp, sizeof(tmp))) return;
++  relalign= align< 0;
++  if( (align & 7) != 0 ) {
++    bitalign= align&7;
++    align= 1;
++  }
++  else {
++    bitalign= 0;
++    align= abs(align >> 3);
++  }
++  blockoffset= ((BLOCK_SEARCH_SIZE-sizea)/align + 1) * align;
++  if( relalign )
++    blockstart= base + cursor;
++  else
++    blockstart= ((base + cursor - 1)/align + 1)*align;
++
+   quit = -1;
+-  blockstart = base + cursor - sizea + 1;
+   do {
+-    blockstart -= BLOCK_SEARCH_SIZE - sizea + 1;
++    blockstart -= blockoffset;
+     sizeb = BLOCK_SEARCH_SIZE;
+-    if (blockstart < 0) { sizeb -= -blockstart; blockstart = 0; }
++    if( blockstart< 0 ) {
++      excess= ((-blockstart-1)/align + 1)*align;
++      blockstart += excess;
++      sizeb -= excess;
++    }
+ 
+     if (sizeb < sizea) quit = -3;
+     else {
+       if (LSEEK_(fd, blockstart) == -1) { quit = -3; break; }
+-      if (sizeb != read(fd, tmp, sizeb)) quit = -3;
++      if ((sizeb= read(fd, tmp, sizeb)) < 0) quit = -3;
+       else if (getch() != ERR) quit = -2;
+-      else if ((p = mymemrmem(tmp, sizeb, string, sizea))) quit = p - tmp;
++      else if( sizeb < sizea ) ;
++      else if( bitalign ) {
++	for( count= sizea-1; count> 0; --count ) {
++	  string[count]= string[count-1];
++	  string[sizea+count]= string[sizea+count-1];
++	}
++	string[0]= string[sizea]= 0;
++	p= NULL;
++	for( alcount= 8; alcount> 0; alcount -= bitalign ) {
++	  for( count= 0; count< sizea-1; ++count ) {
++	    string[count]= (string[count] << bitalign)  |
++			  ((unsigned char)string[count+1] >> (8-bitalign));
++	    string[sizea+count]= (string[sizea+count] << bitalign)  |
++			((unsigned char)string[sizea+count+1] >> (8-bitalign));
++	  }
++	  string[sizea-1] <<= bitalign;
++	  string[2*sizea-1] <<= bitalign;
++	  p2= mymemrmem(tmp, sizeb, string, sizea, string+sizea, 1, nonmatch);
++	  if( !p || p2 > p )
++	    p= p2;
++	}
++	if( p )
++	  quit= p - tmp;
++      }
++      else if ((p = mymemrmem(tmp, sizeb, string, sizea, string+sizea, align, nonmatch))) quit = p - tmp;
+     }
+ 
+     sprintf(tmpstr,"searching... 0x%08llX", (long long) blockstart);
+--- hexedit/hexedit.1.orig	2006-11-27 08:48:11.000000000 +0100
++++ hexedit/hexedit.1	2007-03-09 21:47:54.000000000 +0100
+@@ -163,19 +163,53 @@
+ the beginning of the matching location. If the search failed, a message (``not
+ found'') tells you so. You can cancel the search by pressing a key.
+ .br
+-The search in hexadecimal is a bit confusing. You must give a hexadecimal string
+-with an even number of characters. The search can then be done byte by byte. If
+-you want to search a long number (eg: a 32 bit number), you must know the
+-internal representation of that number (little/big endian problem) and give it
+-the way it is in memory. For example, on an Intel processor (little endian), you
+-must swap every bytes: 0x12345678 is written 0x78563412 in memory and that's the
+-string you must give to the search engine.
+-.br
+-Before searching you are asked if you want to save the changes, if the file is
+-edited.
+-.PP
+-For more sophisticated search, see Volker Schatz's patch at
+-<http://www.volkerschatz.com/unix/homebrew.html#hexedit>.
++The search in hexadecimal is more complex but very powerful. You can simply
++give a string of hexadecimal digits which will then be searched for at byte
++boundaries. But you can also give a bit mask with which the given pattern and
++the data from the file will be ANDed before comparing. In addition, the
++alignment can be given, for instance to search only at even byte boundaries, or
++to search at half-byte boundaries or at arbitrary bit shifts. The format of the
++input is as follows:
++.PP
++Hexa string to search: [!]<pattern>[:<mask>][@[+|.]<alignment>]
++.PP
++Square brackets denote optional parts. If an exclamation mark precedes the
++pattern, \fIhexedit\fR searches for data not matching the pattern.  If <mask> is
++given, it must be a string of hexadecimal digits of the same length as
++<pattern>. If given, <alignment> is a decimal number which may be prepended by
++`+' or `.'. If none of these two characters is present, the pattern is searched
++for at every position (in bytes) divisible by the given number. If `+' is
++given, every position differing from the current cursor position by a multiple
++of the alignment is searched. If the alignment is prepended by a `.', the
++number must be one of 1, 2 or 4. Then the pattern and mask are shifted to be
++searched for at arbitrary bit positions, at positions of even bits or at half
++bytes.
++.br
++Some examples: To search for the 32-bit value 0x12345678 in a file containing
++only 32-bit values in big-endian format, type
++.PP
++	12345678@4
++.PP
++To search for 16-bit values that have the upper two bits set on a little-endian
++machine, type
++.PP
++	00C0:00C0@2
++.PP
++To find positions in a bit stream where five set bits in sequence are followed
++by five zero bits, type
++.PP
++	F80:FFC@.1
++.PP
++After a successful search your cursor will be positioned on the byte containing
++the first bit of the pattern, even if that bit was blocked out by the mask.
++(The cursor position within the byte, ie which digit the cursor is on, remains
++unchanged.) Note that when searching for values larger than a byte, you have to
++know whether the file is in big- or little-endian format, see examples above.
++\fIhexedit\fR merely searches for byte strings.
++.br
++As \fIhexedit\fR searches the file itself, not a representation in memory, you
++are prompted before the search whether to save your changes. Answering `no'
++will revert the file to its saved state, causing you to lose yor changes.
+ .SS Selecting, copying, pasting, filling
+ First, select the part of the buffer you want to copy: start setting the mark
+ where you want. Then go to the end of the area you want to copy (you can use the
+@@ -235,10 +269,6 @@
+ .PP
+ While searching, it could be interesting to know which position the search has
+ reached. It's always nice to see something moving to help waiting.
+-.PP
+-The hexadecimal search could be able to search modulo 4 bits instead of 8 bits.
+-Another feature could be to complete padd odd length hexadecimal searches with
+-zeros.
+ .SH BUGS
+ I have an example where the display is completly screwed up. It seems to be a
+ bug in ncurses (or maybe in xterm and rxvt)?? Don't know if it's me using
+--- hexedit/misc.c.orig	2006-05-16 08:53:06.000000000 +0200
++++ hexedit/misc.c	2007-03-09 21:50:48.000000000 +0100
+@@ -113,46 +113,42 @@
+ }
+ #endif
+ 
+-char *mymemmem(char *a, int sizea, char *b, int sizeb)
++char *mymemmem(char *haystack, int haystacksize, char *needle, int needlesize,
++    			char *andmask, int align, int nonmatch)
+ {
+-#ifdef HAVE_MEMMEM
+-  return memmem(a, sizea, b, sizeb);
+-#else
+-  char *p;
+-  int i = sizea - sizeb + 1;
+-
+-  if (i <= 0) return NULL;
+-  
+-  for (; (p = memchr(a, b[0], i)); i -= p - a + 1, a = p + 1)
++  char *top= haystack + haystacksize - needlesize;
++  int needleind;
++
++  while( haystack <= top )
+   {
+-    if ((memcmp(p + 1, b + 1, sizeb - 1)) == 0) {
+-	 return p;
+-    }
++    for( needleind= 0; needleind< needlesize; ++needleind )
++      if( (haystack[needleind] & andmask[needleind]) != needle[needleind] )
++	break;
++    if( nonmatch? needleind != needlesize : needleind == needlesize )
++      return haystack;
++    haystack += align;
+   }
+   return NULL;
+-#endif
+ }
+ 
+-char *mymemrmem(char *a, int sizea, char *b, int sizeb)
++char *mymemrmem(char *haystack, int haystacksize, char *needle, int needlesize,
++    			char *andmask, int align, int nonmatch)
+ {
+-#ifdef HAVE_MEMRMEM
+-  return memrmem(a, sizea, b, sizeb);
+-#else
+-  char *p;
+-  int i = sizea - sizeb + 1;
+-
+-  if (i <= 0) return NULL;
+-  
+-  a += sizea - 1;
+-  for (; (p = memrchr(a - i + 1, b[sizeb - 1], i)); i -= a - p + 1, a = p - 1)
++  char *base;
++  int needleind;
++
++  for( base= haystack + ((haystacksize - needlesize)/align)*align; 
++      base >= haystack; base -= align )
+   {
+-    if ((memcmp(p - sizeb + 1, b, sizeb - 1)) == 0) return p;
++    for( needleind= 0; needleind< needlesize; ++needleind )
++      if( (base[needleind] & andmask[needleind]) != needle[needleind] )
++	break;
++    if( nonmatch? needleind != needlesize : needleind == needlesize )
++      return base;
+   }
+   return NULL;
+-#endif
+ }
+ 
+-
+ int hexStringToBinString(char *p, int *l)
+ {
+   int i;
+@@ -173,3 +169,74 @@
+   return TRUE;
+ }
+ 
++int hexSearchStringToBinString(char *p, int *l, int *a)
++{
++  char *write, *read, *top, *end, *errmsg;
++  int lownibble, nibbles;
++
++  top= p + *l;
++  for( read= p, write= p, lownibble= 0; read< top && isxdigit(*read); 
++      ++read, lownibble ^= 1 )
++    if( lownibble )	*write++ += hexCharToInt(*read);
++    else		*write= hexCharToInt(*read) << 4;
++  if( read< top && *read != ':' && *read != '@' ) {
++    displayMessageAndWaitForKey("Invalid hexa search string");
++    return FALSE;
++  }
++  write += lownibble;
++  *l= write - p;
++  nibbles= read - p;
++  /* Caution: if we have an odd number of half bytes (nibbles) in the pattern,
++   the mask will be written one byte beyond length *l.  This is not a problem
++   if p is a null-terminated string.  */
++  if( read< top && *read == ':' ) {
++    for( ++read, lownibble= 0; read< top && isxdigit(*read); ++read, lownibble ^= 1 )
++      if( lownibble )	*write++ += hexCharToInt(*read);
++      else		*write= hexCharToInt(*read) << 4;
++    write += lownibble;
++    if( read - p != 2*nibbles+1 ) {
++      displayMessageAndWaitForKey("Pattern and mask must have equal length");
++      return FALSE;
++    }
++    if( read< top && *read != '@' ) {
++      displayMessageAndWaitForKey("Invalid hexa search string");
++      return FALSE;
++    }
++  }
++  else {
++    for( ; nibbles> 1; nibbles -= 2 )
++      *write++ = 0xFF;
++    if( nibbles> 0 )
++      *write++ = 0xF0;
++  }
++  if( read< top ) {
++    ++read;
++    errmsg= NULL;
++    if( *read == '.' ) {
++      ++read;
++      if( read+1!=top || (*read!='1' && *read!='2' && *read!='4') )
++	errmsg= "Bit alignment can only be 1, 2 or 4";
++      else
++	*a= *read - '0';
++    }
++    else if( *read=='+' || isdigit(*read) ) {
++      *a= strtol(read, &end, 10) << 3;
++      if( *read == '+' )
++	*a = -*a;
++      if( end!=top )
++	errmsg= "Illegal characters in alignment";
++    }
++    else
++      errmsg= "Illegal characters in alignment";
++    if( errmsg ) {
++      displayMessageAndWaitForKey(errmsg);
++      return FALSE;
++    }
++  }
++  else
++    *a= 8;
++  return TRUE;
++}
++
++
++
+--- hexedit/hexedit.h.orig	2005-11-08 17:16:47.000000000 +0100
++++ hexedit/hexedit.h	2007-03-09 21:44:59.000000000 +0100
+@@ -195,8 +195,10 @@
+ char *strconcat3(char *a, char *b, char *c);
+ int hexCharToInt(int c);
+ int not(int b);
+-char *mymemmem(char *a, int sizea, char *b, int sizeb);
+-char *mymemrmem(char *a, int sizea, char *b, int sizeb);
++char *mymemmem(char *haystack, int haystacksize, char *needle, int needlesize,
++    			char *andmask, int align, int nonmatch);
++char *mymemrmem(char *haystack, int haystacksize, char *needle, int needlesize,
++    			char *andmask, int align, int nonmatch);
+ int is_file(char *name);
+ int hexStringToBinString(char *p, int *l);
+ 

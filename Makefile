@@ -28,6 +28,7 @@ setup: setup.ruby setup.perl
 
 build:
 	(cd tawk; make tawk)
+	(cd hexedit; make)
 
 install: build
 	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
@@ -35,6 +36,7 @@ install: build
 	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
 	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
