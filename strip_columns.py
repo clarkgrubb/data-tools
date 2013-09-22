@@ -4,6 +4,7 @@ import sys
 
 DELIMITER = '\t'
 
+
 def strip_columns(input_stream, output_stream):
     for line in input_stream:
         row = line.rstrip('\r\n').split(DELIMITER)

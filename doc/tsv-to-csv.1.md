@@ -9,11 +9,11 @@ tsv-to-csv - convert TSV to CSV
 
 # SYNOPSIS
 
-tsv-to-csv OPTIONS 
+tsv-to-csv OPTIONS [TSV_FILE]
 
 # DESCRIPTION
 
-Read a TSV file from standard input and write the corresponding CSV file to standard output.
+Read a TSV file from file specified on the command line or standard input and write the corresponding CSV file to standard output.
 
 In the TSV format fields are delimited by tabs and records are terminated by an end-of-line marker.
 

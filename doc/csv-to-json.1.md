@@ -9,11 +9,11 @@ csv-to-json - convert CSV to JSON
 
 # SYNOPSIS
 
-csv-to-json OPTIONS 
+csv-to-json OPTIONS [CSV_FILE]
 
 # DESCRIPTION
 
-Read a CSV file from standard input and write the corresponding JSON to standard output.
+Read a CSV file from file specified on command line or standard input and write the corresponding JSON to standard output.
 
 Each row of the JSON output contains a serialized JSON object.  The values of the object come from the corresponding row of the CSV file; the header is used for the keys.
 

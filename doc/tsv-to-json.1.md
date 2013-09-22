@@ -9,11 +9,11 @@ tsv-to-json - convert TSV to JSON
 
 # SYNOPSIS
 
-tsv-to-json OPTIONS 
+tsv-to-json OPTIONS [TSV_FILE]
 
 # DESCRIPTION
 
-Read a TSV file from standard input and write the corresponding JSON to standard output.
+Read a TSV file from file specified on the command line or standard input and write the corresponding JSON to standard output.
 
 Each row of the JSON output contains a serialized JSON object.  The values of the object come from the corresponding row of the CSV file, and the header is used fo the keys.
 

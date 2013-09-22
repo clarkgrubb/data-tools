@@ -55,9 +55,9 @@ Then run this, assuming the install directory is writable:
 
 # HOW TO RUN
 
-    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] < CSV_INPUT
+    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
-    csv-to-tsv         [-e|-x|-r[z]] < CSV_INPUT
+    csv-to-tsv         [-e|-x|-r[z]] [CSV_FILE]
 
     date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
@@ -75,7 +75,7 @@ Then run this, assuming the install directory is writable:
 
     set-intersect      FILE1 FILE2
 
-    tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] < TSV_INPUT
+    tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
     utf8-viewer        [-b|-c|-n|-r] [-w NUM] [FILE]
 
@@ -87,4 +87,4 @@ Then run this, assuming the install directory is writable:
     
     xlsx-to-csv        --list
 
-    tsv-to-json        < TSV_INPUT
+    tsv-to-json        [TSV_FILE]

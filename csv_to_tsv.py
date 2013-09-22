@@ -3,13 +3,23 @@
 # Convert CSV and similar formats to TSV (tab and newline delimited).
 
 import argparse
+import codecs
 import csv
 import re
 import sys
 
-STRIPPER_CHARS = "\n\r\t"
-PROHIBITED_REGEX = re.compile('([\n\r\t])')
+# Unicode Newline Guidelines:
+#
+# http://www.unicode.org/standard/reports/tr13/tr13-5.html
+
+STRIPPER_CHARS = "\f\n\r\t\v\x85\u2028\u2029"
+PROHIBITED_REGEX = re.compile('([\f\n\r\t\v\x85\u2028\u2029])')
 SPACES_REGEX = re.compile(' +')
+ENCODING = 'utf-8'
+
+sys.stdin = codecs.getreader(ENCODING)(sys.stdin)
+sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
+sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
 
 
 def stripper(row):
@@ -24,6 +34,9 @@ def escape(field):
         if ch == '\\':
             str_builder.append('\\')
             str_builder.append('\\')
+        elif ch == '\f':
+            str_builder.append('\\')
+            str_builder.append('f')
         elif ch == '\n':
             str_builder.append('\\')
             str_builder.append('n')
@@ -33,9 +46,20 @@ def escape(field):
         elif ch == '\t':
             str_builder.append('\\')
             str_builder.append('t')
+        elif ch == '\v':
+            str_builder.append('\\')
+            str_builder.append('v')
+        elif ch == '\x85':
+            str_builder.append('\\')
+            str_builder.append('x85')
+        elif ch == '\u2028':
+            str_builder.append('\\')
+            str_builder.append('u2028')
+        elif ch == '\u2029':
+            str_builder.append('\\')
+            str_builder.append('u2029')
         else:
             str_builder.append(ch)
-
 
     return ''.join(str_builder)
 

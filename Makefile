@@ -81,11 +81,23 @@ TAGS:
 
 all: man
 
-clean:
-	-find . -name '*.pyc' | xargs rm
-	-find doc -name '*.[0-9]' | xargs rm
-	-find . -name '*.html' | xargs rm
-	-rm TAGS
+output:
+	mkdir -p $@
+
+harness.tsv_to_csv.escape: test/escapes.tsv | output
+	./tsv_to_csv.py -u $< | ./csv_to_tsv.py -e > output/escape.tsv
+	diff $< output/escape.tsv
+
+harness.csv_to_json: test/test.csv | output
+	./csv_to_json.py $< > output/test.csv_to_json.json
+	#diff output/test.csv_to_json.json test/expected.test.csv_to_json.json
+
+harness.tsv_to_json: test/test.tsv | output
+	./tsv_to_json.py $< > output/test.tsv_to_json.json
+
+harness.tsv_to_csv: harness.tsv_to_csv.escape
+
+harness: harness.tsv_to_csv harness.csv_to_json harness.tsv_to_json
 
 check.python:
 	find . -name 'test*.py' | xargs python
@@ -96,3 +108,10 @@ check.ruby:
 check: check.python check.ruby
 
 test: check
+
+clean:
+	-find . -name '*.pyc' | xargs rm
+	-find doc -name '*.[0-9]' | xargs rm
+	-find . -name '*.html' | xargs rm
+	-rm TAGS
+	-rm -rf output
