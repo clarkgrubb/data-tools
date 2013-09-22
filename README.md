@@ -89,6 +89,6 @@ Then run this, assuming the install directory is writable:
 
     xlsx-to-csv        --sheet=SHEET XLSX_FILE OUTPUT_FILE
     
-    xlsx-to-csv        --list
+    xlsx-to-csv        --list XLSX_FILE
 
     tsv-to-json        [TSV_FILE]

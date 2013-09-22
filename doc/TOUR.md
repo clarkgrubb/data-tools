@@ -76,6 +76,11 @@ The first three fields are "Point", "Name", and "[General Category](http://www.u
 <a name="newlines"/>
 # Newlines
 
+[eol markers](#eol-markers) | [set operations](#set-op) | [highlighting](#highlighting) | [sequences](#seq) | [sampling](#sampling)
+
+<a name="eol-markers"/>
+## EOL Markers
+
 The tools use LF as the end-of-line marker in output.  The tools will generally
 handle other EOL markers in input correctly.  See [this](http://www.unicode.org/standard/reports/tr13/tr13-5.html)
 for a list of the Unicode characters that should be treated as EOL markers.
@@ -89,12 +94,18 @@ Use `unix2dos` (see if your package manager has the package `dos2unix`) to conve
    
 Tools are provided for finding the lines which two files share in common, or which are unique to the first file:
 
+<a name="set-op"/>
+## Set Operations
+
     set-intersect FILE1 FILE2
     set-diff FILE1 FILE2
     
 The `cat` command can be used to find the union of two files, with an optional `sort -u` to remove duplicate lines:
     
     cat FILE1 FILE2 | sort -u
+
+<a name="highlighting"/>
+## highlighting
 
 When inspecting files at the command line, `grep` and `less` are invaluable.  Their man pages reward careful study.
 An interesting feature of `grep` is the ability to hightlight the search pattern in red:
@@ -106,8 +117,10 @@ the pattern.  Also it supports multiple patterns, each with its own color:
     
     highlight --red root --green daemon --blue /bin/bash /etc/passwd
 
-Both `grep` and `highlight` use [ANSI Escape Sequences](http://www.ecma-international.org/publications/standards/Ecma-048.htm).
-If you are paging through the output, use `less -R` to render the escape sequences correctly.
+Both `grep` and `highlight` use [ANSI Escapes](http://www.ecma-international.org/publications/standards/Ecma-048.htm).  If you are paging through the output, use `less -R` to render the escape sequences correctly.
+
+<a name="seq"/>
+## Sequences
 
 The `seq` command can generate a newline delimited arithmetic sequence:
 
@@ -139,7 +152,8 @@ It is also useful to at times to be able to iterate through a sequence of dates.
 
     date-seq
 
-**Sampling Lines**
+<a name="sampling"/>
+## Sampling
 
     sort -R | head -10
     awk 'rand() < 0.01'
@@ -147,6 +161,8 @@ It is also useful to at times to be able to iterate through a sequence of dates.
 
 <a name="relational-fmt"/>
 # Relational Formats
+
+[tsv](#tsv) | [csv](#csv) | [json](#relational-json) | [xlsx](#xlsx)
 
 As mentioned previously, much that can be done with a SQL SELECT statement in a database can also be done with `awk`, `sort`, and `join`.  If you are not familiar with the commands, consider reading the man pages.
 
@@ -162,7 +178,8 @@ Count the number of users by their login shell:
 
 The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  We discuss four widely used formats
 
-**TSV**
+<a name="tsv"/>
+## TSV
 
 The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
@@ -188,7 +205,8 @@ Even if a file has a header, `awk` scripts must refer to columns by number inste
 
 *generating and parsing TSV with split and join. looping over the fields and outputing a space after each field is a bad practice since it results in an invsible trailing space on the last fields*
 
-**CSV**
+<a name="csv"/>
+## CSV
 
     csv-to-tsv
     tsv-to-cvs
@@ -201,7 +219,8 @@ CSV files do not necessarily have headers.  This is perhaps because CSV files ar
 
 * csvkit
 
-**JSON**
+<a name="relational-json"/>
+## JSON
 
 JSON ([json.org](http://json.org/)) is discussed more in the hierarchical section.  MongoDB has popularized its use for relational (or near relational) data.  The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  This is why each JSON object can be written on a single line.
 
@@ -210,7 +229,8 @@ The following tools are provided to convert CSV or TSV files to the MongoDB expo
     csv-to-json
     tsv-to-json
 
-**XLSX**
+<a name="xlsx"/>
+## XLSX
 
 XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.  It is a standardized format, and it probably the most commonly encountered spreadsheet format.
 
@@ -221,12 +241,14 @@ XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used t
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats
 
-* JSON
-* XML
-* HTML
- 
+## JSON
+
     json-awk
-    dom-awk
     python -mjson.tool
+
+
+## XML and HTML
+ 
+    dom-awk
     xmllint
 
