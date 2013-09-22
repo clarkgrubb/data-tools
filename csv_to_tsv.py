@@ -12,8 +12,8 @@ import sys
 #
 # http://www.unicode.org/standard/reports/tr13/tr13-5.html
 
-STRIPPER_CHARS = "\f\n\r\t\v\x85\u2028\u2029"
-PROHIBITED_REGEX = re.compile('([\f\n\r\t\v\x85\u2028\u2029])')
+STRIPPER_CHARS = u"\f\n\r\t\v\x85\u2028\u2029"
+PROHIBITED_REGEX = re.compile(u'([\f\n\r\t\v\x85\u2028\u2029])')
 SPACES_REGEX = re.compile(' +')
 ENCODING = 'utf-8'
 
@@ -102,11 +102,11 @@ def csv_to_tsv(input_stream,
 
     lineno = 1
     for row in rows:
-        try:
+        #try:
             output_stream.write('\t'.join(sanitizer(row)) + '\n')
             lineno += 1
-        except ValueError as e:
-            raise ValueError('{}: at line number: {}'.format(str(e), lineno))
+        #except ValueError as e:
+        #    raise ValueError('{}: at line number: {}'.format(str(e), lineno))
 
 
 if __name__ == '__main__':

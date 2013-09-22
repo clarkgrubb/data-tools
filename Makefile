@@ -97,7 +97,11 @@ harness.tsv_to_json: test/test.tsv | output
 
 harness.tsv_to_csv: harness.tsv_to_csv.escape
 
-harness: harness.tsv_to_csv harness.csv_to_json harness.tsv_to_json
+harness.csv_to_tsv:
+	echo -n $$'one,two\nthree,four' | csv-to-tsv > output/test.csv_to_tsv.tsv
+	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
+
+harness: harness.tsv_to_csv harness.csv_to_json harness.tsv_to_json harness.csv_to_tsv
 
 check.python:
 	find . -name 'test*.py' | xargs python

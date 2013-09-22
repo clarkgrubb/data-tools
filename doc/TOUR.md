@@ -105,7 +105,7 @@ The `cat` command can be used to find the union of two files, with an optional `
     cat FILE1 FILE2 | sort -u
 
 <a name="highlighting"/>
-## highlighting
+## Highlighting
 
 When inspecting files at the command line, `grep` and `less` are invaluable.  Their man pages reward careful study.
 An interesting feature of `grep` is the ability to hightlight the search pattern in red:
