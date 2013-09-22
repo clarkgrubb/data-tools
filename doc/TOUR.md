@@ -145,7 +145,7 @@ It is also useful to at times to be able to iterate through a sequence of dates.
     awk 'rand() < 0.01'
     sample
 
-<a name="relational_fmt"/>
+<a name="relational-fmt"/>
 # Relational Formats
 
 As mentioned previously, much that can be done with a SQL SELECT statement in a database can also be done with `awk`, `sort`, and `join`.  If you are not familiar with the commands, consider reading the man pages.
@@ -218,7 +218,7 @@ XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used t
 
     xlsx-to-csv
 
-<a name="hierarchical_fmt"/>
+<a name="hierarchical-fmt"/>
 # Hierarchical Formats
 
 * JSON
