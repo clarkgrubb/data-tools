@@ -13,6 +13,8 @@ Mostly data extraction and file format conversion tools.
 
     header-sort        sort file, keeping header in place
 
+    hexedit            edit a binary file
+
     highlight          highlight text matching REGEX
 
     json-awk           read JSON objects from standard input and process them with Ruby
@@ -64,6 +66,8 @@ Then run this, assuming the install directory is writable:
     dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
 
     header-sort        [OPTIONS] FILE
+
+    hexedit            [-m|-s] FILE
 
     highlight          REGEX < INPUT
     
