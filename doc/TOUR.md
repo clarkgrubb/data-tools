@@ -139,9 +139,11 @@ It is also useful to at times to be able to iterate through a sequence of dates.
 
     date-seq
 
- sort -R | head -10
- awk 'rand() < 0.01'
- sample
+**Sampling Lines**
+
+    sort -R | head -10
+    awk 'rand() < 0.01'
+    sample
 
 <a name="relational_fmt"/>
 # Relational Formats
@@ -160,15 +162,23 @@ Count the number of users by their login shell:
 
 The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  We discuss four widely used formats
 
-*TSV*
+**TSV**
 
 The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
-Tabs receive much criticism, deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -t` can used to expose trailing spaces.  Note that trailing spaces at the end of a line can also be hidden.  `cat -e` can be used to find these. The `strip-columns` tool can be used to clean up a TSV file.
+Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -t` can used to expose trailing spaces.  Note that trailing spaces at the end of a line can also be hidden.  `cat -e` can be used to find these. The `strip-columns` tool can be used to clean up a TSV file.
 
 The fact that tabs are visually identical to spaces, means that in many applications they can be replaced by spaces, which is why tabs are more likely to be available for delimiting fields than any other printing character.  One could ofcourse use a non-printing character, but most applications do not display non-printing characters well.  Here is how to align the columns of a tab delimited file:
 
     tr ':' '\t' < /etc/passwd | column -t -s $'\t'
+
+The default field separator for `awk` is whitespace.  This is results in an error-prone situation, because the default behavior sometimes works on TSV files.  The correct way to use `awk` on a TSV is like this:
+
+    awk 'BEGIN {FS="\t"; OFS="\t"} ...'
+
+Because this is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
+
+    tawk '...'
 
 The IANA spec says that a TSV file must have a header.  This is a good practice, since it makes the data self-describing.  Unfortunately the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  Also, when we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix, though this is not a universal practice.
 
@@ -176,29 +186,37 @@ Even if a file has a header, `awk` scripts must refer to columns by number inste
 
     head -1 foo.tsv | tr '\t' '\n' | nl
 
+*generating and parsing TSV with split and join. looping over the fields and outputing a space after each field is a bad practice since it results in an invsible trailing space on the last fields*
 
-*CSV*
+**CSV**
 
-*JSON*
-
-*XLSX*
-
-    csv-to-json
     csv-to-tsv
     tsv-to-cvs
-    tsv-to-json
-    xlsx-to-csv
 
+The CSV spec.
 
-Mongo export format
+CSV files do not necessarily have headers.  This is perhaps because CSV files are an export format for spreadsheets.
 
-    head -1 foo.tsv | tr '\t' '\n' | nl
-    tawk
-    strip_columns
-    header-sort
+*TSV with quotes*
 
 * csvkit
-* sqlite
+
+**JSON**
+
+JSON ([json.org](http://json.org/)) is discussed more in the hierarchical section.  MongoDB has popularized its use for relational (or near relational) data.  The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  This is why each JSON object can be written on a single line.
+
+The following tools are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
+
+    csv-to-json
+    tsv-to-json
+
+**XLSX**
+
+XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.  It is a standardized format, and it probably the most commonly encountered spreadsheet format.
+
+XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to inspect the archive.
+
+    xlsx-to-csv
 
 <a name="hierarchical_fmt"/>
 # Hierarchical Formats
