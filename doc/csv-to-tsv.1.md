@@ -30,11 +30,14 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tsv` 
 -q QUOTECHAR, \--quotechar=QUOTECHAR
 : Used to read CSV files which use QUOTECHAR to quote fields instead of double quotes.
 
+-r, \--replace
+: replaces tabs and characters that should be interpreted as newlines as newlines with spaces.  The characters treated as newlines are: \f \n \r \v \x85 \u2028 \u2029.
+
 -x, \--strip
 : Remove tabs, carriage returns, and newlines in fields.
 
 -z, \--squeeze
-: replace tabs, carriage returns, and newlines in fields with spaces and then replace adjacent spaces with a single space.
+: replace tabs and characters that should be interpreted as newlines with spaces and then replace adjacent spaces with a single space.
 
 
 # SEE ALSO

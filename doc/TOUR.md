@@ -3,14 +3,19 @@
 <a name="intro"/>
 # Introduction
 
-The tools in this repo come with man pages which can be installed or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
+The *data tools* come with man pages which can be installed or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The traditional command line tools `awk`, `sort`, and `join` can be used to implement a poor man's relational algebra.  This turns out to be useful, because our tabular data isn't always in a SQL database.  Sometimes it's in a flat file.  Anyway, dealing with this kind of data is the central theme of the tools in this repository.
+The theme of the *data tools* repo is working with data at the command line.  We describe operations that also could be performed by a SQL select statment if the data were in relational database tables.  The traditional command line tools `awk`, `sort`, and `join` can be used to implement  relational algebra.  The *data tools* are intended to be used with command line tools which you already have available.
 
 <a name="encodings"/>
 # Encodings
 
-All tools expect and produce UTF-8 (or 8-bit clean ASCII) encoded data.  Use
+[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode)
+
+<a name="iconv"/>
+## iconv
+
+The *data tools* expect and produce UTF-8 (or 8-bit clean ASCII) encoded data.  Use
 `iconv` if you need to deal with a different encoding, e.g:
 
     iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
@@ -22,6 +27,9 @@ To get a list of supported encodings:
 Not all sequences of bytes are valid UTF-8, and the tools with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
 
     iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
+
+<a name="bad-bytes"/>
+## bad bytes
 
 How to find non-ASCII bytes:
 
@@ -48,6 +56,9 @@ the character if the upper bit were zero, with the exception of `^J` being used 
 
 A binary editor can be a useful thing to have.  The repo will build a version of [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.
 
+<a name="utf-8"/>
+## utf-8
+
 Although utf-8 is great, it is also difficult.  It contains characters with strange properties (combing characters, right-to-left characters)
 
     utf8-viewer
@@ -62,6 +73,9 @@ If you are using a different shell but have access to `python` or `ruby`:
      
      $ ruby -e 'puts "\u03bb"'
  
+<a name="unicode"/>
+## unicode
+ 
 How to lookup a Unicode point:
 
     $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
@@ -74,17 +88,17 @@ How to lookup a Unicode point:
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
 
 <a name="newlines"/>
-# Newlines
+# newlines
 
 [eol markers](#eol-markers) | [set operations](#set-op) | [highlighting](#highlighting) | [sequences](#seq) | [sampling](#sampling)
 
 <a name="eol-markers"/>
-## EOL Markers
+## eol markers
 
-The tools use LF as the end-of-line marker in output.  The tools will generally
+The *data tools* use LF as the end-of-line marker in output.  The *data tools* will generally
 handle other EOL markers in input correctly.  See [this](http://www.unicode.org/standard/reports/tr13/tr13-5.html)
 for a list of the Unicode characters that should be treated as EOL markers.
-Use `unix2dos` (see if your package manager has the package `dos2unix`) to convert the output of one of the tools to CRLF style EOL markers.
+Use `unix2dos` (see if your package manager has the package `dos2unix`) to convert the output of one of the *data tools* to CRLF style EOL markers.
 
     tr '\n' '\r'
     tr -d '\r'
@@ -92,10 +106,10 @@ Use `unix2dos` (see if your package manager has the package `dos2unix`) to conve
     dos2unix
     unix2dos
    
-Tools are provided for finding the lines which two files share in common, or which are unique to the first file:
-
 <a name="set-op"/>
-## Set Operations
+## set operations
+
+*Data tools* are provided for finding the lines which two files share in common, or which are unique to the first file:
 
     set-intersect FILE1 FILE2
     set-diff FILE1 FILE2
@@ -105,7 +119,7 @@ The `cat` command can be used to find the union of two files, with an optional `
     cat FILE1 FILE2 | sort -u
 
 <a name="highlighting"/>
-## Highlighting
+## highlighting
 
 When inspecting files at the command line, `grep` and `less` are invaluable.  Their man pages reward careful study.
 An interesting feature of `grep` is the ability to hightlight the search pattern in red:
@@ -120,7 +134,7 @@ the pattern.  Also it supports multiple patterns, each with its own color:
 Both `grep` and `highlight` use [ANSI Escapes](http://www.ecma-international.org/publications/standards/Ecma-048.htm).  If you are paging through the output, use `less -R` to render the escape sequences correctly.
 
 <a name="seq"/>
-## Sequences
+## sequences
 
 The `seq` command can generate a newline delimited arithmetic sequence:
 
@@ -153,7 +167,7 @@ It is also useful to at times to be able to iterate through a sequence of dates.
     date-seq
 
 <a name="sampling"/>
-## Sampling
+## sampling
 
     sort -R | head -10
     awk 'rand() < 0.01'
@@ -179,7 +193,7 @@ Count the number of users by their login shell:
 The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  We discuss four widely used formats
 
 <a name="tsv"/>
-## TSV
+## tsv
 
 The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
@@ -206,31 +220,39 @@ Even if a file has a header, `awk` scripts must refer to columns by number inste
 *generating and parsing TSV with split and join. looping over the fields and outputing a space after each field is a bad practice since it results in an invsible trailing space on the last fields*
 
 <a name="csv"/>
-## CSV
+## csv
+
+The CSV format is described in [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt).  
+
+Note that CSV files do not necessarily have headers.  This is perhaps because CSV files are an export format for spreadsheets.
+
+RFC 4180 defines the EOL marker as CRLF.  The *data tools* use LF as the EOL marker, however.  If you want to conform to the spec, run the output through `unix2dos`.  Also note that the final CRLF is optional.
+
+CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are used, and double quotes themselves are escaped by doubling them. 
+
+Some CSV readers will trim whitespace on fields.  This does not conform to RFC 4180, but it allows fields to be space-padded so that the columns are aligned when displayed in a monospace type.  Because of the existence of such readers, it is a good practice to quote fields which contain whitespace.
+
+The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `taw`) and CSV:
 
     csv-to-tsv
     tsv-to-cvs
 
-The CSV spec.
+Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tsv` will fail if it encounters any.  There are flags to tell `csv-to-tsv` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tsv.1.md). 
 
-CSV files do not necessarily have headers.  This is perhaps because CSV files are an export format for spreadsheets.
-
-*TSV with quotes*
-
-* csvkit
+The philosophy of the *data tools* repo is to convert data to TSV. If you would prefer to work with CSV directly, consider downloading [csvkit](http://csvkit.readthedocs.org/en/latest/).
 
 <a name="relational-json"/>
-## JSON
+## json
 
 JSON ([json.org](http://json.org/)) is discussed more in the hierarchical section.  MongoDB has popularized its use for relational (or near relational) data.  The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  This is why each JSON object can be written on a single line.
 
-The following tools are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
+The following *data tools* are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
 
     csv-to-json
     tsv-to-json
 
 <a name="xlsx"/>
-## XLSX
+## xlsx
 
 XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.  It is a standardized format, and it probably the most commonly encountered spreadsheet format.
 
@@ -241,13 +263,13 @@ XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used t
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats
 
-## JSON
+## json
 
     json-awk
     python -mjson.tool
 
 
-## XML and HTML
+## xml and html
  
     dom-awk
     xmllint

@@ -8,9 +8,9 @@ xlsx-to-csv - convert .xlsx to .csv
 
 # SYNOPSIS
 
-xlsx-to-csv XLSX\_FILE DIRECTORY
-xlsx-to-csv --sheet=SHEET XLSX\_FILE OUTPUT\_FILE
-xlsx-to-csv --list XLSX\_FILE
+    xlsx-to-csv XLSX\_FILE DIRECTORY
+    xlsx-to-csv --sheet=SHEET XLSX\_FILE OUTPUT\_FILE
+    xlsx-to-csv --list XLSX\_FILE
 
 # DESCRIPTION
 
