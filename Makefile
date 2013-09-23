@@ -10,21 +10,21 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
+harnesses_base := csv_to_json csv_to_tsv tsv_to_csv tsv_to_json xlsx_to_csv
+harnesses := $(patsubst %,harness.%,$(harnesses_base))
+gem_pkgs := nokogiri
+pip_pkgs := xlrd
 
 .PHONY: all TAGS check clean test man install install-man
 .SECONDARY:
 
 setup.ruby:
-	gem install nokogiri
+	gem install $(gem_pkgs)
 
-# On Mac OS X, might have to replace 'cpan' with 'cpan5.12':
-#
-setup.perl:
-	cpan -i Text::CSV
-	cpan -i Text::Iconv
-	cpan -i Spreadsheet::XLSX
+setup.python:
+	pip install $(pip_pkgs)
 
-setup: setup.ruby setup.perl
+setup: setup.ruby setup.python
 
 build:
 	(cd tawk; make tawk)
@@ -46,7 +46,7 @@ install: build
 	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
-	ln -sf $(pwd)/xlsx-to-csv.pl $(LOCAL_INSTALL_DIR)/xlsx-to-csv
+	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	@echo Run 'make install-man' to install man pages.
 
 install-man: man
@@ -81,7 +81,7 @@ TAGS:
 
 all: man
 
-output:
+output output/xlsx_to_csv:
 	mkdir -p $@
 
 harness.tsv_to_csv.escape: test/escapes.tsv | output
@@ -101,7 +101,19 @@ harness.csv_to_tsv:
 	echo -n $$'one,two\nthree,four' | csv-to-tsv > output/test.csv_to_tsv.tsv
 	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
 
-harness: harness.tsv_to_csv harness.csv_to_json harness.tsv_to_json harness.csv_to_tsv
+harness.xlsx_to_csv: test/xlsx_to_csv/test.xlsx | output/xlsx_to_csv
+	./xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
+	./xlsx_to_csv.py --sheet=three_rows_three_cols $< output/xlsx_to_csv/3r3c.csv
+	./xlsx_to_csv.py --sheet=unicode $< output/xlsx_to_csv/unicode.csv
+	./xlsx_to_csv.py --sheet=spaces $< output/xlsx_to_csv/spaces.csv
+	./xlsx_to_csv.py --sheet=dates $< output/xlsx_to_csv/dates.csv
+	diff output/xlsx_to_csv/list.out test/xlsx_to_csv/expected.list.out
+	diff output/xlsx_to_csv/3r3c.csv test/xlsx_to_csv/expected.3r3c.csv
+	diff output/xlsx_to_csv/unicode.csv test/xlsx_to_csv/expected.unicode.csv
+	diff output/xlsx_to_csv/spaces.csv test/xlsx_to_csv/expected.spaces.csv
+	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
+
+harness: $(harnesses)
 
 check.python:
 	find . -name 'test*.py' | xargs python

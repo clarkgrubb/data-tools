@@ -49,7 +49,7 @@ Then run these:
 
     $ sudo make setup.ruby
 
-    $ sudo make setup.perl
+    $ sudo make setup.python
 
 Then run this, assuming the install directory is writable:
 
@@ -85,9 +85,9 @@ Then run this, assuming the install directory is writable:
 
     utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
 
-    xlsx-to-csv        XLSX_FILE DIRECTORY
+    xlsx-to-csv        [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
 
-    xlsx-to-csv        --sheet=SHEET XLSX_FILE OUTPUT_FILE
+    xlsx-to-csv        [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
     
     xlsx-to-csv        --list XLSX_FILE
 

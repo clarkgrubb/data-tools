@@ -258,7 +258,19 @@ XLSX is the default format used by Excel since 2007.  Most other spreadsheet app
 
 XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to inspect the archive.
 
-    xlsx-to-csv
+To extract the sheets from a workbook as CSV files, run this:
+
+    xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
+    
+The directory OUTPUT_DIR will be created and must not already exist.
+
+One can list the sheet names and extract a single sheet to a CSV file:
+
+    xlsx-to-csv --list WORKBOOK.xlsx
+    
+    xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
+
+By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
 
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats
