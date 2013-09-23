@@ -10,7 +10,7 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv tsv_to_csv tsv_to_json xlsx_to_csv
+harnesses_base := csv_to_json csv_to_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := nokogiri
 pip_pkgs := xlrd
@@ -81,25 +81,31 @@ TAGS:
 
 all: man
 
-output output/xlsx_to_csv:
+output output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
-
-harness.tsv_to_csv.escape: test/escapes.tsv | output
-	./tsv_to_csv.py -u $< | ./csv_to_tsv.py -e > output/escape.tsv
-	diff $< output/escape.tsv
 
 harness.csv_to_json: test/test.csv | output
 	./csv_to_json.py $< > output/test.csv_to_json.json
 	#diff output/test.csv_to_json.json test/expected.test.csv_to_json.json
 
-harness.tsv_to_json: test/test.tsv | output
-	./tsv_to_json.py $< > output/test.tsv_to_json.json
-
-harness.tsv_to_csv: harness.tsv_to_csv.escape
-
 harness.csv_to_tsv:
 	echo -n $$'one,two\nthree,four' | csv-to-tsv > output/test.csv_to_tsv.tsv
 	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
+
+harness.tsv_to_csv: harness.tsv_to_csv.escape
+
+harness.tsv_to_csv.escape: test/escapes.tsv | output
+	./tsv_to_csv.py -u $< | ./csv_to_tsv.py -e > output/escape.tsv
+	diff $< output/escape.tsv
+
+harness.tsv_to_json: test/test.tsv | output
+	./tsv_to_json.py $< > output/test.tsv_to_json.json
+
+harness.utf8_viewer: | output/utf8_viewer
+	-ruby -e '(0..255).each { |i| print i.chr }' \
+	| ./utf8-viewer.rb -bcr \
+	> output/utf8_viewer/bytes.bcr.out
+	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
 
 harness.xlsx_to_csv: test/xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	./xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out

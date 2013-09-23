@@ -240,7 +240,9 @@ class CharFormatter
   end
 
   def render_code_point(code_point)
-    if unprintable?(code_point)
+    if code_point == INVALID_CODE_POINT
+      [@options[:invalid_char]].pack("U")
+    elsif unprintable?(code_point)
       [@options[:unprintable_char]].pack("U")
     else
       [code_point].pack("U")

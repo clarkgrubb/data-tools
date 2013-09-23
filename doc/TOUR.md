@@ -18,15 +18,15 @@ The theme of the *data tools* repo is working with data at the command line.  We
 The *data tools* expect and produce UTF-8 (or 8-bit clean ASCII) encoded data.  Use
 `iconv` if you need to deal with a different encoding, e.g:
 
-    iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
+    $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
     
 To get a list of supported encodings:
     
-    iconv -l
+    $ iconv -l
 
 Not all sequences of bytes are valid UTF-8, and the tools with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
 
-    iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
+    $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
 
 <a name="bad-bytes"/>
 ## bad bytes
@@ -37,24 +37,45 @@ How to find non-ASCII bytes:
 
 The `-P` option is not available in the version of `grep` distributed with Mac OS X, however.  One can use the `highlight` command in this repo:
 
-    highlight '[\x80-\xFF]+'
+    $ highlight '[\x80-\xFF]+'
 
 How to find invalid UTF-8 bytes?
 
-When a file is in an unknown encoding, one is compelled to inspect it byte-by-byte.
-Three tools are suggested.
+    $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
+    iconv: illegal input sequence at position 24
 
-    od -b
-    od -c
-    cat -te
+The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.
+The black square is itself a Unicode character, so there is a small chance of ambiguity.
+
+    $ utf8-viewer -r /bin/ls
+
+When a file is in an unknown encoding, one is compelled to inspect it byte-by-byte.
+One can use `od -b` to display the bytes in octal:
+
+    $ od -b /bin/ls
+
+If you think of the bytes are ASCII (such as when the encoding is one of the many 8-bit extensions of ASCII),
+the `od -c` is a better choice:
     
-`od -b` will display the input in octal bytes.  If the input is thought to be encoded in one of the many 8-bit
-extensions of ASCII, `od -c` is useful, since it renders printable ASCII and uses octal bytes for everything else.
+    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | od -c
+    
+`od -c` uses C backslash sequences or octal bytes for non-ASCII and non-printing ASCII characters.  
+
+`cat -te` is a tool which uses a unique escape sequence for each byte.  Unlike `od`, it does not display
+a fixed number of bytes per line separated by spaces, so the mapping from input to output is not injective:
+
+    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8  | cat -te
+
 `cat -t` renders printable ASCII and newlines, and uses `^` notation for other control characters.  Some versions of `cat -t`
 use Emacs style `M-X` notation for upper 8-bit bytes.  In this case, `X` will be what `cat -t` would have used to render
 the character if the upper bit were zero, with the exception of `^J` being used for newline.
 
 A binary editor can be a useful thing to have.  The repo will build a version of [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.
+
+The Ruby interpreter can be pressed into service as a tool for performing base conversion:
+
+    $ ruby -e 'puts "316".to_i(8).to_s(16)'
+    ce
 
 <a name="utf-8"/>
 ## utf-8
