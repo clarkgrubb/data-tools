@@ -329,7 +329,11 @@ XLSX is the default format used by Excel since 2007.  Most other spreadsheet app
 
 XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to inspect the archive.
 
-To extract the sheets from a workbook as CSV files, run this:
+Excel provides the ability to export data in a CSV or TSV format.  One exports by choosing the format when saving the workbook.  The CSV formats all use 8-bit encodings and are not recommended since Excel spreadsheets can contain Unicode data.  To export as TSV, look for the "Unicode Text" or "UTF-16 Unicode Text" option.  The file suffix will be `.txt`.  The character encoding is UTF-16 and can be converted using `iconv`:
+
+    iconv -f utf-16 -t utf-8 < foo.txt > foo.tsv
+
+Using Excel to export the data requires having Excel, which is not free.  Also Excel must be run in a desktop environment and is difficult to automate.  So the *data tools* include the script `xslx-to-cv` so the operation can be performed from the command line.  To extract the sheets from a workbook as CSV files, run this:
 
     $ xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
     
@@ -342,6 +346,8 @@ One can list the sheet names and extract a single sheet to a CSV file:
     $ xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
 
 By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
+
+The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the interface as `xlsx-to-csv`.
 
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats

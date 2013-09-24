@@ -46,6 +46,7 @@ install: build
 	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
+	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	@echo Run 'make install-man' to install man pages.
 

@@ -33,6 +33,8 @@ Mostly data extraction and file format conversion tools.  Take [the tour](https:
 
     utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
     
+    xls-to-csv         convert XLS to CSV
+    
     xlsx-to-csv        convert XLSX to CSV
 
 # SETUP
@@ -88,6 +90,8 @@ Then run this:
     utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n] -a BYTE ...
+
+    xls-to-csv         <same as xlsx-to-csv>
 
     xlsx-to-csv        [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
 
