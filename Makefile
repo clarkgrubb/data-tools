@@ -103,7 +103,7 @@ harness.tsv_to_json: test/test.tsv | output
 
 harness.utf8_viewer: | output/utf8_viewer
 	-ruby -e '(0..255).each { |i| print i.chr }' \
-	| ./utf8-viewer.rb -bcr \
+	| ./utf8-viewer.rb -bc \
 	> output/utf8_viewer/bytes.bcr.out
 	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
 
