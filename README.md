@@ -45,7 +45,7 @@ Then run this to put the *data tools* in your path.  It must be run with permiss
 
     $ make install
 
-If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL\_INSTALL\_DIR` environment variable.
+If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL_INSTALL\DIR` environment variable.
 
 To generate and install man pages `pandoc` must be installed.  On Mac go to
 
