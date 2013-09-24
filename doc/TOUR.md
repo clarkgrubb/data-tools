@@ -3,9 +3,19 @@
 <a name="intro"/>
 # Introduction
 
-The *data tools* come with man pages which can be installed or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
+The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The theme of the *data tools* repo is working with data at the command line.  We describe operations that also could be performed by a SQL select statment if the data were in relational database tables.  The traditional command line tools `awk`, `sort`, and `join` can be used to implement  relational algebra.  The *data tools* are intended to be used with command line tools which you already have available.
+The theme of the *data tools* repo is working with data at the command line.  They provide an option to importing data into a relational database to manipulate it with SQL.  It so happens that the widely avaiable command line tools `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, one is likely to find gaps in what can be accomplished with the traditional command line tools.  The *data tools* repo fills some of those gaps.
+
+Command line tools are composable because the output of one command can be the input of another.  The output can be saved to a file which is passed to the other command as an argument, or the commands can be connected by shell pipe.  Using pipes is a sort of tacit programming, and it relieves us of the need to name yet another file, but it requires tools which read from stdin and write to stdout.
+
+It is not enough for tools to be connected by pipes.  The tools must agree on the format of the data in the byte stream that is shared.  To promote interoperability, the *data tools*  favor the following:
+
+* UTF-8 as character encoding (or 8-bit encoded ASCII)
+* LF as newline
+* TSV format for relational data
+
+All is not lost, however, when files are in a different format because we can invoke format conversion tools on them.  The *data tools* repo offers several such tools.
 
 <a name="encodings"/>
 # Encodings
@@ -15,7 +25,7 @@ The theme of the *data tools* repo is working with data at the command line.  We
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 (or 8-bit clean ASCII) encoded data.  Use
+The *data tools* expect and produce UTF-8 encoded data.  UTF-8 is backwardly compatible with 8-bit encoded ASCII in the sense that 8-bit encoded ASCII is valid UTF-8.  Use
 `iconv` if you need to deal with a different encoding, e.g:
 
     $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
@@ -24,14 +34,14 @@ To get a list of supported encodings:
     
     $ iconv -l
 
-Not all sequences of bytes are valid UTF-8, and the tools with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
-
-    $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
-
 <a name="bad-bytes"/>
 ## bad bytes
 
-How to find non-ASCII bytes:
+Not all sequences of bytes are valid UTF-8, and the *data tools* with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
+
+    $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
+
+One may want to investigate the problem, however.  Here is how to find non-ASCII bytes:
 
     grep --color='auto' -P -n "[\x80-\xFF]+"
 
@@ -39,64 +49,71 @@ The `-P` option is not available in the version of `grep` distributed with Mac O
 
     $ highlight '[\x80-\xFF]+'
 
-How to find invalid UTF-8 bytes?
+To find the first occurence of bytes which are not valid UTF-8, use `iconv`:
 
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24
 
-The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.
-The black square is itself a Unicode character, so there is a small chance of ambiguity.
+The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), howver, so there is a small chance of ambiguity.  The Unicode point are displayed next to the rendered characters, and the point will be U+FFFF for invalid characters.
 
-    $ utf8-viewer -r /bin/ls
+    $ utf8-viewer /bin/ls
 
-When a file is in an unknown encoding, one is compelled to inspect it byte-by-byte.
+When a file is in an unknown encoding, one can inspect it byte-by-byte
 One can use `od -b` to display the bytes in octal:
 
     $ od -b /bin/ls
 
-If you think of the bytes are ASCII (such as when the encoding is one of the many 8-bit extensions of ASCII),
-the `od -c` is a better choice:
+The nice thing about `od -b` is that it is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding which your display is assuming when rendering characters.  On the other hand human beings can rarely make sense of octal bytes.
+
+The *data tools* include a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  {{F1}} for help, {{^S}} to search, {{^X}} to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
+
+If you think some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal way which is easier to interpret:
     
     $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | od -c
     
 `od -c` uses C backslash sequences or octal bytes for non-ASCII and non-printing ASCII characters.  
 
-`cat -te` is a tool which uses a unique escape sequence for each byte.  Unlike `od`, it does not display
-a fixed number of bytes per line separated by spaces, so the mapping from input to output is not injective:
+`cat -te` uses a unique escape sequence for each byte, but unlike `od`, it does not display
+a fixed number of bytes per line, so the mapping from input to output is not injective.  Still, since it doesn't introduce line breaks at regular intervals, it may sometimes be easier to interpret.  Here is an example of use:
 
     $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8  | cat -te
 
-`cat -t` renders printable ASCII and newlines, and uses `^` notation for other control characters.  Some versions of `cat -t`
+`cat -t` renders printable ASCII and newlines; it uses `^` notation for other control characters.  Some versions of `cat -t`
 use Emacs style `M-X` notation for upper 8-bit bytes.  In this case, `X` will be what `cat -t` would have used to render
 the character if the upper bit were zero, with the exception of `^J` being used for newline.
-
-A binary editor can be a useful thing to have.  The repo will build a version of [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.
 
 The Ruby interpreter can be pressed into service as a tool for performing base conversion:
 
     $ ruby -e 'puts "316".to_i(8).to_s(16)'
     ce
 
+The `bc` calculator can also be used.  This example assumes `zsh` is the shell:
+
+    echo $'obase=16\n\nibase=8\n42' | bc
+    22
+
 <a name="utf-8"/>
 ## utf-8
 
-Although utf-8 is great, it is also difficult.  It contains characters with strange properties (combing characters, right-to-left characters)
+The `utf8-viewer` *data tool* was written because the author was having a difficult time determining the Unicode points of sequence of UTF-8 bytes.
 
-    utf8-viewer
+    $ utf8-viewer foo.txt
    
 If you want to see the character for a Unicode point, the following works in `zsh`:
 
-     $ echo $'\u03bb'
+    $ echo $'\u03bb'
      
 If you are using a different shell but have access to `python` or `ruby`:
      
-     $ python -c 'print(u"\u03bb")'
+    $ python -c 'print(u"\u03bb")'
      
-     $ ruby -e 'puts "\u03bb"'
+    $ ruby -e 'puts "\u03bb"'
  
 <a name="unicode"/>
 ## unicode
- 
+
+Unicode contains all the characters one is likely to encounter in an encoding system.  It can be difficult to deal with, since it contains characters with strange properties such as combining characters and right-to-left characters.
+
 How to lookup a Unicode point:
 
     $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
@@ -183,9 +200,11 @@ The `seq` is useful in conjunction with the a shell for loop.  This will create 
 
     $ for i in $(seq -w 1 100); do touch foo.$i; done
 
-It is also useful to at times to be able to iterate through a sequence of dates.
+It is also useful to at times to be able to iterate through a sequence of dates.  The *data tools* provide `date-seq` for this.  For example, suppose that you wanted to fetch a set of URLs which contained a date:
 
-    date-seq
+    $ for date in $(date-seq --format='%Y/%m/%d' 20130101 20130131); do mkdir -p $date; curl "http://blog.foo.com/${date}" > ${date}/index.html; done
+
+`date-seq` can iterate though years, months, days, hours, minutes, or seconds.  When iterating through days, the `--weekdays` flag can be used to specify days of the week.  See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/date-seq.1.md) for details.
 
 <a name="sampling"/>
 ## sampling

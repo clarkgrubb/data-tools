@@ -413,6 +413,7 @@ end
 
 def parse_options
   options = {
+    :render => true,
     :width => DEFAULT_WIDTH,
     :invalid_char => INVALID_BYTES,
     :unprintable_char => UNPRINTABLE_CODE_POINT,
@@ -446,8 +447,8 @@ def parse_options
       options[:char_offset] = true
     end
 
-    opts.on("-r", "--render") do
-      options[:render] = true
+    opts.on("--no-render") do
+      options[:render] = false
     end
 
     opts.on("-a", "--arg") do

@@ -9,16 +9,16 @@ utf8-viewer - display Unicode points and optionally names of UTF-8 encoded file
 
 # SYNOPSIS
 
-utf8-viewer [-b|-c|-n|-r] [-w NUM] [FILE]
+utf8-viewer [-b|-c|-n] [-w NUM] [FILE]
 
-utf8-viewer [-b|-c|-n|-r] -a BYTE ...
+utf8-viewer [-b|-c|-n] -a BYTE ...
 
 # DESCRIPTION
 
 Convert UTF-8 to Unicode.  The Unicode points are hex digits.  The 
 UTF-8 bytes are read from a file, or standard input if no file is specified.
-By default eight characters are displayed per line.  With the -r flag the
-characters will be rendered next to the Unicode points.
+By default eight characters are displayed per line.  The
+characters are rendered on the left and the Unicode points are on the right.
 
 With the -a flag each UTF-8 byte is specified as an argument on the
 command line. The format of the bytes can be binary,
@@ -43,8 +43,8 @@ bytes must not have a leading zero.
 -n, \--name
 : use the Internet to lookup the character name for the Unicode code point.  This implies a width of 1.
 
--r, \--render
-: display the characters in addition to the Unicode points.
+\--no-render
+: don't display the characters in addition to the Unicode points.
 
 -u, \--unprintable-char
 : Unicode point of the character to use for unprintable characters.  The default is U+25A1 "WHITE SQUARE".  Has no effect unless the -r flag is also used.
@@ -56,19 +56,19 @@ bytes must not have a leading zero.
 
 How to display the old Mac Roman character set:
 
-    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | utf8-viewer -r
+    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | utf8-viewer
 
 How to display Code Page 437 used by the original IBM PC:
 
-    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f cp437 -t utf8 | utf8-viewer -r
+    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f cp437 -t utf8 | utf8-viewer
 
 How to display Code Page 1252, also called Windows 1252:
 
-    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv --byte-subst=' ' -f ms-ansi -t utf8 | utf8-viewer -r
+    $ ruby -e '(0..255).each { |i| print i.chr }' | iconv --byte-subst=' ' -f ms-ansi -t utf8 | utf8-viewer
 
 How to display the entire Basic Multilingual Plane:
 
-    $ ruby -e '(0..0xfff).each { |i| print [i].pack("U") }' | utf8-viewer -r
+    $ ruby -e '(0..0xfff).each { |i| print [i].pack("U") }' | utf8-viewer
 
 If you need to convert a Unicode code point to UTF-8 bytes, the following
 will work when using the `zsh` shell:
