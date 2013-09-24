@@ -37,7 +37,17 @@ Mostly data extraction and file format conversion tools.  Take [the tour](https:
 
 # SETUP
 
-To generate the man pages, `pandoc` must be installed.  On Mac go to
+To install the necessary Ruby gems and Python packages:
+
+    $ sudo make setup
+
+Then run this to put the *data tools* in your path.  It must be run with permission to create files in the install directory; it creates symlinks to the source directory:
+
+    $ make install
+
+If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL\_INSTALL\_DIR` environment variable.
+
+To generate and install man pages `pandoc` must be installed.  On Mac go to
 
     http://johnmacfarlane.net/pandoc/installing.html
 
@@ -45,15 +55,9 @@ and download the installer.  On Ubuntu there is a package:
 
     $ sudo apt-get install pandoc
 
-Then run these:
+Then run this:
 
-    $ sudo make setup.ruby
-
-    $ sudo make setup.python
-
-Then run this, assuming the install directory is writable:
-
-    $ make install
+    $ make install-man
 
 # HOW TO RUN
 
