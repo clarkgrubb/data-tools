@@ -61,13 +61,18 @@ def cell_to_str(cell, date_fmt, datemode):
 
 def xlsx_book_to_csv(book, sheet_path, sheet_name, date_fmt):
     sheet = book.sheet_by_name(sheet_name)
-    with open(sheet_path, 'wb') as f:
-        csvw = UnicodeWriter(f)
-        for rownum in range(0, sheet.nrows):
-            row = [cell_to_str(cell, date_fmt, book.datemode)
-                   for cell
-                   in sheet.row(rownum)]
-            csvw.writerow(row)
+    if sheet_path == '-':
+        f = sys.stdout
+    else:
+        f = open(sheet_path, 'wb')
+    csvw = UnicodeWriter(f)
+    for rownum in range(0, sheet.nrows):
+        row = [cell_to_str(cell, date_fmt, book.datemode)
+               for cell
+               in sheet.row(rownum)]
+        csvw.writerow(row)
+    if sheet_path != '-':
+        f.close()
 
 
 def xlsx_path_to_csv(xlsx_path, sheet_path, sheet_name, date_fmt):

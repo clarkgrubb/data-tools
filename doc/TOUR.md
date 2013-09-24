@@ -65,7 +65,7 @@ One can use `od -b` to display the bytes in octal:
 
 The nice thing about `od -b` is that it is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding which your display is assuming when rendering characters.  On the other hand human beings can rarely make sense of octal bytes.
 
-The *data tools* include a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  {{F1}} for help, {{^S}} to search, {{^X}} to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
+The *data tools* include a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
 If you think some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal way which is easier to interpret:
     
@@ -140,7 +140,7 @@ Use `unix2dos` (see if your package manager has the package `dos2unix`) to conve
 
     tr '\n' '\r'
     tr -d '\r'
-    
+
     dos2unix
     unix2dos
    
@@ -303,6 +303,25 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
     csv-to-json
     tsv-to-json
 
+`python -mjson.tool` can be used to pretty print JSON and test whether the JSON is well formed.
+
+    $ echo '{"foo":1, "bar": 2, "baz": [1,2,3]}' | python -mjson.tool
+    {
+        "bar": 2, 
+        "baz": [
+            1, 
+            2, 
+            3
+        ], 
+        "foo": 1
+    }
+
+The *data-tools* utility `json-awk` can be used to convert JSON to TSV.
+
+    json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
+
+The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-awk` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
+
 <a name="xlsx"/>
 ## xlsx
 
@@ -312,29 +331,30 @@ XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used t
 
 To extract the sheets from a workbook as CSV files, run this:
 
-    xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
+    $ xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
     
 The directory OUTPUT_DIR will be created and must not already exist.
 
 One can list the sheet names and extract a single sheet to a CSV file:
 
-    xlsx-to-csv --list WORKBOOK.xlsx
+    $ xlsx-to-csv --list WORKBOOK.xlsx
     
-    xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
+    $ xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
 
 By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
 
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats
 
-## json
-
-    json-awk
-    python -mjson.tool
-
+Hierarchical data can be stored in JSON, which we discussed above.
 
 ## xml and html
- 
-    dom-awk
-    xmllint
+
+To check whether an XML file is wellformed, use
+
+    $ xml FILE.xml
+
+The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XMl or HTML file.  Here is an example of getting the links from a web page:
+
+    $ curl www.google.com | dom-awk  '$_.xpath("//a").each {|o| puts o["href"] }'
 

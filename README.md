@@ -1,7 +1,7 @@
 
 # SUMMARY
 
-Mostly data extraction and file format conversion tools.
+Mostly data extraction and file format conversion tools.  Take [the tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) for a more verbose introduction to the tools.
 
     csv-to-json        convert CSV to JSON
 
@@ -81,9 +81,9 @@ Then run this, assuming the install directory is writable:
 
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
-    utf8-viewer        [-b|-c|-n|-r] [-w NUM] [FILE]
+    utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
 
-    utf8-viewer        [-b|-c|-n|-r] -a BYTE ...
+    utf8-viewer        [-b|-c|-n] -a BYTE ...
 
     xlsx-to-csv        [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
 
