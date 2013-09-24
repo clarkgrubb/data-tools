@@ -13,7 +13,7 @@ pwd := $(shell pwd)
 harnesses_base := csv_to_json csv_to_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := nokogiri
-pip_pkgs := xlrd
+pip_pkgs := xlrd subsample
 
 .PHONY: all TAGS check clean test man install install-man
 .SECONDARY:

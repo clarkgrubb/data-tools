@@ -209,9 +209,21 @@ It is also useful to at times to be able to iterate through a sequence of dates.
 <a name="sampling"/>
 ## sampling
 
-    sort -R | head -10
-    awk 'rand() < 0.01'
-    sample
+It is desirable at times to take a random sample of lines from a file.  Simply taking the first *N* lines is not recommend.  Instead one should shuffle the file first:
+
+    sort -R foo.txt | head -3
+
+On large files, randomly shuffling a file is slow.  Also, the `sort` installed on Mac OS X does not have the `-R` flag.  One can use `awk` to select a random percentage of lines from a file:
+    
+    awk 'rand() < 0.01' foo.txt
+    
+ This is faster than shuffling the file, but does not produce an accurate sample size, even if you know the number of lines in the file.
+    
+An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The tool [subsample](https://github.com/paulgb/subsample) implements it:
+
+    $ subsample --sample-size 3 /etc/passwd 2> /dev/null
+    
+ `subsample` can be installed via `pip`.
 
 <a name="relational-fmt"/>
 # Relational Formats
