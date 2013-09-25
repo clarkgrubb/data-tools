@@ -5,17 +5,17 @@
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The theme of the *data tools* repo is working with data at the command line.  They provide an option to importing data into a relational database to manipulate it with SQL.  It so happens that the widely avaiable command line tools `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, one is likely to find gaps in what can be accomplished with the traditional command line tools.  The *data tools* repo fills some of those gaps.
+The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is a interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data flows at the command line can be frustrated by "gaps" is the traditional tool set.  The *data tools* repo fills some of those gaps.
 
-Command line tools are composable because the output of one command can be the input of another.  The output can be saved to a file which is passed to the other command as an argument, or the commands can be connected by shell pipe.  Using pipes is a sort of tacit programming, and it relieves us of the need to name yet another file, but it requires tools which read from stdin and write to stdout.
+Command line tools are composable because the output of one command can be the input of another.  The output can be saved to a file which is passed to the other command as an argument, or the commands can be connected by shell pipe.  Use of pipes is *tacit programming* because it relieves us of the need to name yet another file.  We can't use pipes when tools don't read from stdin and write to stdout, though.
 
-It is not enough for tools to be connected by pipes.  The tools must agree on the format of the data in the byte stream that is shared.  To promote interoperability, the *data tools*  favor the following:
+It is not enough for tools to be connected by pipes.  The tools must agree on the format of the data in the byte stream that is shared.  To promote interoperability, the *data tools*  favor:
 
 * UTF-8 as character encoding (or 8-bit encoded ASCII)
 * LF as newline
 * TSV format for relational data
 
-All is not lost, however, when files are in a different format because we can invoke format conversion tools on them.  The *data tools* repo offers several such tools.
+All is not lost, however, when tools expecte different formats because we can invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
 
 <a name="encodings"/>
 # Encodings
@@ -25,7 +25,7 @@ All is not lost, however, when files are in a different format because we can in
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 encoded data.  UTF-8 is backwardly compatible with 8-bit encoded ASCII in the sense that 8-bit encoded ASCII is valid UTF-8.  Use
+The *data tools* expect and produce UTF-8 encoded data.  Note that 8-bit encoded ASCII is valid UTF-8.  Use
 `iconv` if you need to deal with a different encoding, e.g:
 
     $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
@@ -37,7 +37,7 @@ To get a list of supported encodings:
 <a name="bad-bytes"/>
 ## bad bytes
 
-Not all sequences of bytes are valid UTF-8, and the *data tools* with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
+Not all sequences of bytes are valid UTF-8; the *data tools* with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
 
     $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
 
@@ -263,7 +263,7 @@ Because this is a bit tedious, the repo contains a `tawk` command which uses tab
 
     tawk '...'
 
-The IANA spec says that a TSV file must have a header.  This is a good practice, since it makes the data self-describing.  Unfortunately the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  Also, when we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix, though this is not a universal practice.
+The IANA spec says that a TSV file must have a header.  This is a good practice, since it makes the data self-describing.  Unfortunately the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
 
@@ -282,8 +282,6 @@ RFC 4180 defines the EOL marker as CRLF.  The *data tools* use LF as the EOL mar
 
 CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are used, and double quotes themselves are escaped by doubling them. 
 
-Some CSV readers will trim whitespace on fields.  This does not conform to RFC 4180, but it allows fields to be space-padded so that the columns are aligned when displayed in a monospace type.  Because of the existence of such readers, it is a good practice to quote fields which contain whitespace.
-
 The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `taw`) and CSV:
 
     csv-to-tsv
@@ -296,7 +294,7 @@ The philosophy of the *data tools* repo is to convert data to TSV. If you would 
 <a name="relational-json"/>
 ## json
 
-JSON ([json.org](http://json.org/)) is discussed more in the hierarchical section.  MongoDB has popularized its use for relational (or near relational) data.  The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  This is why each JSON object can be written on a single line.
+JSON ([json.org](http://json.org/)) is strictly speaking a hierarchical format, but MongoDB uses it for relational (or near relational) data.  The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  Thus it is always possible to write a JSON object on a single line.
 
 The following *data tools* are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
 
@@ -325,7 +323,7 @@ The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is st
 <a name="xlsx"/>
 ## xlsx
 
-XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.  It is a standardized format, and it probably the most commonly encountered spreadsheet format.
+XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.
 
 XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to inspect the archive.
 
@@ -347,7 +345,7 @@ One can list the sheet names and extract a single sheet to a CSV file:
 
 By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
 
-The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the interface as `xlsx-to-csv`.
+The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the same interface as `xlsx-to-csv`.
 
 <a name="hierarchical-fmt"/>
 # Hierarchical Formats
@@ -358,7 +356,7 @@ Hierarchical data can be stored in JSON, which we discussed above.
 
 To check whether an XML file is wellformed, use
 
-    $ xml FILE.xml
+    $ xmllint FILE.xml
 
 The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XMl or HTML file.  Here is an example of getting the links from a web page:
 
