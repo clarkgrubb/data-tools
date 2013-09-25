@@ -23,10 +23,10 @@ Mostly data extraction and file format conversion tools.  Take [the tour](https:
 
     set-intersect      find lines common to two files
     
-    strip-columns      trim whitespace from fields of TSV file
-    
     tawk               awk, but uses tabs for FS and OFS by default
 
+    trim-tsv           trim whitespace from fields of TSV file
+    
     tsv-to-csv         convert TSV to CSV
 
     tsv-to-json        convert TSV to JSON
@@ -85,8 +85,12 @@ Then run this:
 
     set-intersect      FILE1 FILE2
 
+    trim-tsv           < INPUT
+
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
+    tsv-to-json        [TSV_FILE]
+    
     utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n] -a BYTE ...
@@ -98,5 +102,3 @@ Then run this:
     xlsx-to-csv        [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
     
     xlsx-to-csv        --list XLSX_FILE
-
-    tsv-to-json        [TSV_FILE]

@@ -28,7 +28,7 @@ All is not lost, however, when tools expecte different formats because we can in
 The *data tools* expect and produce UTF-8 encoded data.  Note that 8-bit encoded ASCII is valid UTF-8.  Use
 `iconv` if you need to deal with a different encoding, e.g:
 
-    $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/pw.utf16
+    $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/password.utf16
     
 To get a list of supported encodings:
     
@@ -202,7 +202,10 @@ The `seq` is useful in conjunction with the a shell for loop.  This will create 
 
 It is also useful to at times to be able to iterate through a sequence of dates.  The *data tools* provide `date-seq` for this.  For example, suppose that you wanted to fetch a set of URLs which contained a date:
 
-    $ for date in $(date-seq --format='%Y/%m/%d' 20130101 20130131); do mkdir -p $date; curl "http://blog.foo.com/${date}" > ${date}/index.html; done
+    $ for date in $(date-seq --format='%Y/%m/%d' 20130101 20130131)
+    > do mkdir -p $date
+    > curl "http://blog.foo.com/${date}" > ${date}/index.html
+    > done
 
 `date-seq` can iterate though years, months, days, hours, minutes, or seconds.  When iterating through days, the `--weekdays` flag can be used to specify days of the week.  See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/date-seq.1.md) for details.
 
@@ -249,7 +252,7 @@ The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  
 
 The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
-Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -t` can used to expose trailing spaces.  Note that trailing spaces at the end of a line can also be hidden.  `cat -e` can be used to find these. The `strip-columns` tool can be used to clean up a TSV file.
+Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can used to expose trailing spaces.  The `trip-tsv` tool can be used to clean up a TSV file.
 
 The fact that tabs are visually identical to spaces, means that in many applications they can be replaced by spaces, which is why tabs are more likely to be available for delimiting fields than any other printing character.  One could ofcourse use a non-printing character, but most applications do not display non-printing characters well.  Here is how to align the columns of a tab delimited file:
 
