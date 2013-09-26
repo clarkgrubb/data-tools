@@ -5,9 +5,9 @@
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is a interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data flows at the command line can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
+The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data workflows at the command line can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
 
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by shell pipe.  Use of pipes is *tacit programming*: it relieves us of the need to name a file and the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of pipes is *tacit programming*: it relieves us of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
 
 Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
 
@@ -15,7 +15,7 @@ Tools in a pipeline must agree on the *format* of the data in the byte stream.  
 * LF as newline
 * TSV format for relational data
 
-When we encounter byte streams in other format, we invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
+When we encounter byte streams in other formats, we invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
 
 <a name="encodings"/>
 # Encodings
@@ -25,7 +25,7 @@ When we encounter byte streams in other format, we invoke *format conversion too
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 encoded data.  Note that 8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
+The *data tools* expect and produce UTF-8 encoded data.  Recall that 8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/password.utf16
     
@@ -44,7 +44,7 @@ One may want to investigate the problem, however.  Here is how to find non-ASCII
 
     grep --color='auto' -P -n "[\x80-\xFF]+"
 
-The `-P` option is not available in the version of `grep` distributed with Mac OS X, however.  One can use the `highlight` command in this repo:
+The `-P` option is not provided by the version of `grep` distributed with Mac OS X, however.  One can use the `highlight` command in this repo:
 
     $ highlight '[\x80-\xFF]+'
 
@@ -53,18 +53,18 @@ To find the first occurence of bytes which are not valid UTF-8, use `iconv`:
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24
 
-The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), howver, so there is a small chance of ambiguity.  The Unicode point are displayed next to the rendered characters, and the point will be U+FFFF for invalid characters.
+The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is a small chance of ambiguity.  The Unicode points are displayed next to the rendered characters, and the point will be U+FFFF for invalid characters.
 
     $ utf8-viewer /bin/ls
 
-When a file is in an unknown encoding, one can inspect it byte-by-byte
-One can use `od -b` to display the bytes in octal:
+When a file is in an unknown encoding, one can try to inspect it byte-by-byte.
+`od -b` displays the bytes in octal:
 
     $ od -b /bin/ls
 
-The nice thing about `od -b` is that it is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding which your display is assuming when rendering characters.  On the other hand human beings can rarely make sense of octal bytes.
+The one nice thing that can be said about `od -b` is that it is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding the display is assuming when renders characters.  On the other hand human beings can rarely make sense of octal bytes.
 
-The *data tools* include a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
+The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
 If you think some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal way which is easier to interpret:
     
