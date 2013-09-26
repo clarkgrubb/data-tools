@@ -5,17 +5,17 @@
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is a interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data flows at the command line can be frustrated by "gaps" is the traditional tool set.  The *data tools* repo fills some of those gaps.
+The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is a interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data flows at the command line can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
 
-Command line tools are composable because the output of one command can be the input of another.  The output can be saved to a file which is passed to the other command as an argument, or the commands can be connected by shell pipe.  Use of pipes is *tacit programming* because it relieves us of the need to name yet another file.  We can't use pipes when tools don't read from stdin and write to stdout, though.
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by shell pipe.  Use of pipes is *tacit programming*: it relieves us of the need to name a file and the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
 
-It is not enough for tools to be connected by pipes.  The tools must agree on the format of the data in the byte stream that is shared.  To promote interoperability, the *data tools*  favor:
+Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
 
 * UTF-8 as character encoding (or 8-bit encoded ASCII)
 * LF as newline
 * TSV format for relational data
 
-All is not lost, however, when tools expecte different formats because we can invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
+When we encounter byte streams in other format, we invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
 
 <a name="encodings"/>
 # Encodings
@@ -25,8 +25,7 @@ All is not lost, however, when tools expecte different formats because we can in
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 encoded data.  Note that 8-bit encoded ASCII is valid UTF-8.  Use
-`iconv` if you need to deal with a different encoding, e.g:
+The *data tools* expect and produce UTF-8 encoded data.  Note that 8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/password.utf16
     
