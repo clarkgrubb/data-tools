@@ -46,6 +46,10 @@ The second day of each month of 2012 in YYYY-MM-DD format:
 
     date-seq --format='%F' --regex='.{6}02' 20120101 20121231
 
+The 30 most recent days in YYYYMMDD format:
+
+    date-seq 20100101 $(date +'%Y%m%d') | tail -30
+
 # SEE ALSO
 
 `strftime` (3), `seq` (1), `grep` (1), `awk` (1)
