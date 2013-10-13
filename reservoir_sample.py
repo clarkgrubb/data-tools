@@ -32,6 +32,9 @@ def reservoir_sample(count, input_stream, output_stream):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('positional',
+                        nargs='?',
+                        metavar='FILE')
     parser.add_argument('--size', '-s',
                         dest='size',
                         type=int,
@@ -45,4 +48,8 @@ if __name__ == '__main__':
     if args.random_seed:
         random.seed(args.random_seed)
 
-    reservoir_sample(args.size, sys.stdin, sys.stdout)
+    if args.positional:
+        with open(args.positional) as f:
+            reservoir_sample(args.size, f, sys.stdout)
+    else:
+        reservoir_sample(args.size, sys.stdin, sys.stdout)

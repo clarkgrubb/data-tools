@@ -4,15 +4,15 @@
 
 # NAME
 
-reservoir-sample - sample lines from standard input
+reservoir-sample - sample lines from file or standard input
 
 # SYNOPSIS
 
-reservoir-sample [-r|--random-seed SEED] (-s NUM|--size=NUM)
+reservoir-sample [-r|--random-seed SEED] (-s NUM|--size=NUM) [FILE]
 
 # DESCRIPTION
 
-Select NUM lines randomly from standard input.  Each line is equally likely to be chosen.
+Select NUM lines randomly from FILE or standard input.  Each line is equally likely to be chosen.
 
 The script uses reservoir sampling.  It is more efficient than randomly shuffling the file
 with `sort -R` and then taking the first N lines with `head`.
