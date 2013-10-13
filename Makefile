@@ -10,10 +10,10 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
+harnesses_base := csv_to_json csv_to_tsv reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := json nokogiri
-pip_pkgs := xlrd subsample
+pip_pkgs := xlrd
 
 .PHONY: all TAGS check clean test man install install-man
 .SECONDARY:
@@ -39,6 +39,7 @@ install: build
 	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
 	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(pwd)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(pwd)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(pwd)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
@@ -82,7 +83,7 @@ TAGS:
 
 all: man
 
-output output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
+output output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
 
 harness.csv_to_json: test/test.csv | output
@@ -92,6 +93,10 @@ harness.csv_to_json: test/test.csv | output
 harness.csv_to_tsv:
 	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/test.csv_to_tsv.tsv
 	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
+
+harness.reservoir_sample: test/reservoir_sample/input.txt | output/reservoir_sample
+	./reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
+	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
 
 harness.trim_tsv: output/trim_tsv
 	echo -n $$' one \t two \n three \t four' | ./trim_tsv.py > output/trim_tsv/trim_tsv.tsv

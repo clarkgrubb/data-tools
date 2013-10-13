@@ -219,14 +219,12 @@ On large files, randomly shuffling a file is slow.  Also, the `sort` installed o
     
     awk 'rand() < 0.01' foo.txt
     
- This is faster than shuffling the file, but does not produce an accurate sample size, even if you know the number of lines in the file.
+This is faster than shuffling the file, but does not produce an accurate sample size, even if you know the number of lines in the file.
     
-An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The tool [subsample](https://github.com/paulgb/subsample) implements it:
+An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The tool `reservoir-sample` implements it:
 
-    $ subsample --sample-size 3 /etc/passwd 2> /dev/null
+    $ reservoir-sample --size 3 < /etc/passwd
     
- `subsample` can be installed via `pip`.
-
 <a name="relational-fmt"/>
 # Relational Formats
 

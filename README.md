@@ -18,6 +18,8 @@ Mostly data extraction and file format conversion tools.  Take [the tour](https:
     highlight          highlight text matching REGEX
 
     json-awk           read JSON objects from standard input and process them with Ruby
+    
+    reservoir-sample   select a specified number of lines from standard input randomly
 
     set-diff           find lines in first file which are not in the second
 
@@ -80,6 +82,8 @@ Then run this:
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... < INPUT
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
+
+    reservoir-sample   [-r SEED] -s NUM < INPUT
 
     set-diff           FILE1 FILE2
 
