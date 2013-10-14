@@ -54,13 +54,10 @@ if not script
 end
 
 cmd = ['ruby', '-n']
-
 cmd << '-e'
 cmd << 'BEGIN {require "rubygems"; require "json"; $nr = 0}'
-
 cmd << '-e'
 cmd << '$_ = JSON.parse($_); $nr += 1'
-
 cmd << '-e'
 cmd << script
 
