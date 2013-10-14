@@ -77,9 +77,9 @@ Then run this:
 
     hexedit            [-m|-s] FILE
 
-    highlight          REGEX < INPUT
+    highlight          REGEX [FILE]
     
-    highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... < INPUT
+    highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
     json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
 

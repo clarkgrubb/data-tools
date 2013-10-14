@@ -28,7 +28,7 @@ def highlight(input_stream, output_stream, esc_seq_to_pattern):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('pattern', nargs='?', metavar='PATTERN')
+    parser.add_argument('positional', nargs='*')
     parser.add_argument('--black',
                         dest='black',
                         metavar='PATTERN')
@@ -55,12 +55,26 @@ if __name__ == '__main__':
                         metavar='PATTERN')
 
     args = parser.parse_args()
+    pattern = None
+    input_path = None
+
+    if len(args.positional) == 1:
+        if args.red or args.black or args.green or args.yellow or args.blue \
+           or args.magenta or args.cyan or args.white:
+            input_path = args.positional[0]
+        else:
+            pattern = args.positional[0]
+    elif len(args.positional) == 2:
+        pattern, input_path = args.positional
+    elif len(args.positional) > 2:
+        sys.stderr.write('USAGE: hightlight [OPTIONS] [PATTERN] [FILE]\n')
+        sys.exit(1)
 
     esc_seq_to_pattern = {}
-    if args.pattern and args.red:
+    if pattern and args.red:
         raise Exception('--red|-r cannot be used with default pattern')
-    if args.pattern:
-        esc_seq_to_pattern[RED_FOREGROUND] = args.pattern
+    if pattern:
+        esc_seq_to_pattern[RED_FOREGROUND] = pattern
     if args.red:
         esc_seq_to_pattern[RED_FOREGROUND] = args.red
     if args.black:
@@ -79,8 +93,12 @@ if __name__ == '__main__':
         esc_seq_to_pattern[WHITE_FOREGROUND] = args.white
 
     if not esc_seq_to_pattern:
-        print("No PATTERN specified.")
+        sys.stderr.write("No PATTERN specified.\n")
         parser.print_help()
         sys.exit(1)
 
-    highlight(sys.stdin, sys.stdout, esc_seq_to_pattern)
+    if input_path:
+        with open(input_path) as f:
+            highlight(f, sys.stdout, esc_seq_to_pattern)
+    else:
+        highlight(sys.stdin, sys.stdout, esc_seq_to_pattern)

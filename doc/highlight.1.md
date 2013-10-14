@@ -9,15 +9,15 @@ highlight - highlight text in a stream maching a regular expression
 
 # SYNOPSIS
 
-highlight REGEX
+highlight REGEX [FILE]
 
-highlight (--red|--green|--yellow|--blue|--magenta|--cyan|--white)=REGEX ...
+highlight (--red|--green|--yellow|--blue|--magenta|--cyan|--white)=REGEX ... [FILE]
 
-highlight (-r|-g|-y|-b|-m|-c|-w)=REGEX ...
+highlight (-r|-g|-y|-b|-m|-c|-w)=REGEX ... [FILE]
 
 # DESCRIPTION
 
-Reads lines from standard input and writes them to standard out with any
+Reads lines from file or standard input and writes them to standard out with any
 substrings matching REGEX highlighted in red.
 
 This is similar to `grep --color=always REGEX`, but grep will not print
@@ -37,7 +37,30 @@ Highlight which shells users are using:
 
 # OPTIONS
 
-None
+-r REGEX, \--red=REGEX
+: highlight text matching REGEX in red.
+
+-g REGEX, \--green=REGEX
+: highlight text matching REGEX in green.
+
+-y REGEX, \--yellow=REGEX
+: highlight text matching REGEX in yellow.
+
+-b REGEX, \--blue=REGEX
+: highlight text matching REGEX in blue.
+
+-m REGEX, \--magenta=REGEX
+: highlight text matching REGEX in magenta.
+
+-c REGEX, \--cyan=REGEX
+: highlight text matching REGEX in cyan.
+
+-w REGEX, \--white=REGEX
+: highlight text matching REGEX in white.
+
+\--black=REGEX
+: highlight text matching REGEX in black.
+
 
 # SEE ALSO
 
