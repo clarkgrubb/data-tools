@@ -10,7 +10,7 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv dom_awk highlight reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
+harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
@@ -83,7 +83,7 @@ TAGS:
 
 all: man
 
-output output/dom_awk output/highlight output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
+output output/dom_awk output/highlight output/json_awk output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
 
 harness.csv_to_json: test/test.csv | output
@@ -109,6 +109,11 @@ harness.highlight: test/highlight/input.txt | output/highlight
 	./highlight.py -r control $< > output/highlight/output4.txt
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
 
+harness.json_awk: test/json_awk/input.json | output/json_awk
+	./json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
+	diff test/json_awk/expected.output.txt output/json_awk/output1.txt
+	./json-awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
+	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
 
 harness.reservoir_sample: test/reservoir_sample/input.txt | output/reservoir_sample
 	./reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt

@@ -20,19 +20,37 @@
 #    value in the $_ to standard out as JSON or in tab delimited
 #    format.
 
+require 'getoptlong'
+
+opts = GetoptLong.new(
+  ['--file', '-f',
+   GetoptLong::OPTIONAL_ARGUMENT],
+  ['--json', '-j',
+   GetoptLong::NO_ARGUMENT],
+  ['--tsv', '-t',
+   GetoptLong::NO_ARGUMENT]
+)
+
+script = nil
 output_format = nil
 
-if ['-j', '--json'].include?(ARGV[0])
-  output_format = :json
-  ARGV.shift
-elsif ['-t', '--tab'].include?(ARGV[0])
-  output_format = :tab
-  ARGV.shift
+opts.each do |opt, arg|
+  case opt
+  when '--file'
+    script = File.open(arg).read
+  when '--json'
+    output_format = :json
+  when '--tsv'
+    output_format = :tsv
+  end
 end
 
-if ARGV.size != 1
-  $stderr.puts("USAGE: json-awk.rb [-t|--tab|-j|--json] JSON_AWK_SCRIPT")
-  exit(1)
+if not script
+  if ARGV.size > 0
+    script = ARGV.shift
+  else
+    raise "no script specified"
+  end
 end
 
 cmd = ['ruby', '-n']
@@ -44,15 +62,17 @@ cmd << '-e'
 cmd << '$_ = JSON.parse($_); $nr += 1'
 
 cmd << '-e'
-cmd << ARGV[0]
+cmd << script
 
 case output_format
 when :json
   cmd << '-e'
   cmd << 'puts $_.to_json'
-when :tab
+when :tsv
   cmd << '-e'
   cmd << 'puts $_.join("\t")'
 end
+
+cmd.concat(ARGV)
 
 exec(*cmd)

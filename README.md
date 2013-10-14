@@ -81,7 +81,7 @@ Then run this:
     
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
-    json-awk           [-j|-t] RUBY_SCRIPT < JSON_INPUT
+    json-awk           [-j|-t] (--file=SCRIPT_PATH | RUBY_SCRIPT) [JSON_INPUT] ...
 
     reservoir-sample   [-r SEED] -s NUM [FILE]
 
