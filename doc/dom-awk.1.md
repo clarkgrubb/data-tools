@@ -9,11 +9,11 @@ dom-awk - read HTML or XML into a DOM object and process it with a Ruby script.
 
 # SYNOPSIS
 
-dom-awk [-x|-h] [-f FILE] RUBY_SCRIPT
+dom-awk [-x|-h] (-f SCRIPT\_PATH) | RUBY\_SCRIPT) [XML\_OR\_HTML_FILE]
 
 # DESCRIPTION
 
-Read an HTML or XML document from standard input, or from FILE if specified using the -f option.
+Read an HTML or XML document from a command line path or standard input and process it with a Ruby script.  The Ruby script can be specified on the command line like `awk`, or the Ruby code can be in a file whose path is provided with the `-f` option.
 
 The HTML/XML document is parsed using the Ruby Nokogiri library and made available to the Ruby script which is provided as a command line argument.  The Ruby DOM object is put in the global accumulator variable $_.
 
@@ -58,8 +58,8 @@ A summary of XPath and CSS selectior syntax:
 
 # OPTIONS
 
--f FILE, \--file=FILE
-: Read from FILE instead of standard input.
+-f SCRIPT\_PATH, \--file=SCRIPT\_PATH
+: Use Ruby code in SCRIPT\_PATH to process input.
 
 -h, \--html
 : Used to indicate input is HTML.

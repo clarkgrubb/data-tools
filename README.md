@@ -71,7 +71,7 @@ Then run this:
 
     date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-awk            [-x|-h] [-f FILE] RUBY_SCRIPT
+    dom-awk            [-x|-h] [-f SCRIPT] RUBY_SCRIPT [HTML_OR_XML_FILE]
 
     header-sort        [OPTIONS] FILE
 
