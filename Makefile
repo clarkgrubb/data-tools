@@ -10,7 +10,7 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
+harnesses_base := csv_to_json csv_to_tsv dom_awk reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
@@ -83,7 +83,7 @@ TAGS:
 
 all: man
 
-output output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
+output output/dom_awk output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
 
 harness.csv_to_json: test/test.csv | output
@@ -93,6 +93,11 @@ harness.csv_to_json: test/test.csv | output
 harness.csv_to_tsv:
 	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/test.csv_to_tsv.tsv
 	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
+
+harness.dom_awk: test/dom_awk/input.txt | output/dom_awk
+	./dom-awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
+	> output/dom_awk/output.txt
+	diff test/dom_awk/expected.output.txt output/dom_awk/output.txt
 
 harness.reservoir_sample: test/reservoir_sample/input.txt | output/reservoir_sample
 	./reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt

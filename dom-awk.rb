@@ -49,23 +49,23 @@ end
 
 if not script
   if ARGV.size > 0
-    script = ARGV[0]
+    script = ARGV.shift
   else
     raise "no script specified"
   end
 end
 
 cmd = ['ruby']
-
 cmd << '-e'
 cmd << 'require "rubygems"'
-
 cmd << '-e'
 cmd << 'require "nokogiri"'
-
 cmd << '-e'
-cmd << '$_ = ' + constructor + '($stdin)'
-
+if (ARGV[0])
+  cmd << '$_ = ' + constructor + "(File.open('#{ARGV[0]}'))"
+else
+  cmd << '$_ = ' + constructor + '($stdin)'
+end
 cmd << '-e'
 cmd << script
 
