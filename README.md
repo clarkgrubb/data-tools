@@ -71,7 +71,7 @@ Then run this:
 
     date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-awk            [-x|-h] [-f SCRIPT] RUBY_SCRIPT [HTML_OR_XML_FILE]
+    dom-awk            [-x|-h] [-f SCRIPT_FILE] SCRIPT [HTML_OR_XML_FILE]
 
     header-sort        [OPTIONS] FILE
 
@@ -81,7 +81,7 @@ Then run this:
     
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
-    json-awk           [-j|-t] (--file=SCRIPT_PATH | RUBY_SCRIPT) [JSON_INPUT] ...
+    json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
     reservoir-sample   [-r SEED] -s NUM [FILE]
 
@@ -89,7 +89,7 @@ Then run this:
 
     set-intersect      FILE1 FILE2
 
-    trim-tsv           < INPUT
+    trim-tsv           [TSV_FILE]
 
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
