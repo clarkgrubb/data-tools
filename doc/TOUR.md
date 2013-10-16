@@ -40,11 +40,11 @@ Not all sequences of bytes are valid UTF-8; the *data tools* with throw exceptio
 
     $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
 
-One may want to investigate the problem, however.  Here is how to find non-ASCII bytes:
+Here is how to find non-ASCII bytes:
 
     grep --color='auto' -P -n "[\x80-\xFF]+"
 
-The `-P` option is not provided by the version of `grep` distributed with Mac OS X, however.  One can use the `highlight` command in this repo:
+The `-P` option is not provided by the version of `grep` distributed with Mac OS X.  One can use the `highlight` command in this repo:
 
     $ highlight '[\x80-\xFF]+'
 
@@ -53,27 +53,27 @@ To find the first occurence of bytes which are not valid UTF-8, use `iconv`:
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24
 
-The *data tool* `utf8-viewer` can also be used, since it will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is a small chance of ambiguity.  The Unicode points are displayed next to the rendered characters, and the point will be U+FFFF for invalid characters.
+The *data tool* `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be U+FFFF for invalid characters.
 
     $ utf8-viewer /bin/ls
 
-When a file is in an unknown encoding, one can try to inspect it byte-by-byte.
+When a file is in an unknown encoding, one can inspect it byte-by-byte.
 `od -b` displays the bytes in octal:
 
     $ od -b /bin/ls
 
-The one nice thing that can be said about `od -b` is that it is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding the display is assuming when renders characters.  On the other hand human beings can rarely make sense of octal bytes.
+`od -b` is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding assumed by the display.  On the other hand it is difficult to make sense of octal bytes.
 
 The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
-If you think some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal way which is easier to interpret:
+If some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal yet easier-to-interpret way:
     
     $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | od -c
     
 `od -c` uses C backslash sequences or octal bytes for non-ASCII and non-printing ASCII characters.  
 
 `cat -te` uses a unique escape sequence for each byte, but unlike `od`, it does not display
-a fixed number of bytes per line, so the mapping from input to output is not injective.  Still, since it doesn't introduce line breaks at regular intervals, it may sometimes be easier to interpret.  Here is an example of use:
+a fixed number of bytes per line; the mapping from input to output is not injective.  Still, since it doesn't introduce line breaks at regular intervals, it may be easier to interpret.  An example:
 
     $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8  | cat -te
 
@@ -94,7 +94,7 @@ The `bc` calculator can also be used.  This example assumes `zsh` is the shell:
 <a name="utf-8"/>
 ## utf-8
 
-The `utf8-viewer` *data tool* was written because the author was having a difficult time determining the Unicode points of sequence of UTF-8 bytes.
+The `utf8-viewer` *data tool* provides an easy way to determine the Unicode points of a sequence of UTF-8 bytes.
 
     $ utf8-viewer foo.txt
    
