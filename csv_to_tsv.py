@@ -104,6 +104,7 @@ def detecter(row):
 
 def csv_to_tsv(input_stream,
                output_stream,
+               header,
                delimiter=',',
                quotechar='"',
                sanitizer=stripper):
@@ -112,6 +113,9 @@ def csv_to_tsv(input_stream,
                               delimiter=delimiter,
                               quotechar=quotechar)
 
+
+    if header:
+        output_stream.write('\t'.join(header.split(',')) + '\n')
     lineno = 1
     for row in rows:
         #try:
@@ -135,6 +139,9 @@ if __name__ == '__main__':
                         dest='escape',
                         action='store_const',
                         const=True)
+    parser.add_argument('--header',
+                        dest='header',
+                        metavar='NAME[,NAME..]')
     parser.add_argument('--strip', '-x',
                         dest='strip',
                         action='store_const',
@@ -176,6 +183,7 @@ if __name__ == '__main__':
 
     csv_to_tsv(sys.stdin,
                sys.stdout,
+               args.header,
                delimiter=args.delimiter,
                quotechar=args.quotechar,
                sanitizer=sanitizer)

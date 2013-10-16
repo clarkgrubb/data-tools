@@ -27,6 +27,9 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tsv` 
 -e, \--escape
 : Use backslash escape sequences to escape tabs, carriage returns, newlines, and backslashes.
 
+\--header=NAME[,NAME...]
+: comma-separated list of column names.  Use if CSV does not have a header row.
+
 -q QUOTECHAR, \--quotechar=QUOTECHAR
 : Used to read CSV files which use QUOTECHAR to quote fields instead of double quotes.
 
