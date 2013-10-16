@@ -86,7 +86,7 @@ The Ruby interpreter can be pressed into service as a tool for performing base c
     $ ruby -e 'puts "316".to_i(8).to_s(16)'
     ce
 
-The `bc` calculator can also be used.  This example assumes `zsh` is the shell:
+The `bc` calculator can also be used:
 
     echo $'obase=16\n\nibase=8\n42' | bc
     22
@@ -253,7 +253,7 @@ Tabs receive criticism, and deservedly, because they are indistinguishable as no
 
 The fact that tabs are visually identical to spaces means that in many applications they *can* be replaced by spaces, which makes tabs available for delimiting fields.  One could use a non-printing character, but most applications do not display non-printing characters well.
 
-Here is how to align the columns of a tab delimited file when using `zsh`:
+Here is how to align the columns of a tab delimited file:
 
     tr ':' '\t' < /etc/passwd | column -t -s $'\t'
 
