@@ -1,0 +1,53 @@
+.TH XLSX\-TO\-CSV 1 "May 4, 2013" 
+.SH NAME
+.PP
+xlsx\-to\-csv \- convert .xlsx to .csv
+.SH SYNOPSIS
+.IP
+.nf
+\f[C]
+xlsx\-to\-csv\ XLSX\\_FILE\ OUTPUT_DIR
+xlsx\-to\-csv\ \-\-sheet=SHEET\ XLSX\\_FILE\ [OUTPUT\\_FILE]
+xlsx\-to\-csv\ \-\-list\ XLSX\\_FILE
+\f[]
+.fi
+.SH DESCRIPTION
+.PP
+Read a .xlsx file and create a .csv file in DIRECTORY for each
+worksheet.
+.PP
+DIRECTORY must not already exist.
+.PP
+Output is UTF\-8 encoded.
+.PP
+\&.xlsx files are the format used by Excel since 2007.
+The .xlsx file format defined by ECMA\-376.
+An .xlsx file is a ZIP archive of a directory containing XML documents.
+The \f[C]unzip\ \-l\f[] command can be used to list the contents of a
+ZIP archive and hence an .xlsx file.
+.PP
+\f[C]xlsx\-to\-csv\f[] also works on .xls files which were used by Excel
+before 2007.
+.PP
+The tool can easily take a minute or more to process a large (~100MB)
+workbook.
+Unfortunately, it takes about this long just to list the sheet names
+with the \f[C]\-\-list\f[] flag.
+Hence it is more efficient to extract all of the sheets from a large
+workbook even if only one of the sheets is needed.
+.SH OPTIONS
+.PP
+\-\-list : list the sheets in XLSX_FILE
+.PP
+\-\-sheet : only convert SHEET to a .csv file.
+.PP
+\-\-date\-format=STRFTIME_FMT : a \f[C]strftime\f[] style format to be
+used for Excel dates.
+The default is the ISO 8601 format: \[aq]%Y\-%m\-%dT%H:%M:%S\[aq].
+.SH SEE ALSO
+.PP
+\f[C]csv\-to\-tsv\f[] (1), \f[C]strftime\f[] (3)
+.PP
+http://www.ecma\-international.org/publications/standards/Ecma\-376.htm
+.SH AUTHORS
+Clark Grubb.

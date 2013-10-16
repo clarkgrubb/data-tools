@@ -1,0 +1,51 @@
+.TH CSV\-TO\-TSV 1 "February 16, 2013" 
+.SH NAME
+.PP
+csv\-to\-tsv \- convert CSV to TSV
+.SH SYNOPSIS
+.PP
+csv\-to\-tsv OPTIONS [CSV_FILE]
+.SH DESCRIPTION
+.PP
+Read a CSV file from file specified on command line or standard input
+and write the corresponding TSV file to standard output.
+.PP
+In the TSV format fields are delimited by tabs and records are
+terminated by an end\-of\-line marker.
+\f[C]csv\-to\-tsv\f[] uses newline as the end\-of\-line marker.
+.PP
+There is no mechanism for quoting tabs or newlines, and by default
+\f[C]csv\-to\-tsv\f[] will fail if they occur in the fields of the CSV
+file.
+.SH OPTIONS
+.PP
+\-d DELIMITER, \-\-delimiter=DELIMITER : Used to read CSV files which
+use DELIMITER to separate fields instead of a comma.
+.PP
+\-e, \-\-escape : Use backslash escape sequences to escape tabs,
+carriage returns, newlines, and backslashes.
+.PP
+\-\-header=NAME[,NAME...] : comma\-separated list of column names.
+Use if CSV does not have a header row.
+.PP
+\-q QUOTECHAR, \-\-quotechar=QUOTECHAR : Used to read CSV files which
+use QUOTECHAR to quote fields instead of double quotes.
+.PP
+\-r, \-\-replace : replaces tabs and characters that should be
+interpreted as newlines as newlines with spaces.
+The characters treated as newlines are: 85 2028 2029.
+.PP
+\-x, \-\-strip : Remove tabs, carriage returns, and newlines in fields.
+.PP
+\-z, \-\-squeeze : replace tabs and characters that should be
+interpreted as newlines with spaces and then replace adjacent spaces
+with a single space.
+.SH SEE ALSO
+.PP
+\f[C]tsv\-to\-csv\f[] (1)
+.PP
+http://www.ietf.org/rfc/rfc4180.txt
+.PP
+http://www.iana.org/assignments/media\-types/text/tab\-separated\-values
+.SH AUTHORS
+Clark Grubb.

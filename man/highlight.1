@@ -1,0 +1,60 @@
+.TH HIGHTLIGHT 1 "September 12, 2013" 
+.SH NAME
+.PP
+highlight \- highlight text in a stream maching a regular expression
+.SH SYNOPSIS
+.PP
+highlight REGEX [FILE]
+.PP
+highlight
+(\-\-red|\-\-green|\-\-yellow|\-\-blue|\-\-magenta|\-\-cyan|\-\-white)=REGEX
+...
+[FILE]
+.PP
+highlight (\-r|\-g|\-y|\-b|\-m|\-c|\-w)=REGEX ...
+[FILE]
+.SH DESCRIPTION
+.PP
+Reads lines from file or standard input and writes them to standard out
+with any substrings matching REGEX highlighted in red.
+.PP
+This is similar to \f[C]grep\ \-\-color=always\ REGEX\f[], but grep will
+not print lines which don\[aq]t match REGEX at all.
+.PP
+The default color is red.
+The other choices are green, yellow, blue, magenta, cyan, white, and
+black.
+.PP
+Multiple patterns can be specified, but the results when patterns
+overlap are unpredictable.
+.SH EXAMPLES
+.PP
+Highlight which shells users are using:
+.IP
+.nf
+\f[C]
+highlight\ \-r\ /bin/bash\ \-g\ /bin/sh\ \-b\ /usr/bin/zsh\ \-m\ /bin/false\ <\ /etc/passwd
+\f[]
+.fi
+.SH OPTIONS
+.PP
+\-r REGEX, \-\-red=REGEX : highlight text matching REGEX in red.
+.PP
+\-g REGEX, \-\-green=REGEX : highlight text matching REGEX in green.
+.PP
+\-y REGEX, \-\-yellow=REGEX : highlight text matching REGEX in yellow.
+.PP
+\-b REGEX, \-\-blue=REGEX : highlight text matching REGEX in blue.
+.PP
+\-m REGEX, \-\-magenta=REGEX : highlight text matching REGEX in magenta.
+.PP
+\-c REGEX, \-\-cyan=REGEX : highlight text matching REGEX in cyan.
+.PP
+\-w REGEX, \-\-white=REGEX : highlight text matching REGEX in white.
+.PP
+\-\-black=REGEX : highlight text matching REGEX in black.
+.SH SEE ALSO
+.PP
+\f[C]grep\f[] (1)
+.SH AUTHORS
+Clark Grubb.

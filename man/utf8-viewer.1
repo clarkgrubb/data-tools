@@ -1,0 +1,102 @@
+.TH UTF8\-VIEWER 1 "May 26, 2013" 
+.SH NAME
+.PP
+utf8\-viewer \- display Unicode points and optionally names of UTF\-8
+encoded file
+.SH SYNOPSIS
+.PP
+utf8\-viewer [\-b|\-c|\-n][\-w NUM] [FILE]
+.PP
+utf8\-viewer [\-b|\-c|\-n] \-a BYTE ...
+.SH DESCRIPTION
+.PP
+Convert UTF\-8 to Unicode.
+The Unicode points are hex digits.
+The UTF\-8 bytes are read from a file, or standard input if no file is
+specified.
+By default eight characters are displayed per line.
+The characters are rendered on the left and the Unicode points are on
+the right.
+.PP
+With the \-a flag each UTF\-8 byte is specified as an argument on the
+command line.
+The format of the bytes can be binary, octal, decimal, or hex.
+The prefixes \[aq]0b\[aq], \[aq]0x\[aq], and \[aq]0\[aq] must be used to
+indicate binary, hex, and octal bytes, respectively.
+Decimal bytes must not have a leading zero.
+.SH OPTIONS
+.PP
+\-a, \-\-arg : read the UTF\-8 bytes from the command line.
+.PP
+\-b, \-\-byte\-offset : display the offset in bytes of the leftmost
+character on the row.
+.PP
+\-c, \-\-char\-offset : display the offset in characters of the leftmost
+character on the row.
+.PP
+\-i, \-\-invalid\-char : Unicode point of the character to use for
+invalid bytes.
+The default is U+25A0 "BLACK SQUARE".
+Has no effect unless the \-r flag is also used.
+.PP
+\-n, \-\-name : use the Internet to lookup the character name for the
+Unicode code point.
+This implies a width of 1.
+.PP
+\-\-no\-render : don\[aq]t display the characters in addition to the
+Unicode points.
+.PP
+\-u, \-\-unprintable\-char : Unicode point of the character to use for
+unprintable characters.
+The default is U+25A1 "WHITE SQUARE".
+Has no effect unless the \-r flag is also used.
+.PP
+\-w NUM, \-\-width NUM : number of characters to display on each row.
+Default is 8.
+.SH EXAMPLES
+.PP
+How to display the old Mac Roman character set:
+.IP
+.nf
+\f[C]
+$\ ruby\ \-e\ \[aq](0..255).each\ {\ |i|\ print\ i.chr\ }\[aq]\ |\ iconv\ \-f\ mac\ \-t\ utf8\ |\ utf8\-viewer
+\f[]
+.fi
+.PP
+How to display Code Page 437 used by the original IBM PC:
+.IP
+.nf
+\f[C]
+$\ ruby\ \-e\ \[aq](0..255).each\ {\ |i|\ print\ i.chr\ }\[aq]\ |\ iconv\ \-f\ cp437\ \-t\ utf8\ |\ utf8\-viewer
+\f[]
+.fi
+.PP
+How to display Code Page 1252, also called Windows 1252:
+.IP
+.nf
+\f[C]
+$\ ruby\ \-e\ \[aq](0..255).each\ {\ |i|\ print\ i.chr\ }\[aq]\ |\ iconv\ \-\-byte\-subst=\[aq]\ \[aq]\ \-f\ ms\-ansi\ \-t\ utf8\ |\ utf8\-viewer
+\f[]
+.fi
+.PP
+How to display the entire Basic Multilingual Plane:
+.IP
+.nf
+\f[C]
+$\ ruby\ \-e\ \[aq](0..0xfff).each\ {\ |i|\ print\ [i].pack("U")\ }\[aq]\ |\ utf8\-viewer
+\f[]
+.fi
+.PP
+If you need to convert a Unicode code point to UTF\-8 bytes, the
+following will work when using the \f[C]zsh\f[] shell:
+.IP
+.nf
+\f[C]
+$\ echo\ \-n\ \[aq]\\u2028\[aq]\ |\ od\ \-b
+\f[]
+.fi
+.SH SEE ALSO
+.PP
+\f[C]od\f[] (1), \f[C]hexdump\f[] (1), \f[C]hexedit\f[] (1)
+.SH AUTHORS
+Clark Grubb.

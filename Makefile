@@ -6,7 +6,7 @@ SHELL := /bin/bash
 .SUFFIXES:
 
 man1_source := $(wildcard doc/*.1.md)
-man1_targets := $(patsubst %.md,%,$(man1_source))
+man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
@@ -54,7 +54,24 @@ install: build
 	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	@echo Run 'make install-man' to install man pages.
 
-install-man: man
+# To generate the man pages `pandoc` must be installed.  On Mac go to
+#
+#    http://johnmacfarlane.net/pandoc/installing.html
+#
+#  and download the installer.  On Ubuntu there is a package:
+#
+#    $ sudo apt-get install pandoc
+#
+# An uninstalled man page can be viewed with the man command:
+#
+#    $ man doc/foo.1
+#
+man/%.1: doc/%.1.md
+	pandoc -s -s -w man $< -o $@
+
+man_targets: $(man1_targets)
+
+install-man: man_targets
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	false; \
@@ -63,26 +80,6 @@ install-man: man
 	do \
 	cp $$target $(LOCAL_MAN_DIR)/man1; \
 	done
-
-data/UnicodeData.txt:
-	curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > $@
-
-download: data/UnicodeData.txt
-
-pep8:
-	pep8 *.py
-
-# An uninstalled man page can be viewed with the man command:
-#
-#   man doc/foo.1
-#
-man: $(man1_targets)
-
-doc/%.1: doc/%.1.md
-	pandoc -s -s -w man $< -o $@
-
-TAGS:
-	find . -name '*.py' | xargs etags
 
 all:
 	@echo
@@ -182,6 +179,12 @@ test.ruby:
 test: test.python test.ruby
 
 check: test harness
+
+pep8:
+	pep8 *.py
+
+TAGS:
+	find . -name '*.py' | xargs etags
 
 clean:
 	-find . -name '*.pyc' | xargs rm

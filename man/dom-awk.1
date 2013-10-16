@@ -1,0 +1,89 @@
+.TH DOM\-AWK 1 "February 17, 2013" 
+.SH NAME
+.PP
+dom\-awk \- read HTML or XML into a DOM object and process it with a
+Ruby script.
+.SH SYNOPSIS
+.PP
+dom\-awk [\-x|\-h] (\-f SCRIPT_PATH) | RUBY_SCRIPT) [XML_OR_HTML_FILE]
+.SH DESCRIPTION
+.PP
+Read an HTML or XML document from a command line path or standard input
+and process it with a Ruby script.
+The Ruby script can be specified on the command line like \f[C]awk\f[],
+or the Ruby code can be in a file whose path is provided with the
+\f[C]\-f\f[] option.
+.PP
+The HTML/XML document is parsed using the Ruby Nokogiri library and made
+available to the Ruby script which is provided as a command line
+argument.
+The Ruby DOM object is put in the global accumulator variable $_.
+.PP
+A Nokogiri DOM object is a hierarchical tree of Nodes.
+Here are some of the most useful Node methods:
+.IP
+.nf
+\f[C]
+[]\ \ \ \ \ \ \ \ \ \ \ treat\ Node\ as\ Hash\ of\ its\ attributes
+children()\ \ \ return\ NodeSet\ of\ children
+content()
+css()\ \ \ \ \ \ \ \ return\ NodeSet\ which\ matches\ CSS\ rule
+document()
+parent()
+to_s()
+xpath()\ \ \ \ \ \ return\ NodeSet\ 
+\f[]
+.fi
+.PP
+Some useful NodeSet methods.
+.IP
+.nf
+\f[C]
+[]
+each()
+filter()
+include?()
+length()
+\f[]
+.fi
+.PP
+A summary of XPath and CSS selectior syntax:
+.IP
+.nf
+\f[C]
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xpath\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ css\ \ \ \ \ \ \ \ \ \ \ \ \ dom
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+by\ id\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //*[\@id="foo"]\ \ \ \ \ \ \ #foo\ \ \ \ \ \ \ \ \ \ \ \ getElementById("foo")
+by\ class\ \ \ \ \ \ \ \ \ \ \ \ \ //*[\@class="foo"]\ \ \ \ .foo\ \ \ \ \ \ \ \ \ \ \ \ getElementsByClassName("foo")
+by\ tag\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //div\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ div\ \ \ \ \ \ \ \ \ \ \ \ \ getElementsByTagName("div")
+by\ attribute\ \ \ \ \ \ \ \ \ //*[\@title]\ \ \ \ \ \ \ \ \ \ [title]
+by\ attribute\ value\ \ \ //*[\@title="foo"]\ \ \ \ [title="foo"]
+union\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //h1\ |\ //h2\ \ \ \ \ \ \ \ \ \ h1,\ h2
+child\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\@class="foo"]/li\ \ \ \ .foo\ >\ li
+descendant\ \ \ \ \ \ \ \ \ \ \ [\@class="foo"]//td\ \ \ .foo\ td
+\f[]
+.fi
+.SH EXAMPLES
+.IP
+.nf
+\f[C]
+curl\ www.google.com\ |\ dom\-awk\ \ \[aq]$_.xpath("//a").each\ {|o|\ puts\ o["href"]\ }\[aq]
+
+echo\ \[aq]<xml><foo>bar</foo></xml>\[aq]\ |\ dom\-awk\ \[aq]$_.xpath("//foo").each\ {\ |o|\ puts\ o.content\ }\[aq]
+\f[]
+.fi
+.SH OPTIONS
+.PP
+\-f SCRIPT_PATH, \-\-file=SCRIPT_PATH : Use Ruby code in SCRIPT_PATH to
+process input.
+.PP
+\-h, \-\-html : Used to indicate input is HTML.
+.PP
+\-x, \-\-xml : Used to indicate input is XML.
+.SH SEE ALSO
+.PP
+\f[C]curl\f[] (1), \f[C]w3m\f[] (1)
+.PP
+http://nokogiri.org/Nokogiri/XML/Node.html
+.SH AUTHORS
+Clark Grubb.

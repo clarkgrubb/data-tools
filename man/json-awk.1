@@ -1,0 +1,36 @@
+.TH JSON\-AWK 1 "February 17, 2013" 
+.SH NAME
+.PP
+json\-awk \- read JSON objects from a file or standard input and process
+them with Ruby
+.SH SYNOPSIS
+.PP
+json\-awk [\-j|\-t] (\-f RUBY_PATH | RUBY_SCRIPT) [JSON_INPUT] ...
+.SH DESCRIPTION
+.PP
+Read input containing one JSON object per line and parse it.
+Each parsed object is placed in the global accumulator variable $_ where
+it can be accessed by the Ruby script.
+.PP
+The Ruby script can be provided on the command line or read from the
+file RUBY_PATH.
+.PP
+BEGIN and END blocks can be defined in the manner of \f[C]awk\f[] to
+define Ruby code which executes at the start or end of execution.
+.SH OPTIONS
+.PP
+\-f PATH, \-\-file=PATH : execute the Ruby script in the file at PATH.
+.PP
+\-j, \-\-json : after the Ruby script is executed, write the contents of
+$_ to standard output as JSON.
+.PP
+\-t, \-\-tsv : after the Ruby script is executed, write the contents of
+$_, which is expected to be an Array, to standard output in tab
+separated values format.
+.SH SEE ALSO
+.PP
+\f[C]awk\f[] (1)
+.PP
+http://json.org/
+.SH AUTHORS
+Clark Grubb.

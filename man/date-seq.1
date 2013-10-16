@@ -1,0 +1,75 @@
+.TH DATE\-SEQ 1 "June 17, 2013" 
+.SH NAME
+.PP
+date\-seq \- print sequence of dates or times
+.SH SYNOPSIS
+.PP
+date\-seq [\-\-format=FMT][\-\-weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]]
+YYYY[MM[DD[HH]]]
+.SH DESCRIPTION
+.PP
+Generate a sequence of dates or times.
+.PP
+The command takes two arguments: the start date and the end date.
+The generated sequence is inclusive.
+.PP
+The format of the date arguments is YYYY[MM[DD[HH[MI[SS]]]]].
+As little as the year or as much as the second can be specified.
+The end date must be the same length as the start date.
+.PP
+If the arguments have a YYYYMMDD format, the sequence will consist of
+days.
+If the arguments have a YYYYMMDDHH format, the sequence will consist of
+hours.
+Sequences of years, months, minutes, or seconds are also possible.
+.SH OPTIONS
+.PP
+\-\-format : \f[C]strftime\f[] style format string to control output.
+.PP
+\-\-regex : a regular expression which can be used to filter the
+sequence.
+The regular expression should be written to apply to the
+YYYY[MM[DD[HH[MI[SS]]]]] format, not the output format specified by the
+\-\-format flag.
+.PP
+\-\-weekdays : comma separated list of weekdays.
+Dates for days outside the list are excluded.
+.SH EXAMPLES
+.PP
+Every Monday, Wednesday, and Friday in October 2012:
+.IP
+.nf
+\f[C]
+date\-seq\ \-\-weekdays=Mon,Wed,Fri\ 20121001\ 20121031
+\f[]
+.fi
+.PP
+Every fourth day starting October 1, 2012:
+.IP
+.nf
+\f[C]
+date\-seq\ 20121001\ 20121101\ |\ awk\ \[aq]NR\ %\ 4\ ==\ 0\[aq]
+\f[]
+.fi
+.PP
+The second day of each month of 2012 in YYYY\-MM\-DD format:
+.IP
+.nf
+\f[C]
+date\-seq\ \-\-format=\[aq]%F\[aq]\ \-\-regex=\[aq].{6}02\[aq]\ 20120101\ 20121231
+\f[]
+.fi
+.PP
+The 30 most recent days in YYYYMMDD format:
+.IP
+.nf
+\f[C]
+date\-seq\ 20100101\ $(date\ +\[aq]%Y%m%d\[aq])\ |\ tail\ \-30
+\f[]
+.fi
+.SH SEE ALSO
+.PP
+\f[C]strftime\f[] (3), \f[C]seq\f[] (1), \f[C]grep\f[] (1), \f[C]awk\f[]
+(1)
+.SH AUTHORS
+Clark Grubb.

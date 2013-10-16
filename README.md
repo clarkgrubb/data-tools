@@ -1,7 +1,7 @@
 
 # SUMMARY
 
-Mostly data extraction and file format conversion tools.  Take [the tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) for a more verbose introduction to the tools.
+Mostly data extraction and file format conversion tools.  This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
 
     csv-to-json        convert CSV to JSON
 
@@ -51,17 +51,11 @@ Then run this to put the *data tools* in your path.  It must be run with permiss
 
 If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL_INSTALL_DIR` environment variable.
 
-To generate and install man pages `pandoc` must be installed.  On Mac go to
-
-    http://johnmacfarlane.net/pandoc/installing.html
-
-and download the installer.  On Ubuntu there is a package:
-
-    $ sudo apt-get install pandoc
-
 Then run this:
 
     $ make install-man
+
+The location of the man directory (`/usr/local/share/man`) can be changed by setting the `LOCAL_MAN_DIR` environment variable.
 
 # HOW TO RUN
 

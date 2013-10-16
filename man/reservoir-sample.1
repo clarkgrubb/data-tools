@@ -1,0 +1,40 @@
+.TH RESERVOIR\-SAMPLE 1 "October 13, 2013" 
+.SH NAME
+.PP
+reservoir\-sample \- sample lines from file or standard input
+.SH SYNOPSIS
+.PP
+reservoir\-sample [\-r|\-\-random\-seed SEED] (\-s NUM|\-\-size=NUM)
+[FILE]
+.SH DESCRIPTION
+.PP
+Select NUM lines randomly from FILE or standard input.
+Each line is equally likely to be chosen.
+.PP
+The script uses reservoir sampling.
+It is more efficient than randomly shuffling the file with
+\f[C]sort\ \-R\f[] and then taking the first N lines with \f[C]head\f[].
+.PP
+To select a sample size which is proportional to the size of the input,
+use \f[C]awk\f[]:
+.IP
+.nf
+\f[C]
+awk\ \[aq]rand()\ <\ 0.1\[aq]
+\f[]
+.fi
+.PP
+The script allocates memory for N lines of input.
+.SH OPTIONS
+.PP
+\-r SEED, \-\-random\-seed=SEED : a seed value to be passed to the
+random number generator.
+.PP
+\-s NUM, \-\-size=NUM : the size of the sample to select
+.SH SEE ALSO
+.PP
+\f[C]sort\f[] (1), \f[C]awk\f[] (1), \f[C]shuf\f[] (1)
+.PP
+https://en.wikipedia.org/wiki/Reservoir_sampling
+.SH AUTHORS
+Clark Grubb.
