@@ -17,7 +17,7 @@ harnesses := $(patsubst %,harness.%,$(harnesses_base))
 hexedit := hexedit/hexedit
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
-tawk := tawk/mawk-1.3.4-20130803
+tawk := tawk/tawk
 VPATH = test
 
 .PHONY: all build TAGS check clean test man install install-build install-man install-script
@@ -202,4 +202,5 @@ clean:
 	-find . -name '*.html' | xargs rm
 	-rm TAGS
 	-rm -rf output
-	-rm -rf $(hexedit) $(tawk)
+	$(MAKE) -C tawk $@
+	$(MAKE) -C hexedit $@
