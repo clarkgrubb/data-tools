@@ -120,7 +120,7 @@ How to lookup a Unicode point:
     $ awk -F';' '$1 == "03BB"' /tmp/UnicodeData.txt 
     03BB;GREEK SMALL LETTER LAMDA;Ll;0;L;;;;;N;GREEK SMALL LETTER LAMBDA;;039B;;039B
 
-`UnicodeData.txt` is a useful file, and possibly it deserves a dedicated path on your file system.  
+`UnicodeData.txt` is a useful file, and possibly it deserves a dedicated path on your file system.  I keep a copy at `~/Etc/UnicodeData.txt`.
 
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
 
@@ -132,16 +132,22 @@ The first three fields are "Point", "Name", and "[General Category](http://www.u
 <a name="eol-markers"/>
 ## eol markers
 
-The *data tools* use LF as the end-of-line marker in output.  The *data tools* will generally
-handle other EOL markers in input correctly.  See [this](http://www.unicode.org/standard/reports/tr13/tr13-5.html)
-for a list of the Unicode characters that should be treated as EOL markers.
-Use `unix2dos` (see if your package manager has the package `dos2unix`) to convert the output of one of the *data tools* to CRLF style EOL markers.
+The *data tools* interpret LF, CRLF, or CR as end-of-line markers in input.  The *data tools* use LF as the end-of-line marker in output.  To convert LF line endings to CRLF or CR line endings:
 
+    sed 's/$'"/$(echo \\\r)/"
     tr '\n' '\r'
+
+To convert CRLF or CR line endings to LF line endings:
+
     tr -d '\r'
+    tr '\n' '\r'
+
+For LF to CRLF conversions, another option is the following tools (which might need to be installed, see if your package manager has `dos2unix`).  These tools take pathnames and modify the files in place:
 
     dos2unix
     unix2dos
+   
+The Unicode Consortium provides a [complete list](http://www.unicode.org/standard/reports/tr13/tr13-5.html) of Unicode characters that might be treated as EOL markers.  In a line-delimited file format these characters should be escaped or removed.
    
 <a name="set-op"/>
 ## set operations
