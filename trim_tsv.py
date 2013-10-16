@@ -14,4 +14,12 @@ def trim_tsv(input_stream, output_stream):
 
 
 if __name__ == '__main__':
-    trim_tsv(sys.stdin, sys.stdout)
+
+    if len(sys.argv) == 1:
+        trim_tsv(sys.stdin, sys.stdout)
+    elif len(sys.argv) == 2:
+        with open(sys.argv[1]) as f:
+            trim_tsv(f, sys.stdout)
+    else:
+        sys.stderr.write("USAGE: trim-tsv [FILE]\n")
+        sys.exit(1)

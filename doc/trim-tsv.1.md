@@ -9,11 +9,11 @@ trim-tsv - trim whitespace from fields in a tab delimited file
 
 # SYNOPSIS
 
-trim-tsv < INPUT > OUTPUT
+trim-tsv [TSV_FILE]
 
 # DESCRIPTION
 
-Trim whitespace from fields in a tab delimited file.
+Trim whitespace from fields in a tab delimited file.  If no path is specified on the command line, the tool reads from standard input.
 
 # OPTIONS
 

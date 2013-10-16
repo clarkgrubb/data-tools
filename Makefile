@@ -122,6 +122,8 @@ harness.reservoir_sample: test/reservoir_sample/input.txt | output/reservoir_sam
 harness.trim_tsv: output/trim_tsv
 	echo -n $$' one \t two \n three \t four' | ./trim_tsv.py > output/trim_tsv/trim_tsv.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/trim_tsv.tsv
+	./trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
+	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
 harness.tsv_to_csv: harness.tsv_to_csv.escape
 
