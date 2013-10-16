@@ -1,7 +1,7 @@
 [introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="intro"/>
-# Introduction
+# INTRODUCTION
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
@@ -18,7 +18,7 @@ Tools in a pipeline must agree on the *format* of the data in the byte stream.  
 When we encounter byte streams in other formats, we invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
 
 <a name="encodings"/>
-# Encodings
+# ENCODINGS
 
 [iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode)
 
@@ -125,7 +125,7 @@ How to lookup a Unicode point:
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
 
 <a name="newlines"/>
-# Newlines
+# NEWLINES
 
 [eol markers](#eol-markers) | [set operations](#set-op) | [highlighting](#highlighting) | [sequences](#seq) | [sampling](#sampling)
 
@@ -232,7 +232,7 @@ An efficient and unbiased way to select an exact number of lines from a file is 
     $ reservoir-sample --size 3 < /etc/passwd
     
 <a name="relational-fmt"/>
-# Relational Formats
+# RELATIONAL FORMATS
 
 [tsv](#tsv) | [csv](#csv) | [json](#relational-json) | [xlsx](#xlsx)
 
@@ -374,7 +374,7 @@ By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change 
 The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the same interface as `xlsx-to-csv`.
 
 <a name="hierarchical-fmt"/>
-# Hierarchical Formats
+# HIERARCHICAL FORMATS
 
 Hierarchical data can be stored in JSON, which we discussed above.
 

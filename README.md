@@ -1,4 +1,6 @@
+[summary](#summary) | [setup](#setup) | [how to run](#how-to-run)
 
+<a name="summary"/>
 # SUMMARY
 
 Mostly data extraction and file format conversion tools.  This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
@@ -39,6 +41,7 @@ Mostly data extraction and file format conversion tools.  This page describe the
     
     xlsx-to-csv        convert XLSX to CSV
 
+<a name="setup"/>
 # SETUP
 
 To install the necessary Ruby gems and Python packages:
@@ -53,6 +56,7 @@ It must be run with permission to create files in the install directory; it crea
 
 You can override the choice of install directory (`/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.  You can override the choice of man page directory (`/usr/local/share/man`) by setting the `LOCAL_MAN_DIR` environment variable.
 
+<a name="how-to-run"/>
 # HOW TO RUN
 
     csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
