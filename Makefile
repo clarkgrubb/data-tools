@@ -10,7 +10,9 @@ man1_targets := $(patsubst %.md,%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer xlsx_to_csv
+harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk
+harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
+harnesses_base += xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
@@ -82,7 +84,14 @@ doc/%.1: doc/%.1.md
 TAGS:
 	find . -name '*.py' | xargs etags
 
-all: man
+all:
+	@echo
+	@echo 'To install data-tools:'
+	@echo
+	@echo '   $$ sudo make setup'
+	@echo
+	@echo '   $$ make install'
+	@echo
 
 output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
 	mkdir -p $@
@@ -100,6 +109,8 @@ harness.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 harness.csv_to_tsv: | output/csv_to_tsv
 	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/csv_to_tsv/test.csv_to_tsv.tsv
 	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
+	echo $$'λ,two\nthree,four' | ./csv_to_tsv.py > output/csv_to_tsv/unicode.tsv
+	diff test/csv_to_tsv/expected.unicode.tsv output/csv_to_tsv/unicode.tsv
 
 harness.dom_awk: dom_awk/input.txt | output/dom_awk
 	./dom-awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
@@ -159,15 +170,15 @@ harness.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 
 harness: $(harnesses)
 
-check.python:
+test.python:
 	find . -name 'test*.py' | xargs python
 
-check.ruby:
+test.ruby:
 	find . -name 'test*.rb' | xargs ruby
 
-check: check.python check.ruby
+test: test.python test.ruby
 
-test: check
+check: test harness
 
 clean:
 	-find . -name '*.pyc' | xargs rm

@@ -22,6 +22,18 @@ sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
 sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
 
 
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
+
+
+def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
+    csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
+                            dialect=dialect, **kwargs)
+    for row in csv_reader:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
+
 def stripper(row):
     return [field.translate(None, STRIPPER_CHARS) for field in row]
 
@@ -96,9 +108,9 @@ def csv_to_tsv(input_stream,
                quotechar='"',
                sanitizer=stripper):
 
-    rows = csv.reader(input_stream,
-                      delimiter=delimiter,
-                      quotechar=quotechar)
+    rows = unicode_csv_reader(input_stream,
+                              delimiter=delimiter,
+                              quotechar=quotechar)
 
     lineno = 1
     for row in rows:
