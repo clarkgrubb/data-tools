@@ -51,7 +51,7 @@ Then run this to put the *data tools* in your path.  It must be run with permiss
 
 If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL_INSTALL_DIR` environment variable.
 
-Then run this:
+To install man pages:
 
     $ make install-man
 
