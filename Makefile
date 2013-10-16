@@ -14,6 +14,7 @@ harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk reservoir_sa
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
+VPATH = test
 
 .PHONY: all TAGS check clean test man install install-man
 .SECONDARY:
@@ -83,23 +84,29 @@ TAGS:
 
 all: man
 
-output output/dom_awk output/highlight output/json_awk output/reservoir_sample output/trim_tsv output/utf8_viewer output/xlsx_to_csv:
+output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
 	mkdir -p $@
 
-harness.csv_to_json: test/test.csv | output
-	./csv_to_json.py $< > output/test.csv_to_json.json
-	#diff output/test.csv_to_json.json test/expected.test.csv_to_json.json
+output/json_awk output/reservoir_sample output/trim_tsv output/tsv_to_csv:
+	mkdir -p $@
 
-harness.csv_to_tsv:
-	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/test.csv_to_tsv.tsv
-	diff test/expected.csv_to_tsv.tsv output/test.csv_to_tsv.tsv
+output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
+	mkdir -p $@
 
-harness.dom_awk: test/dom_awk/input.txt | output/dom_awk
+harness.csv_to_json: csv_to_json/test.csv | output/csv_to_json
+	./csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
+	#diff output/csv_to_json/test.csv_to_json.json test/expected.test.csv_to_json.json
+
+harness.csv_to_tsv: | output/csv_to_tsv
+	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/csv_to_tsv/test.csv_to_tsv.tsv
+	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
+
+harness.dom_awk: dom_awk/input.txt | output/dom_awk
 	./dom-awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
 	> output/dom_awk/output.txt
 	diff test/dom_awk/expected.output.txt output/dom_awk/output.txt
 
-harness.highlight: test/highlight/input.txt | output/highlight
+harness.highlight: highlight/input.txt | output/highlight
 	./highlight.py control < $< > output/highlight/output1.txt
 	diff test/highlight/expected.output.txt output/highlight/output1.txt
 	./highlight.py control $< > output/highlight/output2.txt
@@ -109,30 +116,28 @@ harness.highlight: test/highlight/input.txt | output/highlight
 	./highlight.py -r control $< > output/highlight/output4.txt
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
 
-harness.json_awk: test/json_awk/input.json | output/json_awk
+harness.json_awk: json_awk/input.json | output/json_awk
 	./json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output1.txt
 	./json-awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
 
-harness.reservoir_sample: test/reservoir_sample/input.txt | output/reservoir_sample
+harness.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
 	./reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
 	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
 
-harness.trim_tsv: output/trim_tsv
+harness.trim_tsv: | output/trim_tsv
 	echo -n $$' one \t two \n three \t four' | ./trim_tsv.py > output/trim_tsv/trim_tsv.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/trim_tsv.tsv
 	./trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
-harness.tsv_to_csv: harness.tsv_to_csv.escape
+harness.tsv_to_csv: tsv_to_csv/escapes.tsv | output/tsv_to_csv
+	./tsv_to_csv.py -u $< | ./csv_to_tsv.py -e > output/tsv_to_csv/escape.tsv
+	diff $< output/tsv_to_csv/escape.tsv
 
-harness.tsv_to_csv.escape: test/escapes.tsv | output
-	./tsv_to_csv.py -u $< | ./csv_to_tsv.py -e > output/escape.tsv
-	diff $< output/escape.tsv
-
-harness.tsv_to_json: test/test.tsv | output
-	./tsv_to_json.py $< > output/test.tsv_to_json.json
+harness.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
+	./tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
 
 harness.utf8_viewer: | output/utf8_viewer
 	-ruby -e '(0..255).each { |i| print i.chr }' \
@@ -140,7 +145,7 @@ harness.utf8_viewer: | output/utf8_viewer
 	> output/utf8_viewer/bytes.bcr.out
 	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
 
-harness.xlsx_to_csv: test/xlsx_to_csv/test.xlsx | output/xlsx_to_csv
+harness.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	./xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
 	./xlsx_to_csv.py --sheet=three_rows_three_cols $< output/xlsx_to_csv/3r3c.csv
 	./xlsx_to_csv.py --sheet=unicode $< output/xlsx_to_csv/unicode.csv
