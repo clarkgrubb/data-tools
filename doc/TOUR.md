@@ -284,7 +284,7 @@ RFC 4180 defines the EOL marker as CRLF.  The *data tools* use LF as the EOL mar
 
 CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are used, and double quotes themselves are escaped by doubling them. 
 
-The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `taw`) and CSV:
+The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
 
     csv-to-tsv
     tsv-to-cvs
