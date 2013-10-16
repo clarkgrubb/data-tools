@@ -15,12 +15,15 @@ csv-to-json OPTIONS [CSV_FILE]
 
 Read a CSV file from file specified on command line or standard input and write the corresponding JSON to standard output.
 
-Each row of the JSON output contains a serialized JSON object.  The values of the object come from the corresponding row of the CSV file; the header is used for the keys.
+Each row of the JSON output contains a serialized JSON object.  The values of the object come from the corresponding row of the CSV file; the header is used for the keys.  The \--header flag should be used if the CSV file does not have a header.
 
 # OPTIONS
 
 -d DELIMITER, \--delimiter=DELIMITER
 : Used to read CSV files which use DELIMITER to separate fields instead of a comma.
+
+\--header=NAME[,NAME...]
+: comma-separated list of column names
 
 -q QUOTECHAR, \--quotechar=QUOTECHAR
 : Used to read CSV files which use QUOTECHAR to quote fields instead of double quotes.

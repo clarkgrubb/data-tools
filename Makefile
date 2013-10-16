@@ -105,6 +105,9 @@ output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
 harness.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 	./csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
 	#diff output/csv_to_json/test.csv_to_json.json test/expected.test.csv_to_json.json
+	echo $$'λ,two\nthree,four' | ./csv_to_json.py > output/csv_to_json/unicode.json
+	echo $$'λ,two\nthree,four' | \
+	./csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
 
 harness.csv_to_tsv: | output/csv_to_tsv
 	echo -n $$'one,two\nthree,four' | ./csv_to_tsv.py > output/csv_to_tsv/test.csv_to_tsv.tsv
