@@ -20,7 +20,7 @@ pip_pkgs := xlrd
 tawk := tawk/mawk-1.3.4-20130803
 VPATH = test
 
-.PHONY: all TAGS check clean test man install install-man
+.PHONY: all build TAGS check clean test man install install-build install-man install-script
 .SECONDARY:
 
 setup.ruby:
@@ -36,6 +36,8 @@ $(hexedit):
 
 $(tawk):
 	(cd tawk; make tawk)
+
+build: $(hexedit) $(tawk)
 
 install-build: $(hexedit) $(tawk)
 	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
@@ -90,7 +92,11 @@ install: install-build install-script install-man
 
 all: build
 	@echo
-	@echo 'To install run'
+	@echo 'To install Ruby gems and Python packages:'
+	@echo
+	@echo '   $ sudo make setup'
+	@echo
+	@echo 'To install data tools and man pages:'
 	@echo
 	@echo'    $ make install'
 	@echo
