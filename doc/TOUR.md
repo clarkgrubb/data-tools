@@ -316,7 +316,7 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
         "foo": 1
     }
 
-The *data-tools* utility `json-awk` can be used to convert JSON to TSV.
+The *data tools* utility `json-awk` can be used to convert JSON to TSV.
 
     json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
 
