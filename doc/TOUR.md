@@ -125,7 +125,7 @@ How to lookup a Unicode point:
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
 
 <a name="newlines"/>
-# newlines
+# Newlines
 
 [eol markers](#eol-markers) | [set operations](#set-op) | [highlighting](#highlighting) | [sequences](#seq) | [sampling](#sampling)
 
