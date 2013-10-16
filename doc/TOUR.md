@@ -140,7 +140,7 @@ The *data tools* interpret LF, CRLF, or CR as end-of-line markers in input.  The
 To convert CRLF or CR line endings to LF line endings:
 
     tr -d '\r'
-    tr '\n' '\r'
+    tr '\r' '\n'
 
 For LF to CRLF conversions, another option is the following tools (which might need to be installed, see if your package manager has `dos2unix`).  These tools take pathnames and modify the files in place:
 
