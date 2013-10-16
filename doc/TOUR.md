@@ -248,7 +248,7 @@ Count the number of users by their login shell:
 
     awk -F: '{cnt[$7] += 1} END {for (sh in cnt) print sh, cnt[sh]}' /etc/passwd
 
-The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  We discuss four widely used formats
+The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  We discuss four widely used formats
 
 <a name="tsv"/>
 ## tsv
