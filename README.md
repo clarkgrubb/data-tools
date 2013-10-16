@@ -48,7 +48,7 @@ To install the necessary Ruby gems and Python packages:
 
     $ sudo make setup
 
-Run this to put the *data tools* and man pages in your path.
+To put the *data tools* and man pages in your path:
 
     $ make install
 
