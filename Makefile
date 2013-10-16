@@ -94,11 +94,11 @@ all: build
 	@echo
 	@echo 'To install Ruby gems and Python packages:'
 	@echo
-	@echo '   $ sudo make setup'
+	@echo '   $$ sudo make setup'
 	@echo
 	@echo 'To install data tools and man pages:'
 	@echo
-	@echo'    $ make install'
+	@echo'    $$ make install'
 	@echo
 
 output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
