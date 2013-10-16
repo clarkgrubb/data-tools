@@ -201,7 +201,7 @@ Step values other than one:
     1.5
     2
 
-The `seq` is useful in conjunction with the a shell for loop.  This will create a hundred empty files:
+The `seq` is useful in conjunction with the shell for loop.  This will create a hundred empty files:
 
     $ for i in $(seq -w 1 100); do touch foo.$i; done
 
