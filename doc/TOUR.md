@@ -7,7 +7,7 @@ The *data tools* come with man pages which can be installed locally or browsed o
 
 The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data workflows at the command line can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
 
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of pipes is *tacit programming*: it relieves us of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of pipes is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
 
 Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
 
@@ -249,21 +249,23 @@ The `/etc/passwd` file format, though venerable, has a bit of an adhoc flavor.  
 
 The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
-Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can used to expose trailing spaces.  The `trip-tsv` tool can be used to clean up a TSV file.
+Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The `trim-tsv` tool can be used to clean up a TSV file.
 
-The fact that tabs are visually identical to spaces, means that in many applications they can be replaced by spaces, which is why tabs are more likely to be available for delimiting fields than any other printing character.  One could ofcourse use a non-printing character, but most applications do not display non-printing characters well.  Here is how to align the columns of a tab delimited file:
+The fact that tabs are visually identical to spaces means that in many applications they *can* be replaced by spaces, which makes tabs available for delimiting fields.  One could use a non-printing character, but most applications do not display non-printing characters well.
+
+Here is how to align the columns of a tab delimited file when using `zsh`:
 
     tr ':' '\t' < /etc/passwd | column -t -s $'\t'
 
-The default field separator for `awk` is whitespace.  This is results in an error-prone situation, because the default behavior sometimes works on TSV files.  The correct way to use `awk` on a TSV is like this:
+The default field separator for `awk` is whitespace.  The correct way to use `awk` on a TSV is like this:
 
     awk 'BEGIN {FS="\t"; OFS="\t"} ...'
 
-Because this is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
+This is an error-prone situation, because sometimes the default behavior works correctly on a TSV file.  Because specifying the field separators is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
 
     tawk '...'
 
-The IANA spec says that a TSV file must have a header.  This is a good practice, since it makes the data self-describing.  Unfortunately the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
+The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
 
