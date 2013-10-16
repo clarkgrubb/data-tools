@@ -248,7 +248,7 @@ Count the number of users by their login shell:
 
     awk -F: '{cnt[$7] += 1} END {for (sh in cnt) print sh, cnt[sh]}' /etc/passwd
 
-The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  We discuss four widely used formats
+The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the following sections we consider four formats which are widely used for relational data.
 
 <a name="tsv"/>
 ## tsv
@@ -277,7 +277,25 @@ Even if a file has a header, `awk` scripts must refer to columns by number inste
 
     head -1 foo.tsv | tr '\t' '\n' | nl
 
-*generating and parsing TSV with split and join. looping over the fields and outputing a space after each field is a bad practice since it results in an invsible trailing space on the last fields*
+Python and similar languages have a `split` method which is ideal for parsing a TSV file:
+
+    with open(path) as f:
+        header = f.readline().rstrip('\r\n').split('\t')
+        for line in f:
+            fields = line.rstrip('\r\n').split('\t')
+                ...
+
+CSV libraries are sometimes used to read TSV files.  This works when the delimiter can be changed from a comma to a tab.  The practice is incorrect if the library does not also allow the quote character to be set to none.
+
+The `join` method in Python and similar languages can be used to generate a TSV file:
+
+    def tsv_strip(field):
+        unicode(field).translate(None, u"\f\n\r\t\v\x85\u2028\u2029")
+
+    with open(path, 'w') as f:
+        for row in rows:
+            f.write(u'\t'.join([tsv_strip(field) for field in row]))
+            f.write(u'\n')
 
 <a name="csv"/>
 ## csv
