@@ -325,15 +325,15 @@ The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is st
 <a name="xlsx"/>
 ## xlsx
 
-XLSX is the default format used by Excel since 2007.  Most other spreadsheet applications can read it.
+XLSX is the default format used by Excel since 2007.  Other spreadsheet applications can read it.
 
-XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to inspect the archive.
+XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used to list the contents of an XLSX file.
 
 Excel provides the ability to export data in a CSV or TSV format.  One exports by choosing the format when saving the workbook.  The CSV formats all use 8-bit encodings and are not recommended since Excel spreadsheets can contain Unicode data.  To export as TSV, look for the "Unicode Text" or "UTF-16 Unicode Text" option.  The file suffix will be `.txt`.  The character encoding is UTF-16 and can be converted using `iconv`:
 
     iconv -f utf-16 -t utf-8 < foo.txt > foo.tsv
 
-Using Excel to export the data requires having Excel, which is not free.  Also Excel must be run in a desktop environment and is difficult to automate.  So the *data tools* include the script `xslx-to-cv` so the operation can be performed from the command line.  To extract the sheets from a workbook as CSV files, run this:
+Using Excel to export the data requires having Excel, which is not free.  Also Excel must be run in a desktop environment and is difficult to automate.  The *data tools* include the script `xslx-to-csv` so the operation can be performed at the command line.  To extract the sheets from a workbook as CSV files, run this:
 
     $ xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
     
