@@ -14,8 +14,10 @@ harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk
 harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
 harnesses_base += xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
+hexeit := hexedit/hexedit
 gem_pkgs := json nokogiri
 pip_pkgs := xlrd
+tawk := tawk/mawk-1.3.4-20130803
 VPATH = test
 
 .PHONY: all TAGS check clean test man install install-man
@@ -29,30 +31,33 @@ setup.python:
 
 setup: setup.ruby setup.python
 
-build:
-	(cd tawk; make tawk)
+$(hexedit):
 	(cd hexedit; make)
 
-install: build
+$(tawk):
+	(cd tawk; make tawk)
+
+install-build: $(hexedit) $(tawk)
+	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
+	ln -sf $(pwd)/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
+
+install-script:
 	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(pwd)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
-	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
 	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(pwd)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(pwd)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
-	ln -sf $(pwd)/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 	ln -sf $(pwd)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(pwd)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(pwd)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(pwd)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
-	@echo Run 'make install-man' to install man pages.
 
 # To generate the man pages `pandoc` must be installed.  On Mac go to
 #
@@ -81,13 +86,13 @@ install-man: man_targets
 	cp $$target $(LOCAL_MAN_DIR)/man1; \
 	done
 
-all:
+install: install-build install-script install-man
+
+all: build
 	@echo
-	@echo 'To install data-tools:'
+	@echo 'To install run'
 	@echo
-	@echo '   $$ sudo make setup'
-	@echo
-	@echo '   $$ make install'
+	@echo'    $ make install'
 	@echo
 
 output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
@@ -192,3 +197,4 @@ clean:
 	-find . -name '*.html' | xargs rm
 	-rm TAGS
 	-rm -rf output
+	-rm -rf $(hexedit) $(tawk)

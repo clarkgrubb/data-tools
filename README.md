@@ -45,17 +45,13 @@ To install the necessary Ruby gems and Python packages:
 
     $ sudo make setup
 
-Then run this to put the *data tools* in your path.  It must be run with permission to create files in the install directory; it creates symlinks to the source directory:
+Run this to put the *data tools* and man pages in your path.
 
     $ make install
 
-If you don't like the choice of install directory (`/usr/local/bin`), you can override it by setting the `LOCAL_INSTALL_DIR` environment variable.
+It must be run with permission to create files in the install directory; it creates symlinks to the *data tools* repository.
 
-To install man pages:
-
-    $ make install-man
-
-The location of the man directory (`/usr/local/share/man`) can be changed by setting the `LOCAL_MAN_DIR` environment variable.
+You can override the choice of install directory (`/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.  You can override the choice of man page directory (`/usr/local/share/man`) by setting the `LOCAL_MAN_DIR` environment variable.
 
 # HOW TO RUN
 
