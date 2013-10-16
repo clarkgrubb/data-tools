@@ -113,7 +113,6 @@ def csv_to_tsv(input_stream,
                               delimiter=delimiter,
                               quotechar=quotechar)
 
-
     if header:
         output_stream.write('\t'.join(header.split(',')) + '\n')
     lineno = 1
