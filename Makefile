@@ -21,7 +21,7 @@ pip_pkgs := xlrd
 tawk := tawk/tawk
 VPATH = test
 
-.PHONY: all build TAGS check clean test man install install-build install-man install-script
+.PHONY: all build build-hexedit build-tawk TAGS check clean test man install-hexedit install-tawk install install-build install-man install-script
 .SECONDARY:
 
 setup.ruby:
@@ -38,11 +38,19 @@ $(hexedit):
 $(tawk):
 	(cd tawk; make tawk)
 
-build: $(hexedit) $(tawk)
+build-hexedit: $(hexedit)
 
-install-build: $(hexedit) $(tawk)
+build-tawk: $(tawk)
+
+build: install-hexedit install-tawk
+
+install-hexedit: $(hexedit)
 	ln -sf $(pwd)/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
+
+install-tawk: $(tawk)
 	ln -sf $(pwd)/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
+
+install-build: install-hexedit install-tawk
 
 install-script:
 	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json

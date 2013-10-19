@@ -40,8 +40,37 @@ If the build is failing, one can skip the first step and still install the scrip
 
 # VIRTUALENV AND RBENV
 
-*TODO*
+One could probably use ``virtualenv`` and ``rbenv`` to avoid running ``make setup`` as root.  One would need to be in both environments when running the data tools.
 
-# WINDOWS
+# WINDOWS: MINGW
 
-*TODO*
+There is no ``/usr/local/bin/`` directory.  Installation will likely fail unless the ``LOCAL_INSTALL_DIR`` and ``LOCAL_MAN_DIR``environment variables are set.  Optionally one can create the directories ``~/Bin`` and ``~/Man`` and add them to ``PATH`` and ``MANPATH``.
+
+Ruby, RubyGems, Python, and Pip must be installed.
+
+``hexedit`` is a curses application and won't compile under MinGW.
+
+The recommended installation producure is:
+
+    $ make setup
+    
+    $ make install-tawk
+    
+    $ make install-script
+    
+    $ make install-man
+
+# WINDOWS: CYGWIN
+
+``hexedit`` fails to compile under Cygwin for undiagnosed reasons.  It might be possible to compile ``tawk``, but it takes a long time.
+
+Ruby, RubyGems, Python, and Pip must be installed.
+
+The recommended installation procedure is:
+
+    $ make setup
+    
+    $ make install-script
+    
+    $ make install-man
+
