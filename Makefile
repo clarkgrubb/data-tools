@@ -9,6 +9,7 @@ man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
+LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
 harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk
 harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
@@ -78,7 +79,10 @@ man/%.1: doc/%.1.md
 
 man_targets: $(man1_targets)
 
-install-man:
+$(LOCAL_MAN1_DIR):
+	mkdir -p $@
+
+install-man: $(LOCAL_MAN1_DIR)
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	false; \

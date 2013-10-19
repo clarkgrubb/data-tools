@@ -54,7 +54,7 @@ To put the *data tools* and man pages in your path:
 
 It must be run with permission to create files in the install directory as it creates symlinks to the *data tools* repository.
 
-You can override the choice of install directory (`/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.  You can override the choice of man page directory (`/usr/local/share/man`) by setting the `LOCAL_MAN_DIR` environment variable.
+If you have special installation needs, maybe they are covered [here](https://github.com/clarkgrubb/data-tools/blob/master/INSTALL.md).
 
 <a name="how-to-run"/>
 # HOW TO RUN
