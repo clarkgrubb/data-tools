@@ -1,0 +1,35 @@
+.TH JSON-AWK 1 "February 17, 2013" 
+.SH NAME
+.PP
+json-awk - read JSON objects from standard input and process them with
+Ruby
+.SH SYNOPSIS
+.PP
+json-awk [-j|-t] RUBY_SCRIPT
+.SH DESCRIPTION
+.PP
+Read JSON from standard input, parse it, and call the Ruby script
+provided on the command line on the result.
+The parsed JSON object is placed in the global accumulator variable $_.
+.PP
+JSON cannot contain newlines.
+Hence if the input contains newlines, each line is assumed to contain a
+single JSON object and the Ruby script is invoked after each line is
+parsed.
+BEGIN and END blocks can be defined in the manner of \f[C]awk\f[] to
+define Ruby code which executes at the start or end of execution.
+.SH OPTIONS
+.PP
+-j, --json : after the Ruby script is executed, write the contents of $_
+to standard output as JSON.
+.PP
+-t, --tsv : after the Ruby script is executed, write the contents of $_,
+which is expected to be an Array, to standard output in tab separated
+values format.
+.SH SEE ALSO
+.PP
+\f[C]awk\f[] (1)
+.PP
+http://json.org/
+.SH AUTHORS
+Clark Grubb.

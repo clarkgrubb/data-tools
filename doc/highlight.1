@@ -1,0 +1,43 @@
+.TH HIGHTLIGHT 1 "September 12, 2013" 
+.SH NAME
+.PP
+highlight - highlight text in a stream maching a regular expression
+.SH SYNOPSIS
+.PP
+highlight REGEX
+.PP
+highlight (--red|--green|--yellow|--blue|--magenta|--cyan|--white)=REGEX
+...
+.PP
+highlight (-r|-g|-y|-b|-m|-c|-w)=REGEX ...
+.SH DESCRIPTION
+.PP
+Reads lines from standard input and writes them to standard out with any
+substrings matching REGEX highlighted in red.
+.PP
+This is similar to \f[C]grep\ --color=always\ REGEX\f[], but grep will
+not print lines which don\[aq]t match REGEX at all.
+.PP
+The default color is red.
+The other choices are green, yellow, blue, magenta, cyan, white, and
+black.
+.PP
+Multiple patterns can be specified, but the results when patterns
+overlap are unpredictable.
+.SH EXAMPLES
+.PP
+Highlight which shells users are using:
+.IP
+.nf
+\f[C]
+highlight\ -r\ /bin/bash\ -g\ /bin/sh\ -b\ /usr/bin/zsh\ -m\ /bin/false\ <\ /etc/passwd
+\f[]
+.fi
+.SH OPTIONS
+.PP
+None
+.SH SEE ALSO
+.PP
+\f[C]grep\f[] (1)
+.SH AUTHORS
+Clark Grubb.
