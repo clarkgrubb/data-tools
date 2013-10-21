@@ -17,16 +17,22 @@ Perform a relation join on two TSV files.  The output is written to standard out
 
 `join-tsv` assumes that TSV\_FILE1 and TSV\_FILE2 in accordance with the IANA MIME type specificsation.
 
-`join-tsv` is easier to use than `join` when working with TSV files because it preserves the headers.  It allows specifying the join column by name.
+`join-tsv` is easier to use than `join` when working with TSV files because it preserves the headers.  It allows specifying the join column by name.  If the join column names differ, the column name if the left (i.e. first) file is used in the output.
 
-HOW IT IS IMPLEMENTED
+`join-tsv` performs the join by reading the smaller file into memory.  `join-tsv` can perform left, right, or full outer joins.
 
-HOW NULLS ARE HANDLED
+The default null value is the empty string.  It is not used as a join value.  It can be changed to something else with the `--null` flag.  The `--no-null` flag can be used to treat all strings including the empty string as join values.
 
 # OPTIONS
 
--c NAME, \--column=NAME
-: Used to read CSV files which use DELIMITER to separate fields instead of a comma.
+-C NAME, \--column=NAME
+: the name of the join columns if they are the same.  If they differ, use the -L and -R flags.
+
+-L NAME, \--left-column=NAME
+: used to specify the name of the join column in the left (i.e. first) TSV file.
+
+-R, \--right-column
+: used to specify the name of the join column in the right (i.e. second) TSV file.
 
 -f, \--full
 : Perform a full outer join.  Rows with a null join value in TSV\_FILE1 or TSV_FILE2 will be included in the output.  
@@ -34,14 +40,17 @@ HOW NULLS ARE HANDLED
 -l, \--left
 : Perform a left outer join.  Rows with a null join value in TSV\_FILE1 will be included in the output.
 
--n=VALUE, \--null=VALUE
+-r, \--right
+: Perform a right outer join.  Rows with a null join value in TSV\_FILE2 will be included in the output.
+
+-n VALUE, \--null=VALUE
 : use VALUE as the null value.  The default null value is the empty string.
 
 -N, \--no-null
 : no null value.  The empty string can be used as a join value.
 
--r, \--right
-: Perform a right outer join.  Rows with a null join value in TSV\_FILE2 will be included in the output.
+-o, \--outer-null
+: the null value used in outer joins.
 
 # SEE ALSO
 

@@ -19,6 +19,8 @@ Mostly data extraction and file format conversion tools.  This page describe the
 
     highlight          highlight text matching REGEX
 
+    join-tsv           perform a relation join on two TSV files
+
     json-awk           read JSON objects from standard input and process them with Ruby
     
     reservoir-sample   select N lines from standard input randomly
@@ -74,6 +76,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     highlight          REGEX [FILE]
     
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
+
+    join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV\_FILE1 TSV\_FILE2
 
     json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 

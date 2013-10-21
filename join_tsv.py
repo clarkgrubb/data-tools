@@ -13,14 +13,11 @@ JOIN_INNER = 1
 JOIN_LEFT = 2
 JOIN_RIGHT = 3
 JOIN_FULL = 4
-OUTPUT_NULL = ''
+DEFAULT_OUTER_NULL = ''
+outer_null = None
 
 sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
 sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
-
-# extact common code in header_and_column_to_rows() and join_tsv()
-# left, right, full join
-# test 'null' as null value
 
 
 def header_and_column_to_rows(path, column):
@@ -60,19 +57,29 @@ def print_row(join_value, fields1, fields2, f):
     f.write('\n')
 
 
-def join_tsv(join_column, null, join_type, path1, path2, output_stream):
+def join_tsv(left_join_column,
+             right_join_column,
+             null,
+             join_type,
+             path1,
+             path2,
+             output_stream):
 
     if os.path.getsize(path1) > os.path.getsize(path2):
         big, small, file_order = path1, path2, BIG_FIRST
+        big_join_column = left_join_column
+        small_join_column = right_join_column
     else:
         big, small, file_order = path2, path1, BIG_LAST
+        big_join_column = right_join_column
+        small_join_column = left_join_column
 
     outer_join_big, outer_join_small = False, False
 
     small_header, column_to_rows = header_and_column_to_rows(small,
-                                                             join_column)
+                                                             small_join_column)
 
-    EMPTY_SMALL_HEADER = [OUTPUT_NULL] * len(small_header)
+    EMPTY_SMALL_HEADER = [outer_null] * len(small_header)
 
     if join_type == JOIN_FULL:
         outer_join_big, outer_join_small = True, True
@@ -92,14 +99,14 @@ def join_tsv(join_column, null, join_type, path1, path2, output_stream):
         row_len = len(big_header)
         column_index = None
         try:
-            column_index = big_header.index(join_column)
+            column_index = big_header.index(big_join_column)
         except ValueError:
             raise Exception('{} does not have a {} column'.format(
                 big, coumn))
         del(big_header[column_index])
-        EMPTY_BIG_HEADER = [OUTPUT_NULL] * len(big_header)
+        EMPTY_BIG_HEADER = [outer_null] * len(big_header)
 
-        print_row(join_column,
+        print_row(left_join_column,
                   big_header if file_order == BIG_FIRST else small_header,
                   small_header if file_order == BIG_FIRST else big_header,
                   output_stream)
@@ -153,17 +160,22 @@ if __name__ == '__main__':
     parser.add_argument('files',
                         nargs='+',
                         metavar='TSV_FILE')
-    parser.add_argument('--column', '-c',
-                        dest='column',
-                        required=True)
+    parser.add_argument('--column', '-c', '-C',
+                        dest='column')
     parser.add_argument('--left', '-l',
                         dest='left',
                         action='store_true',
                         default=False)
+    parser.add_argument('--left-column', '-L',
+                        dest='left_column',
+                        default=None)
     parser.add_argument('--right', '-r',
                         dest='right',
                         action='store_true',
                         default=False)
+    parser.add_argument('--right-column', '-R',
+                        dest='right_column',
+                        default=None)
     parser.add_argument('--full', '-f',
                         dest='full',
                         action='store_true',
@@ -171,6 +183,9 @@ if __name__ == '__main__':
     parser.add_argument('--null', '-n',
                         dest='null',
                         default='')
+    parser.add_argument('--outer-null', '-o',
+                        dest='outer_null',
+                        default=DEFAULT_OUTER_NULL)
     parser.add_argument('--no-null', '-N',
                         dest='no_null',
                         action='store_true',
@@ -178,7 +193,27 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if len(args.files) != 2:
-        sys.stderr.write('must be two files\n')
+        sys.stderr.write('must be two files, not {}\n'.format(args.files))
+        parser.print_help()
+        sys.exit(1)
+
+    left_join_column = None
+    right_join_column = None
+
+    if args.column:
+        if args.left_column or args.right_column:
+            sys.stderr.write('--column flag is incompatible with --left-column'
+                             ' and --right-column flags\n')
+            parser.print_help()
+            sys.exit(1)
+        left_join_column, right_join_column = args.column, args.column
+    if args.left_column:
+        left_join_column = args.left_column
+    if args.right_column:
+        right_join_column = args.right_column
+
+    if not left_join_column or not right_join_column:
+        sys.stderr.write('must specify join column(s)\n')
         parser.print_help()
         sys.exit(1)
 
@@ -199,7 +234,10 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
-    join_tsv(args.column,
+    outer_null = args.outer_null
+
+    join_tsv(left_join_column,
+             right_join_column,
              None if args.no_null else args.null,
              join_type,
              args.files[0],

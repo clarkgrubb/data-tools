@@ -1,4 +1,4 @@
-[introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [hierarchical formats](#hierarchical-fmt)
+[introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="intro"/>
 # INTRODUCTION
@@ -372,6 +372,15 @@ One can list the sheet names and extract a single sheet to a CSV file:
 By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
 
 The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the same interface as `xlsx-to-csv`.
+
+<a name="joins"/>
+# JOINS
+
+*joining with join and sort*.
+
+*joining with join-tsv*
+
+*loading the data into a database*
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS

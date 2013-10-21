@@ -1,0 +1,70 @@
+.TH JOIN\-TSV 1 "October 21, 2013" 
+.SH NAME
+.PP
+join\-tsv \- perform a relation join on two TSV files
+.SH SYNOPSIS
+.PP
+join\-tsv \-\-column=NAME
+[\-\-null=VALUE|\-\-no\-null][\-\-left|\-\-right|\-\-full] TSV_FILE1
+TSV_FILE2
+.SH DESCRIPTION
+.PP
+Perform a relation join on two TSV files.
+The output is written to standard output in TSV format.
+.PP
+\f[C]join\-tsv\f[] assumes that TSV_FILE1 and TSV_FILE2 in accordance
+with the IANA MIME type specificsation.
+.PP
+\f[C]join\-tsv\f[] is easier to use than \f[C]join\f[] when working with
+TSV files because it preserves the headers.
+It allows specifying the join column by name.
+If the join column names differ, the column name if the left (i.e.
+first) file is used in the output.
+.PP
+\f[C]join\-tsv\f[] performs the join by reading the smaller file into
+memory.
+\f[C]join\-tsv\f[] can perform left, right, or full outer joins.
+.PP
+The default null value is the empty string.
+It is not used as a join value.
+It can be changed to something else with the \f[C]\-\-null\f[] flag.
+The \f[C]\-\-no\-null\f[] flag can be used to treat all strings
+including the empty string as join values.
+.SH OPTIONS
+.PP
+\-C NAME, \-\-column=NAME : the name of the join columns if they are the
+same.
+If they differ, use the \-L and \-R flags.
+.PP
+\-L NAME, \-\-left\-column=NAME : used to specify the name of the join
+column in the left (i.e.
+first) TSV file.
+.PP
+\-R, \-\-right\-column : used to specify the name of the join column in
+the right (i.e.
+second) TSV file.
+.PP
+\-f, \-\-full : Perform a full outer join.
+Rows with a null join value in TSV_FILE1 or TSV_FILE2 will be included
+in the output.
+.PP
+\-l, \-\-left : Perform a left outer join.
+Rows with a null join value in TSV_FILE1 will be included in the output.
+.PP
+\-r, \-\-right : Perform a right outer join.
+Rows with a null join value in TSV_FILE2 will be included in the output.
+.PP
+\-n VALUE, \-\-null=VALUE : use VALUE as the null value.
+The default null value is the empty string.
+.PP
+\-N, \-\-no\-null : no null value.
+The empty string can be used as a join value.
+.PP
+\-o, \-\-outer\-null : the null value used in outer joins.
+.SH SEE ALSO
+.PP
+\f[C]join\f[] (1)
+.PP
+http://www.iana.org/assignments/media\-types/text/tab\-separated\-values
+.SH AUTHORS
+Clark Grubb.

@@ -59,7 +59,7 @@ install-script:
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
-	ln -sf $(pwd)join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
+	ln -sf $(pwd)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
@@ -180,6 +180,13 @@ harness.join_tsv: | output/join_tsv
 	test/join_tsv/input2.NULL_VALUE.tsv \
 	> output/join_tsv/output.NULL_VALUE.tsv
 	diff test/join_tsv/expected.output.NULL_VALUE.tsv output/join_tsv/output.NULL_VALUE.tsv
+	#
+	./join_tsv.py --left-column=url1 --right-column=url2 \
+	test/join_tsv/input1.diff.tsv \
+	test/join_tsv/input2.diff.tsv \
+	> output/join_tsv/output.diff.tsv
+	diff test/join_tsv/expected.output.diff.tsv output/join_tsv/output.diff.tsv
+
 
 harness.json_awk: json_awk/input.json | output/json_awk
 	./json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
