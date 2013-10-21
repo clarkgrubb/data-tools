@@ -11,7 +11,7 @@ LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/lo
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv dom_awk highlight json_awk
+harnesses_base := csv_to_json csv_to_tsv dom_awk highlight join_tsv json_awk
 harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
 harnesses_base += xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
@@ -59,6 +59,7 @@ install-script:
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(pwd)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
+	ln -sf $(pwd)join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(pwd)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(pwd)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(pwd)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
@@ -116,10 +117,10 @@ all: build
 output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
 	mkdir -p $@
 
-output/json_awk output/reservoir_sample output/trim_tsv output/tsv_to_csv:
+output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
 	mkdir -p $@
 
-output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
+output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
 
 harness.csv_to_json: csv_to_json/test.csv | output/csv_to_json
@@ -148,6 +149,37 @@ harness.highlight: highlight/input.txt | output/highlight
 	diff test/highlight/expected.output.txt output/highlight/output3.txt
 	./highlight.py -r control $< > output/highlight/output4.txt
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
+
+harness.join_tsv: | output/join_tsv
+	./join_tsv.py --column=url \
+	test/join_tsv/input1.tsv \
+	test/join_tsv/input2.tsv \
+	> output/join_tsv/output.tsv
+	diff test/join_tsv/expected.output.tsv output/join_tsv/output.tsv
+	#
+	./join_tsv.py --column=url \
+	test/join_tsv/input1.null.tsv \
+	test/join_tsv/input2.null.tsv \
+	> output/join_tsv/output.null.tsv
+	diff test/join_tsv/expected.output.tsv output/join_tsv/output.null.tsv
+	#
+	./join_tsv.py --column=url --left \
+	test/join_tsv/input1.left.tsv \
+	test/join_tsv/input2.left.tsv \
+	> output/join_tsv/output.left.tsv
+	diff test/join_tsv/expected.output.left.tsv output/join_tsv/output.left.tsv
+	#
+	./join_tsv.py --column=url --right \
+	test/join_tsv/input2.left.tsv \
+	test/join_tsv/input1.left.tsv \
+	> output/join_tsv/output.right.tsv
+	diff test/join_tsv/expected.output.right.tsv output/join_tsv/output.right.tsv
+	#
+	./join_tsv.py --column=url --null=NULL \
+	test/join_tsv/input1.NULL_VALUE.tsv \
+	test/join_tsv/input2.NULL_VALUE.tsv \
+	> output/join_tsv/output.NULL_VALUE.tsv
+	diff test/join_tsv/expected.output.NULL_VALUE.tsv output/join_tsv/output.NULL_VALUE.tsv
 
 harness.json_awk: json_awk/input.json | output/json_awk
 	./json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
