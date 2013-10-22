@@ -10,6 +10,15 @@ To put the *data tools* and man pages in your path:
 
 It must be run with permission to create files in the install directory as it creates symlinks to the *data tools* repository.
 
+# INSTALLING ON DEBIAN/UBUNTU
+
+You may find that the Ruby gems or Python packages fail to build because
+of missing system packages.  On Debain or Ubuntu these packages can be installed with:
+
+    $ sudo apt-get install ruby-dev python-pip
+
+
+
 # SET INSTALLATION DIRECTORY
 
 You can override the choice of install directory (`~/Bin` or `/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.
