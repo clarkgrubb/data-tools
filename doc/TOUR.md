@@ -27,7 +27,7 @@ When we encounter byte streams in other formats, we invoke *format conversion to
 
 The *data tools* expect and produce UTF-8 encoded data.  Recall that 8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
 
-    $ iconv -t UTF-8 -f UTF-16 /etc/passwd > /tmp/password.utf16
+    $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
     
 To get a list of supported encodings:
     
@@ -36,11 +36,11 @@ To get a list of supported encodings:
 <a name="bad-bytes"/>
 ## bad bytes
 
-Not all sequences of bytes are valid UTF-8; the *data tools* with throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
+Not all sequences of bytes are valid UTF-8; the *data tools* throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
 
     $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
 
-Here is how to find non-ASCII bytes:
+Here is a way to find non-ASCII bytes:
 
     grep --color='auto' -P -n "[\x80-\xFF]+"
 
@@ -64,7 +64,7 @@ When a file is in an unknown encoding, one can inspect it byte-by-byte.
 
 `od -b` is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding assumed by the display.  On the other hand it is difficult to make sense of octal bytes.
 
-The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied.  `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
+The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied: `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
 If some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal yet easier-to-interpret way:
     
@@ -201,11 +201,11 @@ Step values other than one:
     1.5
     2
 
-The `seq` is useful in conjunction with the shell for loop.  This will create a hundred empty files:
+The `seq` is useful in conjunction with a shell for loop.  This will create a hundred empty files:
 
     $ for i in $(seq -w 1 100); do touch foo.$i; done
 
-It is also useful to at times to be able to iterate through a sequence of dates.  The *data tools* provide `date-seq` for this.  For example, suppose that you wanted to fetch a set of URLs which contained a date:
+It is also useful at times to be able to iterate through a sequence of dates.  The *data tools* provide `date-seq` for this.  For example, suppose that you wanted to fetch a set of URLs which contained a date:
 
     $ for date in $(date-seq --format='%Y/%m/%d' 20130101 20130131)
     > do mkdir -p $date
@@ -217,7 +217,7 @@ It is also useful to at times to be able to iterate through a sequence of dates.
 <a name="sampling"/>
 ## sampling
 
-It is desirable at times to take a random sample of lines from a file.  Simply taking the first *N* lines is not recommend.  Instead one should shuffle the file first:
+It is desirable at times to take a random sample of lines from a file.  Simply taking the first *N* lines often does not yield a representative sample.  Instead one should shuffle the file first:
 
     sort -R foo.txt | head -3
 
@@ -225,9 +225,9 @@ On large files, randomly shuffling a file is slow.  Also, the `sort` installed o
     
     awk 'rand() < 0.01' foo.txt
     
-This is faster than shuffling the file, but does not produce an accurate sample size, even if you know the number of lines in the file.
+This is faster than shuffling the file, but does not produce a precise sample size, even if you know the number of lines in the file.
     
-An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The tool `reservoir-sample` implements it:
+An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The *data tool* `reservoir-sample` implements it:
 
     $ reservoir-sample --size 3 < /etc/passwd
     
@@ -253,7 +253,7 @@ The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the f
 <a name="tsv"/>
 ## tsv
 
-The IANA, which registered MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
+The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
 Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The `trim-tsv` tool can be used to clean up a TSV file.
 
@@ -393,7 +393,7 @@ To check whether an XML file is wellformed, use
 
     $ xmllint FILE.xml
 
-The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XMl or HTML file.  Here is an example of getting the links from a web page:
+The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XML or HTML file.  Here is an example of getting the links from a web page:
 
     $ curl www.google.com | dom-awk  '$_.xpath("//a").each {|o| puts o["href"] }'
 
