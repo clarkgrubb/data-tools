@@ -387,15 +387,15 @@ To illustrate joining at the command line we create some tab delimited files:
 
     $ grep -v '^#' /etc/passwd | tr ':' '\t' > /tmp/pw.tab
     
-    $ grep -v '^#' /etc/group | tr ':' '\t' > /tmp/group.tab
+    $ grep -v '^#' /etc/group | tr ':' '\t' > /tmp/grp.tab
 
 Here is an example of using `sort` and `join` to join by group id:
 
     $ sort -t $'\t' -k 4,4 /tmp/pw.tab > /tmp/pw.sort.tab
     
-    $ sort -t $'\t' -k 3,3 /tmp/group.tab > /tmp/group.sort.tab
+    $ sort -t $'\t' -k 3,3 /tmp/grp.tab > /tmp/grp.sort.tab
 
-    $ join -t $'\t' -1 4 -2 3 /tmp/pw.sort.tab /tmp/group.sort.tab
+    $ join -t $'\t' -1 4 -2 3 /tmp/pw.sort.tab /tmp/grp.sort.tab
 
 This is tedious because (1) each file must be sorted by the join column, (2) the field delimiter must be specified for each invocation of `sort` and `join`, and (3) the join column index must be determined and specified.
 
@@ -408,11 +408,11 @@ To illustrate using `join-tsv` let's create some TSV files:
 
     $ ( echo $'name\tpw\tuid\tgid\tgecos\thome\tshell';  grep -v '^#' /etc/passwd | tr ':' '\t' ) > /tmp/pw.tsv
     
-    $ ( echo $'name\tpw\tgid\tlist';  grep -v '^#' /etc/group | tr ':' '\t' ) > /tmp/group.tsv
+    $ ( echo $'name\tpw\tgid\tlist';  grep -v '^#' /etc/group | tr ':' '\t' ) > /tmp/grp.tsv
 
 If the join column has the same name in both files, it can be specified with the `-c` or `--column` flag:
 
-    $ join-tsv --column=gid /tmp/pw.tsv /tmp/group.tsv
+    $ join-tsv --column=gid /tmp/pw.tsv /tmp/grp.tsv
 
 The output is in TSV format, and in particular it has a header.  The order of columns is (1) join column, (2) left file columns other than the join column, (3) right file columns other than the join column.  If the join column has different names in the two files, the left name is used in the output.
 
@@ -435,16 +435,28 @@ Using SQLite to perform a join:
     
     > .import /tmp/pw.tab pw
     
-    > .import /tmp/group.tab grp
+    > .import /tmp/grp.tab grp
     
     > .mode tabs
     
-    > .output /tmp/pw_group.tab
+    > .output /tmp/pw_grp.tab
     
     > select * from pw join grp on pw.gid = grp.gid;
 
 <a name="join-r"/>
 ## r
+
+Using R to perform a join:
+
+    $ /usr/bin/r
+    
+    > pw = read.delim('/tmp/pw.tsv', quote='')
+    
+    > grp = read.delim('/tmp/grp.tsv', quote='')
+
+    > j = merge(pw, grp, by.x='gid', by.y='gid')
+
+    > write.table(j, '/tmp/pw_grp.tsv', row.names=F, sep='\t', quote=F)
 
 <a name="join-pandas"/>
 ## pandas
