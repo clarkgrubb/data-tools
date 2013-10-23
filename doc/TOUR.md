@@ -482,7 +482,7 @@ Hierarchical data can be stored in JSON, which we discussed above.
 
 ## xml and html
 
-To check whether an XML file is well-formed, use
+To check whether an XML file is well-formed, use:
 
     $ xmllint FILE.xml
 
