@@ -17,7 +17,11 @@ of missing system packages.  On Debain or Ubuntu these packages can be installed
 
     $ sudo apt-get install ruby-dev python-pip
 
+# INSTALLING ON MAC
 
+Mac OS X comes with Ruby 1.8, which the current version of Nokogiri no longer supports.  A fix is to install an older version:
+
+    $ sudo gem install nokogiri -v 1.5
 
 # SET INSTALLATION DIRECTORY
 

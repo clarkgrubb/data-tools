@@ -216,6 +216,12 @@ harness.utf8_viewer: | output/utf8_viewer
 	| ./utf8-viewer.rb -bc \
 	> output/utf8_viewer/bytes.bcr.out
 	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
+	#
+	./utf8-viewer.rb -a 33 34 35 > output/utf8_viewer/arg.decimal.out
+	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.decimal.out
+	#
+	./utf8-viewer.rb -a 041 042 043 > output/utf8_viewer/arg.octal.out
+	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.octal.out
 
 harness.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	./xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out

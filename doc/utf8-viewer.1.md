@@ -29,7 +29,7 @@ bytes must not have a leading zero.
 # OPTIONS
 
 -a, \--arg
-: read the UTF-8 bytes from the command line.
+: read the UTF-8 bytes from the command line.  BUG: this flag doesn't work with Ruby 1.8
 
 -b, \--byte-offset
 : display the offset in bytes of the leftmost character on the row.
@@ -51,6 +51,17 @@ bytes must not have a leading zero.
 
 -w NUM, \--width NUM
 : number of characters to display on each row.  Default is 8.
+
+# EXIT STATUS
+
+0
+: no invalid UTF-8 byte sequences
+
+1
+: invalid command line arguments
+
+2
+: invalid UTF-8 byte sequences
 
 # EXAMPLES
 
