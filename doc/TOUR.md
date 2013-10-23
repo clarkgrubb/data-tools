@@ -399,7 +399,7 @@ Here is an example of using `sort` and `join` to join by group id:
 
 This is tedious because (1) each file must be sorted by the join column, (2) the field delimiter must be specified for each invocation of `sort` and `join`, and (3) the join column index must be determined and specified.
 
-<a name="jointsv"/>
+<a name="join-tsv"/>
 ## tsv
 
 Another problem with `sort` and `join` is they don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
