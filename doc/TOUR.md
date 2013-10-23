@@ -378,6 +378,11 @@ The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spr
 <a name="joins"/>
 # JOINS
 
+[tab](#join-tab) | [tsv](#join-tsv) | [database](#join-database) | [r](#join-r) | [pandas](#join-pandas)
+
+<a name="join-tab"/>
+## tab
+
 To illustrate joining at the command line we create some tab delimited files:
 
     $ grep -v '^#' /etc/passwd | tr ':' '\t' > /tmp/pw.tab
@@ -394,7 +399,8 @@ Here is an example of using `sort` and `join` to join by group id:
 
 This is tedious because (1) each file must be sorted by the join column, (2) the field delimiter must be specified for each invocation of `sort` and `join`, and (3) the join column index must be determined and specified.
 
-## 
+<a name="jointsv"/>
+## tsv
 
 Another problem with `sort` and `join` is they don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
 
@@ -414,7 +420,15 @@ The output is in TSV format, and in particular it has a header.  The order of co
 
 `join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
  
-*loading the data into a database*
+<a name="join-database"/>
+## database
+
+<a name="join-r"/>
+## r
+
+<a name="join-pandas"/>
+## pandas
+
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
@@ -429,5 +443,5 @@ To check whether an XML file is wellformed, use
 
 The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XML or HTML file.  Here is an example of getting the links from a web page:
 
-    $ curl www.google.com | dom-awk  '$_.xpath("//a").each {|o| puts o["href"] }'
+    $ curl www.google.com | dom-awk '$_.xpath("//a").each {|o| puts o["href"] }'
 
