@@ -7,7 +7,7 @@ The *data tools* come with man pages which can be installed locally or browsed o
 
 The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database where it can be manipulated with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, implementing data workflows at the command line can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
 
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of pipes is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of pipes is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.   Only tools which read from standard input or write to standard output can participate in a pipeline.  This is an application of the [principle of least knowledge](http://en.wikipedia.org/wiki/Law_of_Demeter).
 
 Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
 
@@ -42,7 +42,7 @@ Not all sequences of bytes are valid UTF-8; the *data tools* throw exceptions wh
 
 Here is a way to find non-ASCII bytes:
 
-    grep --color='auto' -P -n "[\x80-\xFF]+"
+    $ grep --color='auto' -P -n "[\x80-\xFF]+"
 
 The `-P` option is not provided by the version of `grep` distributed with Mac OS X.  One can use the `highlight` command in this repo:
 
@@ -88,7 +88,7 @@ The Ruby interpreter can be pressed into service as a tool for performing base c
 
 The `bc` calculator can also be used:
 
-    echo $'obase=16\n\nibase=8\n42' | bc
+    $ echo $'obase=16\n\nibase=8\n42' | bc
     22
 
 <a name="utf-8"/>
@@ -134,13 +134,15 @@ The first three fields are "Point", "Name", and "[General Category](http://www.u
 
 The *data tools* interpret LF, CRLF, or CR as end-of-line markers in input.  The *data tools* use LF as the end-of-line marker in output.  To convert LF line endings to CRLF or CR line endings:
 
-    sed 's/$'"/$(echo \\\r)/"
-    tr '\n' '\r'
+    $sed 's/$'"/$(echo \\\r)/"
+    
+    $ tr '\n' '\r'
 
 To convert CRLF or CR line endings to LF line endings:
 
-    tr -d '\r'
-    tr '\r' '\n'
+    $ tr -d '\r'
+    
+    $ tr '\r' '\n'
 
 For LF to CRLF conversions, another option is the following tools (which might need to be installed, see if your package manager has `dos2unix`).  These tools take pathnames and modify the files in place:
 
@@ -154,12 +156,12 @@ The Unicode Consortium provides a [complete list](http://www.unicode.org/standar
 
 *Data tools* are provided for finding the lines which two files share in common, or which are unique to the first file:
 
-    set-intersect FILE1 FILE2
-    set-diff FILE1 FILE2
+    $ set-intersect FILE1 FILE2
+    $ set-diff FILE1 FILE2
     
 The `cat` command can be used to find the union of two files, with an optional `sort -u` to remove duplicate lines:
     
-    cat FILE1 FILE2 | sort -u
+    $ cat FILE1 FILE2 | sort -u
 
 <a name="highlighting"/>
 ## highlighting
@@ -167,12 +169,12 @@ The `cat` command can be used to find the union of two files, with an optional `
 When inspecting files at the command line, `grep` and `less` are invaluable.  Their man pages reward careful study.
 An interesting feature of `grep` is the ability to hightlight the search pattern in red:
 
-    grep --color=always root /etc/passwd
+    $ grep --color=always root /etc/passwd
     
 The `highlight` command does the same thing, except that it also prints lines which don't match
 the pattern.  Also it supports multiple patterns, each with its own color:
     
-    highlight --red root --green daemon --blue /bin/bash /etc/passwd
+    $ highlight --red root --green daemon --blue /bin/bash /etc/passwd
 
 Both `grep` and `highlight` use [ANSI Escapes](http://www.ecma-international.org/publications/standards/Ecma-048.htm).  If you are paging through the output, use `less -R` to render the escape sequences correctly.
 
@@ -219,11 +221,11 @@ It is also useful at times to be able to iterate through a sequence of dates.  T
 
 It is desirable at times to take a random sample of lines from a file.  Simply taking the first *N* lines often does not yield a representative sample.  Instead one should shuffle the file first:
 
-    sort -R foo.txt | head -3
+    $ sort -R foo.txt | head -3
 
 On large files, randomly shuffling a file is slow.  Also, the `sort` installed on Mac OS X does not have the `-R` flag.  One can use `awk` to select a random percentage of lines from a file:
     
-    awk 'rand() < 0.01' foo.txt
+    $ awk 'rand() < 0.01' foo.txt
     
 This is faster than shuffling the file, but does not produce a precise sample size, even if you know the number of lines in the file.
     
@@ -242,11 +244,11 @@ Relational data can be stored in flat files in a variety of ways.  On Unix, the 
 
 Get the root entry from `/etc/passwd`:
 
-    awk -F: '$1 == "root"' /etc/passwd
+    $ awk -F: '$1 == "root"' /etc/passwd
 
 Count the number of users by their login shell:
 
-    awk -F: '{cnt[$7] += 1} END {for (sh in cnt) print sh, cnt[sh]}' /etc/passwd
+    $ awk -F: '{cnt[$7] += 1} END {for (sh in cnt) print sh, cnt[sh]}' /etc/passwd
 
 The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the following sections we consider four formats which are widely used for relational data.
 
@@ -261,21 +263,21 @@ The fact that tabs are visually identical to spaces means that in many applicati
 
 Here is how to align the columns of a tab delimited file:
 
-    tr ':' '\t' < /etc/passwd | column -t -s $'\t'
+    $ tr ':' '\t' < /etc/passwd | column -t -s $'\t'
 
 The default field separator for `awk` is whitespace.  The correct way to use `awk` on a TSV is like this:
 
-    awk 'BEGIN {FS="\t"; OFS="\t"} ...'
+    $ awk 'BEGIN {FS="\t"; OFS="\t"} ...'
 
 This is an error-prone situation, because sometimes the default behavior works correctly on a TSV file.  Because specifying the field separators is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
 
-    tawk '...'
+    $ tawk '...'
 
 The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
 
-    head -1 foo.tsv | tr '\t' '\n' | nl
+    $ head -1 foo.tsv | tr '\t' '\n' | nl
 
 Python and similar languages have a `split` method which is ideal for parsing a TSV file:
 
@@ -342,7 +344,7 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
 
 The *data tools* utility `json-awk` can be used to convert JSON to TSV.
 
-    json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
+    $ json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
 
 The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-awk` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
 
@@ -355,7 +357,7 @@ XLSX is a ZIP archive of mostly XML files.  The `unzip -l` command can be used t
 
 Excel provides the ability to export data in a CSV or TSV format.  One exports by choosing the format when saving the workbook.  The CSV formats all use 8-bit encodings and are not recommended since Excel spreadsheets can contain Unicode data.  To export as TSV, look for the "Unicode Text" or "UTF-16 Unicode Text" option.  The file suffix will be `.txt`.  The character encoding is UTF-16 and can be converted using `iconv`:
 
-    iconv -f utf-16 -t utf-8 < foo.txt > foo.tsv
+    $ iconv -f utf-16 -t utf-8 < foo.txt > foo.tsv
 
 Using Excel to export the data requires having Excel, which is not free.  Also Excel must be run in a desktop environment and is difficult to automate.  The *data tools* include the script `xslx-to-csv` so the operation can be performed at the command line.  To extract the sheets from a workbook as CSV files, run this:
 
@@ -376,10 +378,42 @@ The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spr
 <a name="joins"/>
 # JOINS
 
-*joining with join and sort*.
+To illustrate joining at the command line we create some tab delimited files:
 
-*joining with join-tsv*
+    $ grep -v '^#' /etc/passwd | tr ':' '\t' > /tmp/pw.tab
+    
+    $ grep -v '^#' /etc/group | tr ':' '\t' > /tmp/group.tab
 
+Here is an example of using `sort` and `join` to join by group id:
+
+    $ sort -t $'\t' -k 4,4 /tmp/pw.tab > /tmp/pw.sort.tab
+    
+    $ sort -t $'\t' -k 3,3 /tmp/group.tab > /tmp/group.sort.tab
+
+    $ join -t $'\t' -1 4 -2 3 /tmp/pw.sort.tab /tmp/group.sort.tab
+
+This is tedious because (1) each file must be sorted by the join column, (2) the field delimiter must be specified for each invocation of `sort` and `join`, and (3) the join column index must be determined and specified.
+
+## 
+
+Another problem with `sort` and `join` is they don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
+
+To illustrate using `join-tsv` let's create some TSV files:
+
+    $ ( echo $'name\tpw\tuid\tgid\tgecos\thome\tshell';  grep -v '^#' /etc/passwd | tr ':' '\t' ) > /tmp/pw.tsv
+    
+    $ ( echo $'name\tpw\tgid\tlist';  grep -v '^#' /etc/group | tr ':' '\t' ) > /tmp/group.tsv
+
+If the join column has the same name in both files, it can be specified with the `-c` or `--column` flag:
+
+    $ join-tsv --column=gid /tmp/pw.tsv /tmp/group.tsv
+
+The output is in TSV format, and in particular it has a header.  The order of columns is (1) join column, (2) left file columns other than the join column, (3) right file columns other than the join column.  If the join column has different names in the two files, the left name is used in the output.
+
+`join-tsv` reads the smaller of the two files into memory.
+
+`join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
+ 
 *loading the data into a database*
 
 <a name="hierarchical-fmt"/>
