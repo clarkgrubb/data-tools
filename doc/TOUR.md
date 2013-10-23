@@ -423,6 +423,26 @@ The output is in TSV format, and in particular it has a header.  The order of co
 <a name="join-database"/>
 ## database
 
+Using SQLite to perform a join:
+
+    $ sqlite3
+    
+    > create table pw ( name text, pw text, uid int, gid int, gecos text, home text, shell text );
+    
+    > create table grp ( name text, pw text, gid int, list text );
+    
+    > .separator \t
+    
+    > .import /tmp/pw.tab pw
+    
+    > .import /tmp/group.tab grp
+    
+    > .mode tabs
+    
+    > .output /tmp/pw_group.tab
+    
+    > select * from pw join grp on pw.gid = grp.gid;
+
 <a name="join-r"/>
 ## r
 
