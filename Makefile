@@ -211,6 +211,8 @@ harness.tsv_to_csv: tsv_to_csv/escapes.tsv | output/tsv_to_csv
 harness.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
 	./tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
 
+# doesn't pass with Ruby 1.8:
+#
 harness.utf8_viewer: | output/utf8_viewer
 	-ruby -e '(0..255).each { |i| print i.chr }' \
 	| ./utf8-viewer.rb -bc \

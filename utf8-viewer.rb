@@ -17,6 +17,7 @@ DEFAULT_WIDTH = 8
 # black square
 INVALID_BYTES = "25A0".to_i(16)
 INVALID_CODE_POINT = -1
+INVALID_CODE_POINT_HEX = "----"
 
 # white square
 UNPRINTABLE_CODE_POINT = "25A1".to_i(16)
@@ -250,8 +251,8 @@ class CharFormatter
   end
 
   def format_code_point(code_point)
-    if code_point == @options[:invalid_char]
-      "none"
+    if code_point == INVALID_CODE_POINT
+      INVALID_CODE_POINT_HEX
     else
       to_hex(code_point)
     end
@@ -267,7 +268,7 @@ class CharFormatter
 
   def format_surrogate_pair(code_point)
     if code_point < 0x10000
-      to_hex(code_point) + "/----"
+      to_hex(code_point) + "/" + INVALID_CODE_POINT_HEX
     else
       lead, trail = astral_point_to_surrogate_pair(code_point)
       to_hex(lead) + "/" + to_hex(trail)
@@ -330,7 +331,11 @@ class CharFormatter
 end
 
 def to_hex(cp)
-  sprintf("%04X", cp)
+  if cp == INVALID_CODE_POINT
+    INVALID_CODE_POINT_HEX
+  else
+    sprintf("%04X", cp)
+  end
 end
 
 def code_point(bytes)

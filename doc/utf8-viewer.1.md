@@ -46,6 +46,9 @@ bytes must not have a leading zero.
 \--no-render
 : don't display the characters in addition to the Unicode points.
 
+-s, \--surrogate-pairs
+: show the surrogate pairs that would be used to represent astral code points in UTF-16.
+
 -u, \--unprintable-char
 : Unicode point of the character to use for unprintable characters.  The default is U+25A1 "WHITE SQUARE".  Has no effect unless the -r flag is also used.
 
