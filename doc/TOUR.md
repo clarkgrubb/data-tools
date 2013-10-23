@@ -402,7 +402,7 @@ This is tedious because (1) each file must be sorted by the join column, (2) the
 <a name="join-tsv"/>
 ## tsv
 
-Another problem with `sort` and `join` is they don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
+`sort` and `join` don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
 
 To illustrate using `join-tsv` let's create some TSV files:
 
@@ -461,6 +461,19 @@ Using R to perform a join:
 <a name="join-pandas"/>
 ## pandas
 
+Using the Python library *pandas* to perform a join:
+
+    $ python
+    
+    > import pandas as pd
+    
+    > pw = pd.read_table('/tmp/pw.tsv')
+    
+    > grp = pd.read_table('/tmp/grp.tsv')
+    
+    > j = pd.merge(pw, grp, left_on='gid', right_on='gid')
+    
+    > j.to_csv('/tmp/pw_grp.tsv', sep='\t', index=False)
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
