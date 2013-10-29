@@ -88,8 +88,8 @@ The Ruby interpreter can be pressed into service as a tool for performing base c
 
 The `bc` calculator can also be used:
 
-    $ echo $'obase=16\n\nibase=8\n42' | bc
-    22
+    $ echo $'obase=16\n\nibase=8\n316' | bc
+    CE
 
 <a name="utf-8"/>
 ## utf-8
