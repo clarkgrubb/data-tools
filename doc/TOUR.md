@@ -144,7 +144,7 @@ To convert CRLF or CR line endings to LF line endings:
     
     $ tr '\r' '\n'
 
-For LF to CRLF conversions, another option is the following tools (which might need to be installed, see if your package manager has `dos2unix`).  These tools take pathnames and modify the files in place:
+For LF to CRLF conversions, another option is the following tools (which might need to be installed, see if your package manager has `dos2unix`).  These tools take paths as arguments and modify the files in place:
 
     dos2unix
     unix2dos
@@ -154,7 +154,7 @@ The Unicode Consortium provides a [complete list](http://www.unicode.org/standar
 <a name="set-op"/>
 ## set operations
 
-*Data tools* are provided for finding the lines which two files share in common, or which are unique to the first file:
+*Data tools* are provided for finding the lines which two files share in common, or which are exclusive to the first file:
 
     $ set-intersect FILE1 FILE2
     $ set-diff FILE1 FILE2
