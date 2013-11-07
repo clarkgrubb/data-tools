@@ -9,6 +9,8 @@ Mostly data extraction and file format conversion tools.  This page describe the
 
     csv-to-tsv         convert CSV to TSV
 
+    csv-to-xlsx        convert CSV files to XLSX worksheets
+
     date-seq           create a sequence of dates
 
     dom-awk            read HTML or XML into DOM object and process it with Ruby

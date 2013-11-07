@@ -11,13 +11,14 @@ LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/lo
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv dom_awk highlight join_tsv json_awk
+harnesses_base := csv_to_json csv_to_tsv csv_to_xlsx dom_awk highlight join_tsv
+harnesses_base += json_awk
 harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
 harnesses_base += xlsx_to_csv
 harnesses := $(patsubst %,harness.%,$(harnesses_base))
 hexedit := hexedit/hexedit
 gem_pkgs := json nokogiri
-pip_pkgs := xlrd
+pip_pkgs := openpyxl xlrd
 tawk := tawk/tawk
 VPATH = test
 
@@ -55,6 +56,7 @@ install-build: install-hexedit install-tawk
 install-script:
 	ln -sf $(pwd)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(pwd)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
+	ln -sf $(pwd)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(pwd)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(pwd)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(pwd)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
@@ -114,7 +116,10 @@ all: build
 	@echo '   $$ make install'
 	@echo
 
-output output/csv_to_json output/csv_to_tsv output/dom_awk output/highlight:
+output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
+	mkdir -p $@
+
+output/highlight:
 	mkdir -p $@
 
 output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
@@ -134,6 +139,11 @@ harness.csv_to_tsv: | output/csv_to_tsv
 	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
 	echo $$'λ,two\nthree,four' | ./csv_to_tsv.py > output/csv_to_tsv/unicode.tsv
 	diff test/csv_to_tsv/expected.unicode.tsv output/csv_to_tsv/unicode.tsv
+
+harness.csv_to_xlsx: | output/csv_to_xlsx
+	./csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
+	test/csv_files/no-header.csv \
+	test/csv_files/unicode.csv
 
 harness.dom_awk: dom_awk/input.txt | output/dom_awk
 	./dom-awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \

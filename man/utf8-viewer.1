@@ -27,6 +27,7 @@ Decimal bytes must not have a leading zero.
 .SH OPTIONS
 .PP
 \-a, \-\-arg : read the UTF\-8 bytes from the command line.
+BUG: this flag doesn\[aq]t work with Ruby 1.8
 .PP
 \-b, \-\-byte\-offset : display the offset in bytes of the leftmost
 character on the row.
@@ -46,6 +47,9 @@ This implies a width of 1.
 \-\-no\-render : don\[aq]t display the characters in addition to the
 Unicode points.
 .PP
+\-s, \-\-surrogate\-pairs : show the surrogate pairs that would be used
+to represent astral code points in UTF\-16.
+.PP
 \-u, \-\-unprintable\-char : Unicode point of the character to use for
 unprintable characters.
 The default is U+25A1 "WHITE SQUARE".
@@ -53,6 +57,13 @@ Has no effect unless the \-r flag is also used.
 .PP
 \-w NUM, \-\-width NUM : number of characters to display on each row.
 Default is 8.
+.SH EXIT STATUS
+.PP
+0 : no invalid UTF\-8 byte sequences
+.PP
+1 : invalid command line arguments
+.PP
+2 : invalid UTF\-8 byte sequences
 .SH EXAMPLES
 .PP
 How to display the old Mac Roman character set:
