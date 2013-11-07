@@ -14,6 +14,7 @@ REGEX_SPACES = re.compile(' +')
 MAX_SHEETNAME_LENGTH = 31
 ENCODING = 'utf-8'
 
+
 def path_to_sheetname(path):
     sheetname = REGEX_CSV_SUFFIX.sub('', path)
     sheetname = REGEX_INVALID_SHEETNAME_CHARS.sub(' ', sheetname)
@@ -49,8 +50,8 @@ def csv_to_xlsx(input_files, output_file):
             if sheetname in sheetnames:
                 raise ValueError('files {} and {} result in the same sheet '
                                  'name: "{}"'.format(input_file,
-                                                   sheetnames[sheetname],
-                                                   sheetname))
+                                                     sheetnames[sheetname],
+                                                     sheetname))
             sheetnames[sheetname] = input_file
             ws.title = sheetname
             for rownum, row in enumerate(rows):
