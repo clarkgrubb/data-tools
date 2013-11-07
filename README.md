@@ -3,7 +3,9 @@
 <a name="summary"/>
 # SUMMARY
 
-Command line tools for data extraction, data manipulation, and file format conversion.  This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
+Command line tools for data extraction, data manipulation, and file format conversion.
+
+This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
 
     csv-to-json        convert CSV to JSON
 
