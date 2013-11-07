@@ -67,6 +67,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     csv-to-tsv         [-e|-x|-r[z]] [CSV_FILE]
 
+    csv-to-xlsx        -o XLSX_FILE CSV_FILE ...
+
     date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
     dom-awk            [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
