@@ -3,7 +3,7 @@
 <a name="summary"/>
 # SUMMARY
 
-Mostly data extraction and file format conversion tools.  This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
+Data extraction, data manipulation, and file format conversion tools.  This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
 
     csv-to-json        convert CSV to JSON
 
