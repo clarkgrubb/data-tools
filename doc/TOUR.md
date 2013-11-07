@@ -375,7 +375,7 @@ By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change 
 
 The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the same interface as `xlsx-to-csv`.
 
-The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file on the command line becomes a worksheet in the workbook.  The worksheet names are derived form the CSV file names; see the man page for details.
+The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file on the command line becomes a worksheet in the workbook.  The worksheet names are derived from the CSV file names; see the man page for details.
 
 <a name="joins"/>
 # JOINS
