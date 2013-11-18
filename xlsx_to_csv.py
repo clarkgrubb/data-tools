@@ -122,9 +122,10 @@ if __name__ == '__main__':
     else:
         if len(args.paths) != 2:
             raise Exception("USAGE: xlsx-to-csv XLSX_FILE OUTPUT_DIR")
-        if os.path.exists(args.path[1]):
+        if os.path.exists(args.paths[1]):
             sys.stderr.write(
                 'Something is already at the output path: {}\n'.format(
                     args.path[1]))
             sys.exit(1)
+        os.makedirs(args.paths[1])
         xlsx_path_to_csvs(args.paths[0], args.paths[1], args.date_fmt)
