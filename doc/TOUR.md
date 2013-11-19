@@ -167,7 +167,7 @@ The `cat` command can be used to find the union of two files, with an optional `
 ## highlighting
 
 When inspecting files at the command line, `grep` and `less` are invaluable.  Their man pages reward careful study.
-An interesting feature of `grep` is the ability to hightlight the search pattern in red:
+`grep` can highlight the search pattern in red:
 
     $ grep --color=always root /etc/passwd
     
