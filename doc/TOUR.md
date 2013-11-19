@@ -257,7 +257,7 @@ The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the f
 
 The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
-Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The `trim-tsv` tool can be used to clean up a TSV file.
+Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The *data tool* `trim-tsv` can be used to clean up a TSV file.
 
 The fact that tabs are visually identical to spaces means that in many applications they *can* be replaced by spaces, which makes tabs available for delimiting fields.  One could use a non-printing character, but most applications do not display non-printing characters well.
 
