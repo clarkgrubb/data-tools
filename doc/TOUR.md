@@ -257,9 +257,9 @@ The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the f
 
 The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
 
-Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces, which can cause cryptic errors.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The *data tool* `trim-tsv` can be used to clean up a TSV file.
+Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The *data tool* `trim-tsv` can be used to clean up a TSV file.
 
-The fact that tabs are visually identical to spaces means that in many applications they *can* be replaced by spaces, which makes tabs available for delimiting fields.  One could use a non-printing character, but most applications do not display non-printing characters well.
+The fact that tabs are visually identical to spaces means that in many applications they *can* be replaced by spaces.  This makes tabs available for delimiting fields.  One could use a non-printing character, but most applications do not display non-printing characters well.
 
 Here is how to align the columns of a tab delimited file:
 
@@ -273,7 +273,7 @@ This is an error-prone situation, because sometimes the default behavior works c
 
     $ tawk '...'
 
-The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient; when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
+The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient—when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
 
