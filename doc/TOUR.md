@@ -300,6 +300,28 @@ The `join` method in Python and similar languages can be used to generate a TSV 
             f.write(u'\t'.join([tsv_strip(field) for field in row]))
             f.write(u'\n')
 
+How to export data from a PostgreSQL table in TSV format:
+
+    $ psql
+    > \a
+    Output format is unaligned.
+    > \pset fieldsep '\t'
+    Field separator is "	".
+    > \pset footer off
+    Default footer is off.
+    > sums.tsv
+    > select 1 + 1 as sum1, 2 + 2 as sum2;
+    sum1	sum2
+    2	4
+
+A non-interactive example:
+
+    echo 'select 1 + 1 as sum1, 2 + 2 as sum2' | psql -A -F$'\t' -P footer=off > sums.tsv
+
+Replacing any tabs and end-of-line characters in column `foo` with spaces:
+
+    select translate(foo, chr(9) || chr(10) || chr(11) || chr(12) || chr(13) || chr(133) || chr(8232) || chr(8233), '        ')
+
 <a name="csv"/>
 ## csv
 
