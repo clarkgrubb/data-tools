@@ -40,6 +40,10 @@ Not all sequences of bytes are valid UTF-8; the *data tools* throw exceptions wh
 
     $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
 
+This command strips all non-ASCII characters:
+
+    $ iconv -c -f UTF-8 -t ASCII < INPUT_FILE > OUTPUT_FILE
+
 Here is a way to find non-ASCII bytes:
 
     $ grep --color='auto' -P -n "[\x80-\xFF]+"
