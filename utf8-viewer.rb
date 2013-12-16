@@ -258,23 +258,6 @@ class CharFormatter
     end
   end
 
-  def astral_point_to_surrogate_pair(code_point)
-    x = code_point - 0x10000
-    lead = x >> 10
-    trail = x & 0b1111111111
-
-    return lead, trail
-  end
-
-  def format_surrogate_pair(code_point)
-    if code_point < 0x10000
-      to_hex(code_point) + "/" + INVALID_CODE_POINT_HEX
-    else
-      lead, trail = astral_point_to_surrogate_pair(code_point)
-      to_hex(lead) + "/" + to_hex(trail)
-    end
-  end
-
   def print_rendered_code_points(width)
     augmented = @code_points.dup
     if @code_points.size > width
@@ -309,12 +292,6 @@ class CharFormatter
       end
 
       print @code_points.map { |cp| format_code_point(cp) }.join(COLUMN_SEP)
-
-      if @options[:surrogate_pairs]
-        print SECTION_SEP
-        pairs = @code_points.map { |cp| format_surrogate_pair(cp) }
-        print pairs.join(COLUMN_SEP)
-      end
 
       if @options[:name_lookup]
         print SECTION_SEP
@@ -486,11 +463,6 @@ def parse_options
     opts.on("-n", "--name-lookup") do
       options[:name_lookup] = true
     end
-
-    opts.on("-s", "--surrogate-pairs") do
-      options[:surrogate_pairs] = true
-    end
-
   end.parse!
 
   options
