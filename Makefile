@@ -33,9 +33,6 @@ setup.python:
 
 setup: setup.ruby setup.python
 
-setup.travis:
-	rvm use 1.9.3
-
 $(hexedit):
 	(cd hexedit; make)
 
