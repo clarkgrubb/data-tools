@@ -254,7 +254,7 @@ python.harness: $(python_harnesses)
 
 ruby.harness: $(ruby_harnesses)
 
-harness: python_harness ruby_harness
+harness: python.harness ruby.harness
 
 test.python:
 	find . -name 'test*.py' | xargs python
