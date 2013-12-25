@@ -33,6 +33,9 @@ setup.python:
 
 setup: setup.ruby setup.python
 
+setup.travis:
+	apt-get install ruby
+
 $(hexedit):
 	(cd hexedit; make)
 
