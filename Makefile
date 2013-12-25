@@ -34,7 +34,7 @@ setup.python:
 setup: setup.ruby setup.python
 
 setup.travis:
-	apt-get install ruby
+	apt-get install ruby rubygems
 
 $(hexedit):
 	(cd hexedit; make)
