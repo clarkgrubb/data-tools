@@ -11,11 +11,11 @@ LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/lo
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
 LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
-harnesses_base := csv_to_json csv_to_tsv csv_to_xlsx dom_awk highlight join_tsv
-harnesses_base += json_awk
-harnesses_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json utf8_viewer
-harnesses_base += xlsx_to_csv
-harnesses := $(patsubst %,harness.%,$(harnesses_base))
+python_base := csv_to_json csv_to_tsv csv_to_xlsx highlight join_tsv
+python_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json xlsx_to_csv
+ruby_base += dom_awk json_awk utf8_viewer
+python_harnesses := $(patsubst %,harness.%,$(python_base))
+ruby_harnesses := $(patsubst %,harness.%,$(ruby_base))
 hexedit := hexedit/hexedit
 gem_pkgs := json nokogiri
 pip_pkgs := openpyxl xlrd
@@ -32,9 +32,6 @@ setup.python:
 	pip install $(pip_pkgs)
 
 setup: setup.ruby setup.python
-
-setup.travis:
-	apt-get install ruby1.9.3
 
 $(hexedit):
 	(cd hexedit; make)
@@ -250,7 +247,11 @@ harness.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	diff output/xlsx_to_csv/spaces.csv test/xlsx_to_csv/expected.spaces.csv
 	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
 
-harness: $(harnesses)
+python_harness: $(python_harnesses)
+
+ruby_harness: $(ruby_harnesses)
+
+harness: python_harness ruby_harness
 
 test.python:
 	find . -name 'test*.py' | xargs python

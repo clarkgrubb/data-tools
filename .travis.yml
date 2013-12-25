@@ -1,5 +1,4 @@
 language: python
   - "2.7"
-before_install: sudo make setup.travis
-install: sudo make setup
+install: sudo make setup.python
 script: make harness
