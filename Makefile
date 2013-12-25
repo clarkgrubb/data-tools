@@ -247,9 +247,9 @@ harness.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	diff output/xlsx_to_csv/spaces.csv test/xlsx_to_csv/expected.spaces.csv
 	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
 
-python_harness: $(python_harnesses)
+python.harness: $(python_harnesses)
 
-ruby_harness: $(ruby_harnesses)
+ruby.harness: $(ruby_harnesses)
 
 harness: python_harness ruby_harness
 

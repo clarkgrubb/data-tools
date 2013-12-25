@@ -1,4 +1,4 @@
 language: python
   - "2.7"
 install: sudo make setup.python
-script: make harness
+script: make python.harness
