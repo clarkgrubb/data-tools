@@ -515,6 +515,10 @@ To check whether an XML file is well-formed, use:
 
     $ xmllint FILE.xml
 
+To pretty-print XML:
+
+    $ xmllint --format FILE.xml
+
 The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an XML or HTML file.  Here is an example of getting the links from a web page:
 
     $ curl www.google.com | dom-awk '$_.xpath("//a").each {|o| puts o["href"] }'
