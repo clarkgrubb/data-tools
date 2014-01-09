@@ -141,8 +141,8 @@ def join_tsv(left_join_column,
                         output_stream)
 
         if outer_join_small:
-            big_fields = EMPTY_BIG_HEADEr
-            for join_value, small_rows in column_to_rows.iter_items():
+            big_fields = EMPTY_BIG_HEADER
+            for join_value, small_rows in column_to_rows.iteritems():
                 if join_value not in join_values:
                     for small_fields in small_rows:
                         print_row(

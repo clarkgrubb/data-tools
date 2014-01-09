@@ -179,6 +179,12 @@ harness.join_tsv: | output/join_tsv
 	> output/join_tsv/output.left.tsv
 	diff test/join_tsv/expected.output.left.tsv output/join_tsv/output.left.tsv
 	#
+	./join_tsv.py --column=url --left \
+	test/join_tsv/input2.left.tsv \
+	test/join_tsv/input1.left.tsv \
+	> output/join_tsv/output.left.tsv
+	diff test/join_tsv/expected.output.left2.tsv output/join_tsv/output.left.tsv
+	#
 	./join_tsv.py --column=url --right \
 	test/join_tsv/input2.left.tsv \
 	test/join_tsv/input1.left.tsv \
