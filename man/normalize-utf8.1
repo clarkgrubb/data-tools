@@ -1,0 +1,55 @@
+.TH NORMALIZE-UTF8 1 "February 8, 2014" 
+.SH NAME
+.PP
+normalize-utf8 - convert UTF-8 encoded files or standard input to a
+normalized form
+.SH SYNOPSIS
+.PP
+normalize-utf8 [--nfc|--nfd|--nfkc|--nfkd] [FILE]
+.SH DESCRIPTION
+.PP
+Put UTF-8 encoded Unicode text into a normalized form.
+.PP
+Unicode contains different character sequences which are rendered the
+same way.
+An example is SMALL LETTER C WITH CEDILLA, which can be represented as a
+single character: U+00E7 or as SMALL LETTER C followed by COMBINING
+CEDILLA: U+0063 U+0327.
+When performing a string comparison, the two sequences should often be
+regarded as identifical.
+If the strings being compared have been put into normal form, then a
+simple string comparison can be used.
+.PP
+The Unicode standard defines four normalization forms.
+NFC (Normal Form C), which is the default format used by
+\f[C]normalize-utf8\f[], favors single character representations over
+multiple character representations containing combining marks.
+NFC is also called W3C normalization.
+.PP
+Conversely, NFD (Normal Form D) favors multiple character
+representations consisting of a simple character representation followed
+by a combining mark.
+Converting a string to NFD is faster because the algorithm for
+converting a string to NFC starts by converting it to NFD.
+.PP
+NFKC and NFKD conflate compatibility composites.
+These sequences which are visually distinct but semantically the same.
+Examples are the ff and ffi ligatures.
+.SH OPTIONS
+.PP
+--nfc : write input to standard out in Normal Form C
+.PP
+--nfd : write input to standard out in Normal Form D
+.PP
+--nfkc : write input to standard out in Normal Form KC
+.PP
+--nfkd : write input to standard out in Normal Form KD
+.SH SEE ALSO
+.PP
+\f[C]utf8-viewer\f[] (1)
+.PP
+http://unicode.org/reports/tr15/
+.PP
+http://www.unicode.org/reports/tr36/
+.SH AUTHORS
+Clark Grubb.

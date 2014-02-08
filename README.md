@@ -26,7 +26,9 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
     join-tsv           perform a relation join on two TSV files
 
     json-awk           read JSON objects from standard input and process them with Ruby
-    
+
+    normalize-utf8     write UTF-8 encoded input to standard out in normalized form
+
     reservoir-sample   select N lines from standard input randomly
 
     set-diff           find lines in first file which are not in the second
@@ -88,6 +90,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV\_FILE1 TSV\_FILE2
 
     json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
+
+    normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 
     reservoir-sample   [-r SEED] -s NUM [FILE]
 

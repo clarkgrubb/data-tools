@@ -12,7 +12,7 @@ LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/
 LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
 src := $(pwd)/src
-python_base := csv_to_json csv_to_tsv csv_to_xlsx highlight join_tsv
+python_base := csv_to_json csv_to_tsv csv_to_xlsx highlight join_tsv normalize_utf8
 python_base += reservoir_sample trim_tsv tsv_to_csv tsv_to_json xlsx_to_csv
 ruby_base += dom_awk json_awk utf8_viewer
 python_harnesses := $(patsubst %,harness.%,$(python_base))
@@ -64,6 +64,7 @@ install-script:
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
@@ -120,7 +121,7 @@ all: build
 output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
 	mkdir -p $@
 
-output/highlight:
+output/highlight output/normalize_utf8:
 	mkdir -p $@
 
 output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
@@ -211,6 +212,14 @@ harness.json_awk: json_awk/input.json | output/json_awk
 	./src/json-awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
 
+harness.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
+	./src/normalize_utf8.py < $< > output/normalize_utf8/output.nfc.txt
+	diff test/normalize_utf8/expected.output.nfc.txt output/normalize_utf8/output.nfc.txt
+	./src/normalize_utf8.py $< > output/normalize_utf8/output.nfc.2.txt
+	diff test/normalize_utf8/expected.output.nfc.txt output/normalize_utf8/output.nfc.2.txt
+	./src/normalize_utf8.py --nfd < $< > output/normalize_utf8/output.nfd.txt
+	diff test/normalize_utf8/expected.output.nfd.txt output/normalize_utf8/output.nfd.txt
+
 harness.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
 	./src/reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
 	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
@@ -271,7 +280,7 @@ test: test.python test.ruby
 check: test harness
 
 pep8:
-	pep8 *.py
+	find . -name '*.py' | xargs pep8
 
 TAGS:
 	find . -name '*.py' | xargs etags
