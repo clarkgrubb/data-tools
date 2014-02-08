@@ -20,7 +20,7 @@ When we encounter byte streams in other formats, we invoke *format conversion to
 <a name="encodings"/>
 # ENCODINGS
 
-[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode)
+[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode) | [whitespace](#whitespace)
 
 <a name="iconv"/>
 ## iconv
@@ -122,7 +122,7 @@ How to lookup a Unicode point:
     $ awk -F';' '$1 == "03BB"' /tmp/UnicodeData.txt 
     03BB;GREEK SMALL LETTER LAMDA;Ll;0;L;;;;;N;GREEK SMALL LETTER LAMBDA;;039B;;039B
 
-`UnicodeData.txt` is a useful file, and possibly it deserves a dedicated path on your file system.  I keep a copy at `~/Etc/UnicodeData.txt`.
+`UnicodeData.txt` is a useful file, and possibly it deserves a dedicated path on your file system.
 
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
 
