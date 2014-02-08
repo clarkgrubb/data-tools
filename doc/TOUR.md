@@ -115,8 +115,6 @@ If you are using a different shell but have access to `python` or `ruby`:
 <a name="unicode"/>
 ## unicode
 
-Unicode contains all the characters one is likely to encounter in an encoding system.  It can be difficult to deal with, since it contains characters with strange properties such as combining characters and right-to-left characters.
-
 How to lookup a Unicode point:
 
     $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
@@ -127,6 +125,55 @@ How to lookup a Unicode point:
 `UnicodeData.txt` is a useful file, and possibly it deserves a dedicated path on your file system.  I keep a copy at `~/Etc/UnicodeData.txt`.
 
 The first three fields are "Point", "Name", and "[General Category](http://www.unicode.org/reports/tr44/#General_Category_Values)".  
+
+Unicode contains all the characters one is likely to need, but writing code which handles the entire Unicode character
+set correctly is sometimes impractical.  One might opt to reject characters which are not needed instead.  A character
+frequency table such as used when breaking ciphers is useful in this context:
+
+    $ cat /etc/passwd |  ruby -ne '$_.split("").each { |ch| puts "#{ch} #{ch.ord}" }' | sort | uniq -c | sort -nr
+
+
+Unicode contains different character sequences which are
+rendered the same way.  An example is SMALL LETTER C WITH CEDILLA,
+which can be represented as a single character: U+00E7 or as SMALL LETTER C
+followed by COMBINING CEDILLA: U+0063 U+0327.
+
+When performing a string comparison, the two sequences should often
+be regarded as identifical.  The easiest way to accomplish this is to put
+the strings to be compared into a normalized form.  The Unicode standard defines
+[four normal forms](http://unicode.org/reports/tr15/).  The *data tool* `normalize-utf8` can be used to put a UTF-8 encoded file or stream into any of them.
+
+<a name="whitespace"/>
+## whitespace
+
+How to get the non-control character whitespace characters:
+
+    $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
+
+    $ awk -F';' '$3 ~ /^Z/ {print $1, $2}' /tmp/UnicodeData.txt
+
+    0020 SPACE
+    00A0 NO-BREAK SPACE
+    1680 OGHAM SPACE MARK
+    180E MONGOLIAN VOWEL SEPARATOR
+    2000 EN QUAD
+    2001 EM QUAD
+    2002 EN SPACE
+    2003 EM SPACE
+    2004 THREE-PER-EM SPACE
+    2005 FOUR-PER-EM SPACE
+    2006 SIX-PER-EM SPACE
+    2007 FIGURE SPACE
+    2008 PUNCTUATION SPACE
+    2009 THIN SPACE
+    200A HAIR SPACE
+    2028 LINE SEPARATOR
+    2029 PARAGRAPH SEPARATOR
+    202F NARROW NO-BREAK SPACE
+    205F MEDIUM MATHEMATICAL SPACE
+    3000 IDEOGRAPHIC SPACE
+
+Line feed, carriage return, and horizontal tab are not in the list because all ASCII control characters are assigned a General Category value of "Cc".
 
 <a name="newlines"/>
 # NEWLINES
