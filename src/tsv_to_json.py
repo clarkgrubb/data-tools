@@ -14,6 +14,9 @@ sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
 if len(sys.argv) == 1:
     f = sys.stdin
 elif len(sys.argv) == 2:
+    if sys.argv[1] == '--help':
+        sys.stderr.write('USAGE: tsv-to-json [TSV_FILE]\n')
+        sys.exit(1)
     f = codecs.open(sys.argv[1], encoding=ENCODING)
 else:
     sys.sderr.write("USAGE: tsv_to_json.py [FILE]")
