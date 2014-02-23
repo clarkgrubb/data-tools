@@ -47,7 +47,7 @@ opts.each do |opt, arg|
   when '--html'
     constructor = 'Nokogiri::HTML'
   when '--help'
-    $stderr.puts "USAGE: dom-awk (SCRIPT | -f FILE) [-h|-x]"
+    $stderr.puts "USAGE: dom-awk [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]"
     exit 1
 
   end

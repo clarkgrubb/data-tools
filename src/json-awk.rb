@@ -45,7 +45,7 @@ opts.each do |opt, arg|
   when '--tsv'
     output_format = :tsv
   when '--help'
-    $stderr.puts "USAGE: json-awk (SCRIPT | -f FILE) [-j|-t]"
+    $stderr.puts "USAGE: json-awk  [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ..."
     exit 1
   end
 end
