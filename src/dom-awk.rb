@@ -23,6 +23,8 @@ opts = GetoptLong.new(
   ['--xml', '-x',
    GetoptLong::NO_ARGUMENT],
   ['--html', '-h',
+   GetoptLong::NO_ARGUMENT],
+  ['--help',
    GetoptLong::NO_ARGUMENT]
 )
 
@@ -44,6 +46,10 @@ opts.each do |opt, arg|
     constructor = 'Nokogiri::XML'
   when '--html'
     constructor = 'Nokogiri::HTML'
+  when '--help'
+    $stderr.puts "USAGE: dom-awk (SCRIPT | -f FILE) [-h|-x]"
+    exit 1
+
   end
 end
 
