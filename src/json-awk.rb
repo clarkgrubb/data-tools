@@ -28,6 +28,8 @@ opts = GetoptLong.new(
   ['--json', '-j',
    GetoptLong::NO_ARGUMENT],
   ['--tsv', '-t',
+   GetoptLong::NO_ARGUMENT],
+  ['--help', '-h',
    GetoptLong::NO_ARGUMENT]
 )
 
@@ -42,6 +44,9 @@ opts.each do |opt, arg|
     output_format = :json
   when '--tsv'
     output_format = :tsv
+  when '--help'
+    $stderr.puts "USAGE: json-awk (SCRIPT | -f FILE) [-j|-t]"
+    exit 1
   end
 end
 
