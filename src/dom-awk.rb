@@ -17,6 +17,11 @@
 
 require 'getoptlong'
 
+def usage
+    $stderr.puts "USAGE: dom-awk [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]"
+    exit 1
+end
+
 opts = GetoptLong.new(
   ['--file', '-f',
    GetoptLong::REQUIRED_ARGUMENT],
@@ -47,9 +52,7 @@ opts.each do |opt, arg|
   when '--html'
     constructor = 'Nokogiri::HTML'
   when '--help'
-    $stderr.puts "USAGE: dom-awk [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]"
-    exit 1
-
+    usage
   end
 end
 
@@ -57,7 +60,8 @@ if not script
   if ARGV.size > 0
     script = ARGV.shift
   else
-    raise "no script specified"
+    $stderr.puts "ERROR: no SCRIPT or SCRIPT_FILE specified"
+    usage
   end
 end
 
