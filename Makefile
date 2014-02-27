@@ -7,8 +7,8 @@ SHELL := /bin/bash
 
 man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
-LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Bin ]; then echo ~/Bin; else echo /usr/local/bin; fi)
-LOCAL_MAN_DIR ?= $(shell if [ -d ~/Man ]; then echo ~/Man; else echo /usr/local/share/man; fi)
+LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Local/bin ]; then echo ~/Local/bin; else echo /usr/local/bin; fi)
+LOCAL_MAN_DIR ?= $(shell if [ -d ~/Local/man ]; then echo ~/Local/man; else echo /usr/local/share/man; fi)
 LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 pwd := $(shell pwd)
 src := $(pwd)/src

@@ -25,9 +25,9 @@ Mac OS X versions 10.8 and earlier come with Ruby 1.8, which the current version
 
 # SET INSTALLATION DIRECTORY
 
-You can override the choice of install directory (`~/Bin` or `/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.
+You can override the choice of install directory (`~/Local/bin` or `/usr/local/bin`) by setting the `LOCAL_INSTALL_DIR` environment variable.
 
-You can override the choice of man page directory (`~/Man` or `/usr/local/share/man`) by setting the `LOCAL_MAN_DIR` environment variable.
+You can override the choice of man page directory (`~/Local/man` or `/usr/local/share/man`) by setting the `LOCAL_MAN_DIR` environment variable.
 
 # INSTALL AS ROOT
 
@@ -57,7 +57,7 @@ One could probably use ``virtualenv`` and ``rbenv`` to avoid running ``make setu
 
 # WINDOWS: MINGW
 
-There is no ``/usr/local/bin/`` directory.  Installation will likely fail unless the ``LOCAL_INSTALL_DIR`` and ``LOCAL_MAN_DIR``environment variables are set.  Optionally one can create the directories ``~/Bin`` and ``~/Man`` and add them to ``PATH`` and ``MANPATH``.
+There is no ``/usr/local/bin/`` directory.  Installation will likely fail unless the ``LOCAL_INSTALL_DIR`` and ``LOCAL_MAN_DIR``environment variables are set.  Optionally one can create the directories ``~/Local/bin`` and ``~/Local/man`` and add them to ``PATH`` and ``MANPATH``.
 
 Ruby, RubyGems, Python, and Pip must be installed.
 
