@@ -55,6 +55,11 @@ def cell_to_str(cell, date_fmt, datemode):
     if cell.ctype == xlrd.XL_CELL_DATE:
         dt = datetime.datetime(*xlrd.xldate_as_tuple(cell.value, datemode))
         return dt.strftime(date_fmt)
+    elif cell.ctype == xlrd.XL_CELL_NUMBER:
+        if cell.value == int(cell.value):
+            return unicode(int(cell.value))
+        else:
+            return unicode(cell.value)
     else:
         return unicode(cell.value)
 
@@ -125,7 +130,7 @@ if __name__ == '__main__':
         if os.path.exists(args.paths[1]):
             sys.stderr.write(
                 'Something is already at the output path: {}\n'.format(
-                    args.path[1]))
+                    args.paths[1]))
             sys.exit(1)
         os.makedirs(args.paths[1])
         xlsx_path_to_csvs(args.paths[0], args.paths[1], args.date_fmt)
