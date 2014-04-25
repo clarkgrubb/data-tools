@@ -43,6 +43,8 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
 
     tsv-to-json        convert TSV to JSON
 
+    undermongo         mongo wrapper which loads underscore.js
+
     utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
     
     xls-to-csv         convert XLS to CSV
@@ -104,7 +106,9 @@ If you have special installation needs, maybe they are covered [here](https://gi
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
     tsv-to-json        [TSV_FILE]
-    
+
+    undermongo         <options> [DB_ADDRESS]
+
     utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
 
     utf8-viewer        [-b|-c|-n] -a BYTE ...
