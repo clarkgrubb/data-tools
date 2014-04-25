@@ -64,10 +64,10 @@ def escape(field):
         elif ch == '\x85':
             str_builder.append('\\')
             str_builder.append('x85')
-        elif ch == '\u2028':
+        elif ch == u'\u2028':
             str_builder.append('\\')
             str_builder.append('u2028')
-        elif ch == '\u2029':
+        elif ch == u'\u2029':
             str_builder.append('\\')
             str_builder.append('u2029')
         else:
@@ -115,13 +115,8 @@ def csv_to_tsv(input_stream,
 
     if header:
         output_stream.write('\t'.join(header.split(',')) + '\n')
-    lineno = 1
     for row in rows:
-        #try:
-            output_stream.write('\t'.join(sanitizer(row)) + '\n')
-            lineno += 1
-        #except ValueError as e:
-        #    raise ValueError('{}: at line number: {}'.format(str(e), lineno))
+        output_stream.write('\t'.join(sanitizer(row)) + '\n')
 
 
 if __name__ == '__main__':

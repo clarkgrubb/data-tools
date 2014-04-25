@@ -7,9 +7,9 @@ import openpyxl
 import re
 import sys
 
-REGEX_CSV_SUFFIX = re.compile('\.csv$', re.I)
-REGEX_XLSX_SUFFIX = re.compile('\.xlsx$', re.I)
-REGEX_INVALID_SHEETNAME_CHARS = re.compile('[][*?/\\\.]')
+REGEX_CSV_SUFFIX = re.compile(r'.csv$', re.I)
+REGEX_XLSX_SUFFIX = re.compile(r'.xlsx$', re.I)
+REGEX_INVALID_SHEETNAME_CHARS = re.compile(r'[][*?/\.]')
 REGEX_SPACES = re.compile(' +')
 MAX_SHEETNAME_LENGTH = 31
 ENCODING = 'utf-8'

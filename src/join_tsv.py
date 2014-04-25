@@ -102,7 +102,7 @@ def join_tsv(left_join_column,
             column_index = big_header.index(big_join_column)
         except ValueError:
             raise Exception('{} does not have a {} column'.format(
-                big, coumn))
+                big, big_join_column))
         del(big_header[column_index])
         EMPTY_BIG_HEADER = [outer_null] * len(big_header)
 
@@ -119,7 +119,7 @@ def join_tsv(left_join_column,
             if len(big_fields) != row_len:
                 raise Exception('row {} does not have {} fields: {}'.format(
                     lineno,
-                    row_line,
+                    row_len,
                     line))
             join_value = big_fields[column_index]
             del(big_fields[column_index])

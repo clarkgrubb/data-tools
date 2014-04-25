@@ -26,9 +26,9 @@ def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
 
 
 def csv_to_json(input_stream, output_stream, header_str, delimiter, quotechar):
-    reader = unicode_csv_reader(f,
-                                delimiter=args.delimiter,
-                                quotechar=args.quotechar)
+    reader = unicode_csv_reader(input_stream,
+                                delimiter=delimiter,
+                                quotechar=quotechar)
 
     if header_str:
         header = header_str.split(',')
@@ -36,7 +36,8 @@ def csv_to_json(input_stream, output_stream, header_str, delimiter, quotechar):
         header = reader.next()
 
     for row in reader:
-        print(json.dumps(dict(zip(header, row))))
+        output_stream.write(json.dumps(dict(zip(header, row))))
+        output_stream.write('\n')
 
 
 if __name__ == '__main__':

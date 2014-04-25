@@ -16,7 +16,7 @@ CSV_SUFFIX = '.csv'
 PP = pprint.PrettyPrinter()
 
 
-class UnicodeWriter:
+class UnicodeWriter(object):
     """
     This class is lifted from http://docs.python.org/2/library/csv.html
     """

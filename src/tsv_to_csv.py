@@ -5,7 +5,6 @@
 import argparse
 import codecs
 import csv
-import re
 import sys
 
 ENCODING = 'utf-8'
@@ -35,10 +34,10 @@ def unescaper(field):
                     str_builder.append('\t')
                 elif field[i:i + 5] == 'u2028':
                     i += 4
-                    str_builder.append('\u2028')
+                    str_builder.append(u'\u2028')
                 elif field[i:i + 5] == 'u2029':
                     i += 4
-                    str_builder.append('\u2029')
+                    str_builder.append(u'\u2029')
                 elif ch == 'v':
                     str_builder.append('\v')
                 elif field[i:i + 3] == 'x85':

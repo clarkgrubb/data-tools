@@ -19,7 +19,7 @@ elif len(sys.argv) == 2:
         sys.exit(1)
     f = codecs.open(sys.argv[1], encoding=ENCODING)
 else:
-    sys.sderr.write("USAGE: tsv_to_json.py [FILE]")
+    sys.stderr.write("USAGE: tsv_to_json.py [FILE]")
     sys.exit(1)
 
 header = f.readline().rstrip(NEWLINE_CHARS).split('\t')

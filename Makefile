@@ -324,7 +324,7 @@ pep8:
 
 .PHONY: pylint
 pylint:
-	find . -name '*.py' | xargs pylint
+	find . -name '*.py' | xargs pylint --disable=missing-docstring
 
 .PHONY: clean
 clean:

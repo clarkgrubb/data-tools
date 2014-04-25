@@ -8,7 +8,7 @@ import sys
 import pprint
 PP = pprint.PrettyPrinter()
 
-REGEX_INPUT_DATE = re.compile('^\d{4,14}$')
+REGEX_INPUT_DATE = re.compile(r'^\d{4,14}$')
 WEEKDAY_TO_NUMBER = {
     'mon': 1,
     'tue': 2,
