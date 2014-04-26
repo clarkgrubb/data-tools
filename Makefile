@@ -296,7 +296,7 @@ python_harnesses := $(patsubst %,test.%,$(python_base))
 .PHONY: python.harness
 python.harness: $(python_harnesses)
 
-ruby_base += dom_awk json_awk utf8_viewer
+ruby_base := dom_awk json_awk utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
 .PHONY: ruby.harness
