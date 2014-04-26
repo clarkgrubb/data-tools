@@ -7,8 +7,8 @@ SHELL := /bin/bash
 
 LOCAL_INSTALL_DIR ?= $(shell if [ -d ~/Local/bin ]; then echo ~/Local/bin; else echo /usr/local/bin; fi)
 LOCAL_MAN_DIR ?= $(shell if [ -d ~/Local/man ]; then echo ~/Local/man; else echo /usr/local/share/man; fi)
-LOCAL_MAN1_DIR := $(LOCAL_MAN_DIR)/man1
 
+local_man1_dir := $(LOCAL_MAN_DIR)/man1
 man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
@@ -101,11 +101,11 @@ man/%.1: doc/%.1.md
 .PHONY: man_targets
 man_targets: $(man1_targets)
 
-$(LOCAL_MAN1_DIR):
+$(local_man1_dir):
 	mkdir -p $@
 
 .PHONY: install-man
-install-man: $(LOCAL_MAN1_DIR)
+install-man: $(local_man1_dir)
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	false; \
