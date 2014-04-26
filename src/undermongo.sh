@@ -12,7 +12,7 @@ fi
 
 if [ ! -e $underscore_file ]
 then
-  curl $undescore_url > $underscore_file
+  curl $underscore_url > $underscore_file
 fi
 
 mongo --shell "$@" $underscore_file
