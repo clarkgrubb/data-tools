@@ -316,9 +316,6 @@ test.ruby:
 .PHONY: test
 test: test.python test.ruby
 
-.PHONY: check
-check: test harness
-
 .PHONY: pep8
 pep8:
 	find . -name '*.py' | xargs pep8
