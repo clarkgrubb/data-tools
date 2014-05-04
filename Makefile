@@ -69,6 +69,7 @@ install-script:
 	ln -sf $(src)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
+	ln -sf $(src)/jar-awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
@@ -233,7 +234,7 @@ test.jar_awk: jar_awk/cookies.txt | output/jar_awk
 	diff test/jar_awk/expected.output3.txt output/jar_awk/output3.txt
 	./src/jar-awk.rb -l '^\[(.*)\]' -t -F = 'puts $$_["bar"]' test/jar_awk/records.whitespace.ini > output/jar_awk/output4.txt
 	diff test/jar_awk/expected.output4.txt output/jar_awk/output4.txt
-	./src/jar-awk.rb -l '^%' -b '$$nr = 0' -e 'puts $$nr' '$$nr += 1' < $< > output/jar_awk/output5.txt
+	./src/jar-awk.rb -l '^%' -B '$$nr = 0' -E 'puts $$nr' '$$nr += 1' < $< > output/jar_awk/output5.txt
 	diff test/jar_awk/expected.output5.txt output/jar_awk/output5.txt
 
 

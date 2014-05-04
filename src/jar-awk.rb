@@ -8,9 +8,9 @@ def usage
 end
 
 opts = GetoptLong.new(
-                      ['--begin', '-b',
+                      ['--BEGIN', '-B',
                        GetoptLong::REQUIRED_ARGUMENT],
-                      ['--end', '-e',
+                      ['--END', '-E',
                        GetoptLong::REQUIRED_ARGUMENT],
                       ['--file', '-f',
                        GetoptLong::REQUIRED_ARGUMENT],
@@ -35,9 +35,9 @@ $trim = false
 
 opts.each do |opt, arg|
   case opt
-  when '--begin'
+  when '--BEGIN'
     begin_script = arg
-  when '--end'
+  when '--END'
     end_script = arg
   when '--file'
     script = File.open(arg).read
@@ -61,10 +61,11 @@ if not script
   end
 end
 
-# TODO: what if no line delimiter
+if not line_delimiter
+  $stderr.puts "ERROR: no --line-delimiter or -l specified"
+  usage
+end
 
-# TODO: BEGIN and END blocks?
-#
 def get_binding
   binding
 end
