@@ -8,6 +8,10 @@ def usage
 end
 
 opts = GetoptLong.new(
+                      ['--begin', '-b',
+                       GetoptLong::REQUIRED_ARGUMENT],
+                      ['--end', '-e',
+                       GetoptLong::REQUIRED_ARGUMENT],
                       ['--file', '-f',
                        GetoptLong::REQUIRED_ARGUMENT],
                       ['--line-delimiter', '-l',
@@ -23,12 +27,18 @@ opts = GetoptLong.new(
 
 script = nil
 line_delimiter = nil
+begin_script = nil
+end_script = nil
 
 $field_delimiter = nil
 $trim = false
 
 opts.each do |opt, arg|
   case opt
+  when '--begin'
+    begin_script = arg
+  when '--end'
+    end_script = arg
   when '--file'
     script = File.open(arg).read
   when '--field-delimiter'
@@ -51,9 +61,16 @@ if not script
   end
 end
 
+# TODO: what if no line delimiter
+
 # TODO: BEGIN and END blocks?
 #
-$processor = eval("lambda { |line, md| $_ = line; $md = md; #{script} }")
+def get_binding
+  binding
+end
+
+$binding = get_binding
+$processor = eval("lambda { |line, md| $_ = line; $md = md; #{script} }", $binding)
 
 if ARGV.size > 0
   input_stream = File.open(ARGV[0])
@@ -102,6 +119,10 @@ class Record
 
 end
 
+if begin_script
+  eval(begin_script, $binding)
+end
+
 record_num = 0
 record = Record.new(EmptyMatchData.new)
 
@@ -119,3 +140,7 @@ input_stream.each do |line|
 end
 
 record.process
+
+if end_script
+  eval(end_script, $binding)
+end

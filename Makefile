@@ -233,6 +233,8 @@ test.jar_awk: jar_awk/cookies.txt | output/jar_awk
 	diff test/jar_awk/expected.output3.txt output/jar_awk/output3.txt
 	./src/jar-awk.rb -l '^\[(.*)\]' -t -F = 'puts $$_["bar"]' test/jar_awk/records.whitespace.ini > output/jar_awk/output4.txt
 	diff test/jar_awk/expected.output4.txt output/jar_awk/output4.txt
+	./src/jar-awk.rb -l '^%' -b '$$nr = 0' -e 'puts $$nr' '$$nr += 1' < $< > output/jar_awk/output5.txt
+	diff test/jar_awk/expected.output5.txt output/jar_awk/output5.txt
 
 
 .PHONY: test.json_awk
