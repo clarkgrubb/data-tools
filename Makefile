@@ -133,7 +133,7 @@ all: build
 output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
 	mkdir -p $@
 
-output/highlight output/normalize_utf8:
+output/highlight output/normalize_utf8 output/jar_awk:
 	mkdir -p $@
 
 output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
@@ -223,6 +223,11 @@ test.join_tsv: | output/join_tsv
 	> output/join_tsv/output.diff.tsv
 	diff test/join_tsv/expected.output.diff.tsv output/join_tsv/output.diff.tsv
 
+.PHONY: test.jar_awk
+test.jar_awk: jar_awk/cookies.txt | output/jar_awk
+	./src/jar-awk.rb -l '^%' 'puts $$_.size' $< > output/jar_awk/output1.txt
+	diff test/jar_awk/expected.output1.txt output/jar_awk/output1.txt
+
 .PHONY: test.json_awk
 test.json_awk: json_awk/input.json | output/json_awk
 	./src/json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
@@ -296,7 +301,7 @@ python_harnesses := $(patsubst %,test.%,$(python_base))
 .PHONY: python.harness
 python.harness: $(python_harnesses)
 
-ruby_base := dom_awk json_awk utf8_viewer
+ruby_base := dom_awk jar_awk json_awk utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
 .PHONY: ruby.harness
