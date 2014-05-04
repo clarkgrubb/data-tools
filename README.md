@@ -91,7 +91,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
-    jar-awk            [-t] -l REGEX [-F REGEX] [(-B|-E) RUBY_SCRIPT] ... (-f RUBY\_PATH | RUBY\_SCRIPT) [JAR\_INPUT] ...
+    jar-awk            -l REGEX [-F REGEX] [(-B|-E) SCRIPT] ... (-f SCRIPT\_FILE | SCRIPT) [JAR\_FILE] ...
 
     join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV\_FILE1 TSV\_FILE2
 
