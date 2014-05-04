@@ -48,12 +48,21 @@ end
 
 # TODO: BEGIN and END blocks?
 #
-processor = eval("lambda { |line| $_ = line; #{script} }")
+processor = eval("lambda { |line, md| $_ = line; $md = md; #{script} }")
 
 if ARGV.size > 0
   input_stream = File.open(ARGV[0])
 else
   input_stream = $stdin
+end
+
+# TODO: implement all MatchData methods
+class EmtpyMatch
+  def pre_match; ''; end
+  def post_match; ''; end
+  def [](i); nil; end
+  def length; 0; end
+  def size; 0; end
 end
 
 record_num = 0
@@ -62,14 +71,16 @@ if field_delimiter
 else
   record = ''
 end
+record_md = EmtpyMatch.new
 
 input_stream.each do |line|
-  if line_delimiter.match(line)
-    # TODO: save the match
+  md = line_delimiter.match(line)
+  if md
     if record_num > 0
-      processor.call(record)
+      processor.call(record, record_md)
     end
     record_num += 1
+    record_md = md
     if field_delimiter
       record = {}
     else
@@ -86,5 +97,5 @@ input_stream.each do |line|
 end
 
 if record
-  processor.call(record)
+  processor.call(record, record_md)
 end

@@ -227,8 +227,11 @@ test.join_tsv: | output/join_tsv
 test.jar_awk: jar_awk/cookies.txt | output/jar_awk
 	./src/jar-awk.rb -l '^%' 'puts $$_.size' $< > output/jar_awk/output1.txt
 	diff test/jar_awk/expected.output1.txt output/jar_awk/output1.txt
-	./src/jar-awk.rb -l '^\[.*\]' -F = 'puts $$_["bar"]' test/jar_awk/records.ini > output/jar_awk/output2.txt
+	./src/jar-awk.rb -l '^\[(.*)\]' -F = 'puts $$_["bar"]' test/jar_awk/records.ini > output/jar_awk/output2.txt
 	diff test/jar_awk/expected.output2.txt output/jar_awk/output2.txt
+	./src/jar-awk.rb -l '^\[(.*)\]' -F = 'puts $$md[1]' test/jar_awk/records.ini > output/jar_awk/output3.txt
+	diff test/jar_awk/expected.output3.txt output/jar_awk/output3.txt
+
 
 .PHONY: test.json_awk
 test.json_awk: json_awk/input.json | output/json_awk
