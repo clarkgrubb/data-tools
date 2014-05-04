@@ -49,6 +49,17 @@ Because `jar-awk` is implemented with `eval` instead of `ruby -e`, `BEGIN` and `
 
 # EXAMPLES
 
+On Mac OS X, list the sections of the `system_profiler` output:
+
+    system_profiler -detailLevel mini | grep -v '^\s*$' | jar-awk -l '^(\S+):' 'puts $md[1]'
+
+On Mac OS X, extract the `Software` section of the `system_profiler` output:
+
+    system_profiler -detailLevel mini | grep -v '^\s*$' | jar-awk -l '^(\S+):' 'puts $_ if $md[1] == "Software"'
+    
+One Mac OS X, extract the `System Version` from the `Software` section of the `system_profiler` output:
+    
+    system_profiler -detailLevel mini | grep -v '^\s*$' | jar-awk -t -F ':' -l '^(\S+):' 'puts $_["System Version"] if $md[1] == "Software"'
 
 
 # SEE ALSO

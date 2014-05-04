@@ -70,6 +70,32 @@ the
 -t, --trim : Trim whitespace on the edge of records.
 If -F flag is specified, trim whitespace on the edge of keys and values.
 .SH EXAMPLES
+.PP
+On Mac OS X, list the sections of the \f[C]system_profiler\f[] output:
+.IP
+.nf
+\f[C]
+system_profiler\ -detailLevel\ mini\ |\ grep\ -v\ \[aq]^\\s*$\[aq]\ |\ jar-awk\ -l\ \[aq]^(\\S+):\[aq]\ \[aq]puts\ $md[1]\[aq]
+\f[]
+.fi
+.PP
+On Mac OS X, extract the \f[C]Software\f[] section of the
+\f[C]system_profiler\f[] output:
+.IP
+.nf
+\f[C]
+system_profiler\ -detailLevel\ mini\ |\ grep\ -v\ \[aq]^\\s*$\[aq]\ |\ jar-awk\ -l\ \[aq]^(\\S+):\[aq]\ \[aq]puts\ $_\ if\ $md[1]\ ==\ "Software"\[aq]
+\f[]
+.fi
+.PP
+One Mac OS X, extract the \f[C]System\ Version\f[] from the
+\f[C]Software\f[] section of the \f[C]system_profiler\f[] output:
+.IP
+.nf
+\f[C]
+system_profiler\ -detailLevel\ mini\ |\ grep\ -v\ \[aq]^\\s*$\[aq]\ |\ jar-awk\ -t\ -F\ \[aq]:\[aq]\ -l\ \[aq]^(\\S+):\[aq]\ \[aq]puts\ $_["System\ Version"]\ if\ $md[1]\ ==\ "Software"\[aq]
+\f[]
+.fi
 .SH SEE ALSO
 .PP
 \f[C]awk\f[] (1)
