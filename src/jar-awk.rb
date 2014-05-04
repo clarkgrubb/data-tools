@@ -8,27 +8,28 @@ def usage
 end
 
 opts = GetoptLong.new(
-  ['--file', '-f',
-   GetoptLong::REQUIRED_ARGUMENT],
-  ['--line-delimiter', '-l',
-   GetoptLong::REQUIRED_ARGUMENT],
-  ['--field-delimiter', '-F',
-   GetoptLong::OPTIONAL_ARGUMENT],
-  ['--help',
-   GetoptLong::NO_ARGUMENT]
-)
+                      ['--file', '-f',
+                       GetoptLong::REQUIRED_ARGUMENT],
+                      ['--line-delimiter', '-l',
+                       GetoptLong::REQUIRED_ARGUMENT],
+                      ['--field-delimiter', '-F',
+                       GetoptLong::OPTIONAL_ARGUMENT],
+                      ['--help',
+                       GetoptLong::NO_ARGUMENT]
+                      )
 
 
 script = nil
 field_delimiter = nil
 line_delimiter = nil
+ignore_parse_errors = false
 
 opts.each do |opt, arg|
   case opt
   when '--file'
     script = File.open(arg).read
   when '--field-delimiter'
-    field_delimiter = arg
+    field_delimiter = /#{arg}/
   when '--line-delimiter'
     line_delimiter = /#{arg}/
   when '--help'
@@ -56,7 +57,11 @@ else
 end
 
 record_num = 0
-record = ''
+if field_delimiter
+  record = {}
+else
+  record = ''
+end
 
 input_stream.each do |line|
   if line_delimiter.match(line)
@@ -65,9 +70,18 @@ input_stream.each do |line|
       processor.call(record)
     end
     record_num += 1
-    record = ''
+    if field_delimiter
+      record = {}
+    else
+      record = ''
+    end
   else
-    record += line
+    if field_delimiter
+      key, value = line.split(field_delimiter, 2)
+      record[key] = value
+    else
+      record += line
+    end
   end
 end
 
