@@ -3,7 +3,16 @@
 require 'getoptlong'
 
 def usage
-    $stderr.puts "USAGE: jar-awk -l REGEX [-F REGEX] -(-f SCRIPT_FILE | SCRIPT) [RECORD_JAR_FILE]"
+    $stderr.puts "USAGE: jar-awk [-t] -l REGEX [-F REGEX] [-B SCRIPT] [-E SCRIPT] (-f SCRIPT_FILE | SCRIPT) [RECORD_FILE]"
+    $stderr.puts
+    $stderr.puts "  -t (--trim): trim whitespace"
+    $stderr.puts "  -l (--line-delimiter): regex identifying lines between records"
+    $stderr.puts "  -B (--BEGIN): script to execute before processing records"
+    $stderr.puts "  -E (--END): script to execute after processing records"
+    $stderr.puts "  -f (--file): execute script in file for each record instead of script on cmd line"
+    $stderr.puts
+    $stderr.puts "  $_: variable containing record"
+    $stderr.puts "  $md: variable containing match data for -l REGEX"
     exit 1
 end
 
