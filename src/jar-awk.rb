@@ -14,24 +14,29 @@ opts = GetoptLong.new(
                        GetoptLong::REQUIRED_ARGUMENT],
                       ['--field-delimiter', '-F',
                        GetoptLong::OPTIONAL_ARGUMENT],
+                      ['--trim', '-t',
+                       GetoptLong::NO_ARGUMENT],
                       ['--help',
                        GetoptLong::NO_ARGUMENT]
                       )
 
 
 script = nil
-field_delimiter = nil
 line_delimiter = nil
-ignore_parse_errors = false
+
+$field_delimiter = nil
+$trim = false
 
 opts.each do |opt, arg|
   case opt
   when '--file'
     script = File.open(arg).read
   when '--field-delimiter'
-    field_delimiter = /#{arg}/
+    $field_delimiter = /#{arg}/
   when '--line-delimiter'
     line_delimiter = /#{arg}/
+  when '--trim'
+    $trim = true
   when '--help'
     usage
   end
@@ -48,7 +53,7 @@ end
 
 # TODO: BEGIN and END blocks?
 #
-processor = eval("lambda { |line, md| $_ = line; $md = md; #{script} }")
+$processor = eval("lambda { |line, md| $_ = line; $md = md; #{script} }")
 
 if ARGV.size > 0
   input_stream = File.open(ARGV[0])
@@ -56,46 +61,61 @@ else
   input_stream = $stdin
 end
 
-# TODO: implement all MatchData methods
-class EmtpyMatch
+class EmptyMatchData
   def pre_match; ''; end
   def post_match; ''; end
   def [](i); nil; end
   def length; 0; end
   def size; 0; end
+  def names; []; end
+end
+
+class Record
+  def initialize(match_data)
+    @match_data = match_data
+    if $field_delimiter
+      @record = {}
+    else
+      @record = ''
+    end
+  end
+
+  def add_line(line)
+    if $field_delimiter
+      key, value = line.split($field_delimiter, 2)
+      if $trim
+        key.strip!
+        value.strip!
+      end
+      @record[key] = value
+    else
+      @record += line
+    end
+  end
+
+  def process
+    if $trim and not $field_delimiter
+      @record.strip!
+    end
+    $processor.call(@record, @match_data)
+  end
+
 end
 
 record_num = 0
-if field_delimiter
-  record = {}
-else
-  record = ''
-end
-record_md = EmtpyMatch.new
+record = Record.new(EmptyMatchData.new)
 
 input_stream.each do |line|
   md = line_delimiter.match(line)
   if md
     if record_num > 0
-      processor.call(record, record_md)
+      record.process
     end
     record_num += 1
-    record_md = md
-    if field_delimiter
-      record = {}
-    else
-      record = ''
-    end
+    record = Record.new(md)
   else
-    if field_delimiter
-      key, value = line.split(field_delimiter, 2)
-      record[key] = value
-    else
-      record += line
-    end
+    record.add_line(line)
   end
 end
 
-if record
-  processor.call(record, record_md)
-end
+record.process
