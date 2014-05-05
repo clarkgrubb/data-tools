@@ -44,6 +44,12 @@ Because `jar-awk` is implemented with `eval` instead of `ruby -e`, `BEGIN` and `
 -l REGEX, \--line-delimiter=REGEX
 : a regular expression for identifying the 
 
+-s, \--strict
+: exit with error message and nonzero status when a record line cannot be parsed as a key and value; this only has an effect with the -F flag.
+
+-S, \--silent
+: do not emit an error message when the -F flag is in effect and a record line cannot be parsed as a key and value.
+
 -t, \--trim
 : Trim whitespace off  the edges of records.  Note that when the -F flag is use, whitespace is trimmed off the edges of keys and values by defualt.
 

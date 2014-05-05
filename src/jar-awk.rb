@@ -27,6 +27,10 @@ opts = GetoptLong.new(
                        GetoptLong::REQUIRED_ARGUMENT],
                       ['--field-delimiter', '-F',
                        GetoptLong::OPTIONAL_ARGUMENT],
+                      ['--strict', '-s',
+                       GetoptLong::NO_ARGUMENT],
+                      ['--silent', '-S',
+                       GetoptLong::NO_ARGUMENT],
                       ['--trim', '-t',
                        GetoptLong::NO_ARGUMENT],
                       ['--no-trim', '-T',
@@ -44,6 +48,8 @@ begin_script = nil
 end_script = nil
 use_zero = true
 
+$strict = false
+$silent = false
 $field_delimiter = nil
 $trim = nil
 
@@ -59,6 +65,10 @@ opts.each do |opt, arg|
     $field_delimiter = /#{arg}/
   when '--line-delimiter'
     line_delimiter = /#{arg}/
+  when '--strict'
+    $strict = true
+  when '--silent'
+    $silent = true
   when '--no-trim'
     $trim = false
   when '--trim'
@@ -123,9 +133,16 @@ class Record
   def add_line(line)
     if $field_delimiter
       key, value = line.split($field_delimiter, 2)
+      if value.nil? and not $silent and not $strict
+        $stderr.puts "WARNING: record line does not have field delimiter: #{line}"
+      end
+      if value.nil? and $strict
+        $stderr.puts "ERROR: line does not have field delimiter: #{line}"
+        exit 1
+      end
       if $trim
         key.strip!
-        value.strip!
+        value.strip! if value
       end
       @record[key] = value
     else
