@@ -29,6 +29,10 @@ opts = GetoptLong.new(
                        GetoptLong::OPTIONAL_ARGUMENT],
                       ['--trim', '-t',
                        GetoptLong::NO_ARGUMENT],
+                      ['--no-trim', '-T',
+                       GetoptLong::NO_ARGUMENT],
+                      ['--skip-record-zero', '-Z',
+                       GetoptLong::NO_ARGUMENT],
                       ['--help',
                        GetoptLong::NO_ARGUMENT]
                       )
@@ -38,9 +42,10 @@ script = nil
 line_delimiter = nil
 begin_script = nil
 end_script = nil
+use_zero = true
 
 $field_delimiter = nil
-$trim = false
+$trim = nil
 
 opts.each do |opt, arg|
   case opt
@@ -54,11 +59,19 @@ opts.each do |opt, arg|
     $field_delimiter = /#{arg}/
   when '--line-delimiter'
     line_delimiter = /#{arg}/
+  when '--no-trim'
+    $trim = false
   when '--trim'
     $trim = true
+  when '--skip-record-zero'
+    use_zero = false
   when '--help'
     usage
   end
+end
+
+if $trim.nil?
+  $trim = $field_delimiter ? true : false
 end
 
 if not script
@@ -136,10 +149,10 @@ end
 record_num = 0
 record = Record.new(EmptyMatchData.new)
 
-input_stream.each do |line|
+input_stream.each_with_index do |line, line_num|
   md = line_delimiter.match(line)
   if md
-    if record_num > 0
+    if (use_zero and record_num == 0 and line_num > 0) or record_num > 0
       record.process
     end
     record_num += 1
@@ -149,7 +162,9 @@ input_stream.each do |line|
   end
 end
 
-record.process
+if (use_zero and record_num == 0 and line_num > 0) or record_num > 0
+  record.process
+end
 
 if end_script
   eval(end_script, $binding)

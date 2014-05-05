@@ -45,7 +45,13 @@ Because `jar-awk` is implemented with `eval` instead of `ruby -e`, `BEGIN` and `
 : a regular expression for identifying the 
 
 -t, \--trim
-: Trim whitespace on the edge of records.  If -F flag is specified, trim whitespace on the edge of keys and values.
+: Trim whitespace off  the edges of records.  Note that when the -F flag is use, whitespace is trimmed off the edges of keys and values by defualt.
+
+-T, \--no-trim
+: When the -F flag is specified, do not trim whitespace off the edges of keys and values.
+
+-Z, \--skip-record-zero
+: If there are lines before the first line which matches the -l REGEX, skip them.  By default they are treated as a record
 
 # EXAMPLES
 
