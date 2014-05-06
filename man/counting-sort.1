@@ -1,0 +1,26 @@
+.TH COUNTING\-SORT 1 "May 6, 2014" 
+.SH NAME
+.PP
+counting\-sort \- perform counting sort on a file or standard input
+.SH SYNOPSIS
+.PP
+counting\-sort [FILE]
+.SH DESCRIPTION
+.PP
+Counting sort is fast when the number of distinct values is small
+compared to the total number of values.
+For example, when sorting a file with 3M rows but only 300 distinct
+values, the regular \f[C]sort\f[] takes 2m30s whereas
+\f[C]counting\-sort\f[] only takes 3s.
+.PP
+\f[C]counting\-sort\f[] only does a lexical sort.
+.SH OPTIONS
+.PP
+None
+.SH SEE ALSO
+.PP
+\f[C]sort\f[] (1)
+.PP
+http://en.wikipedia.org/wiki/Counting_sort
+.SH AUTHORS
+Clark Grubb.

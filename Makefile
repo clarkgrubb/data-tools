@@ -62,6 +62,7 @@ install-build: install-hexedit install-tawk
 
 .PHONY: install-script
 install-script:
+	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(src)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
@@ -134,7 +135,7 @@ all: build
 output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
 	mkdir -p $@
 
-output/highlight output/normalize_utf8 output/jar_awk:
+output/highlight output/normalize_utf8 output/jar_awk output/counting_sort:
 	mkdir -p $@
 
 output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
@@ -142,6 +143,12 @@ output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
 
 output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
+
+.PHONY: test.counting_sort
+test.counting_sort: counting_sort/input.txt | output/counting_sort
+	./src/counting_sort.py $< > output/counting_sort/output.txt
+	sort $< > output/counting_sort/expected.output.txt
+	diff output/counting_sort/output.txt output/counting_sort/expected.output.txt
 
 .PHONY: test.csv_to_json
 test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
@@ -305,7 +312,8 @@ test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	diff output/xlsx_to_csv/spaces.csv test/xlsx_to_csv/expected.spaces.csv
 	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
 
-python_base := csv_to_json csv_to_tsv csv_to_xlsx highlight join_tsv
+python_base := counting_sort csv_to_json csv_to_tsv
+python_base += csv_to_xlsx highlight join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_csv tsv_to_json
 python_base += xlsx_to_csv
 python_harnesses := $(patsubst %,test.%,$(python_base))

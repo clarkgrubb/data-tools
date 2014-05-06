@@ -7,6 +7,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
 This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
 
+    counting-sort      sort a file using counting sort
+
     csv-to-json        convert CSV to JSON
 
     csv-to-tsv         convert CSV to TSV
@@ -72,6 +74,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
 <a name="how-to-run"/>
 # HOW TO RUN
+
+    counting-sort      [FILE]
 
     csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
