@@ -11,10 +11,18 @@ List the lines which are in the first file and not in the second.
 .PP
 The lines are output in a sorted order and not necessarily the order of
 the first file.
+.PP
+If the files are already sorted, it is faster to use
+\f[C]comm\ \-23\f[].
+.PP
+\f[C]comm\ \-23\f[] gives erroneous results with no warning if the input
+files are not sorted.
 .SH OPTIONS
 .PP
 None
 .SH SEE ALSO
+.PP
+\f[C]comm\f[] (1)
 .PP
 \f[C]set\-intersect\f[] (1)
 .SH AUTHORS

@@ -8,10 +8,18 @@ set\-intersect FILE1 FILE2
 .SH DESCRIPTION
 .PP
 List the lines which are in both the first file and the second file.
+.PP
+If the files are already sorted, it is faster to use
+\f[C]comm\ \-12\f[].
+.PP
+\f[C]comm\ \-12\f[] gives erroneous results with no warning if the input
+files are not sorted.
 .SH OPTIONS
 .PP
 None
 .SH SEE ALSO
+.PP
+\f[C]comm\f[] (1)
 .PP
 \f[C]set\-diff\f[] (1)
 .SH AUTHORS
