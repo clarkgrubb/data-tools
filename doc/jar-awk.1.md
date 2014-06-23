@@ -42,7 +42,7 @@ Because `jar-awk` is implemented with `eval` instead of `ruby -e`, `BEGIN` and `
 : the regular expression 
 
 -l REGEX, \--line-delimiter=REGEX
-: a regular expression for identifying the 
+: a regular expression for identifying lines between records.
 
 -s, \--strict
 : exit with error message and nonzero status when a record line cannot be parsed as a key and value; this only has an effect with the -F flag.
