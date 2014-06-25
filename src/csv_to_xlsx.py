@@ -13,6 +13,7 @@ REGEX_INVALID_SHEETNAME_CHARS = re.compile(r'[][*?/\.]')
 REGEX_SPACES = re.compile(' +')
 MAX_SHEETNAME_LENGTH = 31
 ENCODING = 'utf-8'
+OPENPYXL_START_INDEX = 0 if openpyxl.__version__.startswith('1') else 1
 
 
 def path_to_sheetname(path):
@@ -54,8 +55,8 @@ def csv_to_xlsx(input_files, output_file):
                                                      sheetname))
             sheetnames[sheetname] = input_file
             ws.title = sheetname
-            for rownum, row in enumerate(rows):
-                for colnum, value in enumerate(row):
+            for rownum, row in enumerate(rows, start=OPENPYXL_START_INDEX):
+                for colnum, value in enumerate(row, start=OPENPYXL_START_INDEX):
                     # TODO: WHAT ABOUT DATES
                     ws.cell(row=rownum, column=colnum).value = value
 
