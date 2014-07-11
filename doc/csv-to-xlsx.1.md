@@ -27,7 +27,7 @@ XLSX is the default format used by Excel 2007 and later.
 
 # OPTIONS
 
--o DELIMITER, \--output-file PATH
+-o PATH, \--output-file PATH
 : the PATH of the XLSX file to create.  It must have an .xlsx suffix.
 
 # SEE ALSO
