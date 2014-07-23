@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ]
 then
-    echo "USAGE: head-sort [OPTIONS] FILE"
+    echo "USAGE: $0 [OPTIONS] FILE"
     exit 1
 fi
 
@@ -10,7 +10,7 @@ file="${!#}"
 
 if [ ! -f $file ]
 then
-    echo "USAGE: head-sort [OPTIONS] FILE"
+    echo "USAGE: $0 [OPTIONS] FILE"
     exit 1
 fi
 
