@@ -31,6 +31,8 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
 
     json-awk           read JSON objects from standard input and process them with Ruby
 
+    json-diff          show differences between two JSON documents
+
     normalize-utf8     write UTF-8 encoded input to standard out in normalized form
 
     reservoir-sample   select N lines from standard input randomly
@@ -100,6 +102,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
 
     json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
+
+    json-diff          JSON_FILE1 JSON_FILE2
 
     normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 

@@ -416,6 +416,8 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
         "foo": 1
     }
 
+The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
+
 The *data tools* utility `json-awk` can be used to convert JSON to TSV.
 
     $ json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
