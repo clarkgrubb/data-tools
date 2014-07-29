@@ -258,9 +258,9 @@ test.json_awk: json_awk/input.json | output/json_awk
 .PHONY: test.json_diff
 test.json_diff: | output/json_diff
 	-./src/json-diff.sh test/json_diff/1a.json test/json_diff/1b.json > output/json_diff/output1.txt
-	diff test/json_diff/expected.output1.txt output/json_diff/output1.txt
+	diff -w test/json_diff/expected.output1.txt output/json_diff/output1.txt
 	-./src/json-diff.sh test/json_diff/2a.json test/json_diff/2b.json > output/json_diff/output2.txt
-	diff test/json_diff/expected.output2.txt output/json_diff/output2.txt
+	diff -w test/json_diff/expected.output2.txt output/json_diff/output2.txt
 
 .PHONY: test.normalize_utf8
 test.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
