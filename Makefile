@@ -73,6 +73,7 @@ install-script:
 	ln -sf $(src)/jar-awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(src)/json-diff.rb $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
@@ -138,7 +139,7 @@ output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
 output/highlight output/normalize_utf8 output/jar_awk output/counting_sort:
 	mkdir -p $@
 
-output/join_tsv output/json_awk output/reservoir_sample output/trim_tsv:
+output/join_tsv output/json_awk output/json_diff output/reservoir_sample output/trim_tsv:
 	mkdir -p $@
 
 output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
@@ -254,6 +255,13 @@ test.json_awk: json_awk/input.json | output/json_awk
 	./src/json-awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
 
+.PHONY: test.json_diff
+test.json_diff: | output/json_diff
+	-./src/json-diff.sh test/json_diff/1a.json test/json_diff/1b.json > output/json_diff/output1.txt
+	diff test/json_diff/expected.output1.txt output/json_diff/output1.txt
+	-./src/json-diff.sh test/json_diff/2a.json test/json_diff/2b.json > output/json_diff/output2.txt
+	diff test/json_diff/expected.output2.txt output/json_diff/output2.txt
+
 .PHONY: test.normalize_utf8
 test.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
 	./src/normalize_utf8.py < $< > output/normalize_utf8/output.nfc.txt
@@ -324,11 +332,13 @@ python.harness: $(python_harnesses)
 ruby_base := dom_awk jar_awk json_awk utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
+shell.harness: test.json_diff
+
 .PHONY: ruby.harness
 ruby.harness: $(ruby_harnesses)
 
 .PHONY: test.harness
-test.harness: python.harness ruby.harness
+test.harness: python.harness ruby.harness shell.harness
 
 .PHONY: test.python
 test.python:
