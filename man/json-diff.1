@@ -4,14 +4,14 @@
 json\-diff \- run diff on two JSON documents
 .SH SYNOPSIS
 .PP
-json\-diff PATH1 PATH2
+json\-diff [DIFF_OPTIONS] PATH1 PATH2
 .SH DESCRIPTION
 .PP
 Run \f[C]diff\f[] on two JSON documents.
 Each document is normalized using \f[C]python\ \-mjson.tool\f[].
 .SH OPTIONS
 .PP
-none
+Any options are passed to \f[C]diff\f[].
 .SH SEE ALSO
 .PP
 \f[C]diff\f[] (1)

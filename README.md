@@ -103,7 +103,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
-    json-diff          JSON_FILE1 JSON_FILE2
+    json-diff          [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
     normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 

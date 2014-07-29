@@ -2,15 +2,18 @@
 
 set -eu -o pipefail
 
-# TODO: pass options to diff
-# TODO: option to pipe to colordiff
-
-if [ "$#" -ne 2 ]
+if [ "$#" -lt 2 ]
 then
-    echo "USAGE: json-diff PATH1 PATH2" 1>&2
+    echo "USAGE: json-diff [DIFF_OPTIONS] PATH1 PATH2" 1>&2
     exit 2
 fi
 
+args=("$@")
+
+file1=${args[$(( $# - 2 ))]}
+file2=${args[$(( $# - 1 ))]}
+unset args[$(( $# - 1 ))]
+unset args[$(( $# - 2 ))]
 normalized1=$(mktemp /tmp/json-diff-XXXXX)
 normalized2=$(mktemp /tmp/json-diff-XXXXX)
 
@@ -25,14 +28,18 @@ function cleanup_and_exit {
     exit $1
 }
 
-if ! python -mjson.tool < $1 > $normalized1
+if ! python -mjson.tool < $file1 > $normalized1
 then
     cleanup_and_exit 2
 fi
-if ! python -mjson.tool < $2 > $normalized2
+if ! python -mjson.tool < $file2 > $normalized2
 then
     cleanup_and_exit 2
 fi
 
-diff $normalized1 $normalized2
-cleanup_and_exit $?
+set +u
+diff "${args[@]}" $normalized1 $normalized2
+diff_retval=$?
+set -u
+
+cleanup_and_exit $diff_retval

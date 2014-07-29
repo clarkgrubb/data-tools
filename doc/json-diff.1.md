@@ -9,7 +9,7 @@ json-diff - run diff on two JSON documents
 
 # SYNOPSIS
 
-json-diff PATH1 PATH2
+json-diff [DIFF_OPTIONS] PATH1 PATH2
 
 # DESCRIPTION
 
@@ -17,7 +17,7 @@ Run `diff` on two JSON documents.  Each document is normalized using `python -mj
 
 # OPTIONS
 
-none
+Any options are passed to `diff`.
 
 # SEE ALSO
 
