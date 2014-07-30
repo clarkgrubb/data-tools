@@ -73,7 +73,7 @@ install-script:
 	ln -sf $(src)/jar-awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
-	ln -sf $(src)/json-diff.rb $(LOCAL_INSTALL_DIR)/json-diff
+	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
