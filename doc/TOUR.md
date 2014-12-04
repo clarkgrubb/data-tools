@@ -106,7 +106,7 @@ If you want to see the character for a Unicode point, use `printf`:
 
     $ printf '\u03bb\n'
      
-If you are using a different shell but have access to `python` or `ruby`:
+If you have access to `python` or `ruby`:
      
     $ python -c 'print(u"\u03bb")'
      
