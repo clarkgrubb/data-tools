@@ -105,6 +105,10 @@ The `utf8-viewer` *data tool* provides an easy way to determine the Unicode poin
 If you want to see the character for a Unicode point, use `printf`:
 
     $ printf '\u03bb\n'
+    
+`zsh` and recent versions of `bash` honor the `\u` backslash escape sequence in `$' '` strings:
+
+    $ echo $'\u03bb'
      
 If you have access to `python` or `ruby`:
      
