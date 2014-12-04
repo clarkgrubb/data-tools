@@ -57,7 +57,7 @@ To find the first occurence of bytes which are not valid UTF-8, use `iconv`:
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24
 
-The *data tool* `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be U+FFFF for invalid characters.
+The *data tool* `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be ---- for invalid characters.
 
     $ utf8-viewer /bin/ls
 
