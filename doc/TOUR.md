@@ -102,9 +102,9 @@ The `utf8-viewer` *data tool* provides an easy way to determine the Unicode poin
 
     $ utf8-viewer foo.txt
    
-If you want to see the character for a Unicode point, the following works in `zsh`:
+If you want to see the character for a Unicode point, use `printf`:
 
-    $ echo $'\u03bb'
+    $ printf '\u03bb\n'
      
 If you are using a different shell but have access to `python` or `ruby`:
      
