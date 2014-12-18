@@ -67,7 +67,7 @@ install-script:
 	ln -sf $(src)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
-	ln -sf $(src)/dom-awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
+	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/jar-awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
@@ -173,7 +173,7 @@ test.csv_to_xlsx: | output/csv_to_xlsx
 
 .PHONY: test.dom_awk
 test.dom_awk: dom_awk/input.txt | output/dom_awk
-	./src/dom-awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
+	./src/dom_awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
 	> output/dom_awk/output.txt
 	diff test/dom_awk/expected.output.txt output/dom_awk/output.txt
 
@@ -350,6 +350,10 @@ test.ruby:
 
 .PHONY: test
 test: test.python test.ruby
+
+.PHONY: rubocop
+rubocop:
+	find . -name '*.rb' | xargs rubocop
 
 .PHONY: pep8
 pep8:
