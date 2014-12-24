@@ -72,7 +72,7 @@ install-script:
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/jar_awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
-	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(src)/json_awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
@@ -250,9 +250,9 @@ test.jar_awk: jar_awk/cookies.txt | output/jar_awk
 
 .PHONY: test.json_awk
 test.json_awk: json_awk/input.json | output/json_awk
-	./src/json-awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
+	./src/json_awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output1.txt
-	./src/json-awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
+	./src/json_awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
 	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
 
 .PHONY: test.json_diff

@@ -23,8 +23,8 @@
 require 'getoptlong'
 
 def usage
-    $stderr.puts "USAGE: json-awk  [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ..."
-    exit 1
+  $stderr.puts 'USAGE: json-awk  [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...'
+  exit 1
 end
 
 opts = GetoptLong.new(
@@ -54,11 +54,11 @@ opts.each do |opt, arg|
   end
 end
 
-if not script
+unless script
   if ARGV.size > 0
     script = ARGV.shift
   else
-    $stderr.puts "ERROR: no SCRIPT or SCRIPT_FILE specified"
+    $stderr.puts 'ERROR: no SCRIPT or SCRIPT_FILE specified'
     usage
   end
 end
