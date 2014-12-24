@@ -70,7 +70,7 @@ install-script:
 	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
-	ln -sf $(src)/jar-awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
+	ln -sf $(src)/jar_awk.rb $(LOCAL_INSTALL_DIR)/jar-awk
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json-awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
@@ -234,17 +234,17 @@ test.join_tsv: | output/join_tsv
 
 .PHONY: test.jar_awk
 test.jar_awk: jar_awk/cookies.txt | output/jar_awk
-	./src/jar-awk.rb -l '^%' 'puts $$_.size' $< > output/jar_awk/output1.txt
+	./src/jar_awk.rb -l '^%' 'puts $$_.size' $< > output/jar_awk/output1.txt
 	diff test/jar_awk/expected.output1.txt output/jar_awk/output1.txt
-	./src/jar-awk.rb -l '^\[(.*)\]' -F = 'puts $$_["bar"]' test/jar_awk/records.ini > output/jar_awk/output2.txt
+	./src/jar_awk.rb -l '^\[(.*)\]' -F = 'puts $$_["bar"]' test/jar_awk/records.ini > output/jar_awk/output2.txt
 	diff test/jar_awk/expected.output2.txt output/jar_awk/output2.txt
-	./src/jar-awk.rb -l '^\[(.*)\]' -F = 'puts $$md[1]' test/jar_awk/records.ini > output/jar_awk/output3.txt
+	./src/jar_awk.rb -l '^\[(.*)\]' -F = 'puts $$md[1]' test/jar_awk/records.ini > output/jar_awk/output3.txt
 	diff test/jar_awk/expected.output3.txt output/jar_awk/output3.txt
-	./src/jar-awk.rb -l '^\[(.*)\]' -F = 'puts $$_["bar"]' test/jar_awk/records.whitespace.ini > output/jar_awk/output4.txt
+	./src/jar_awk.rb -l '^\[(.*)\]' -F = 'puts $$_["bar"]' test/jar_awk/records.whitespace.ini > output/jar_awk/output4.txt
 	diff test/jar_awk/expected.output4.txt output/jar_awk/output4.txt
-	./src/jar-awk.rb -l '^%' -B '$$nr = 0' -E 'puts $$nr' '$$nr += 1' < $< > output/jar_awk/output5.txt
+	./src/jar_awk.rb -l '^%' -B '$$nr = 0' -E 'puts $$nr' '$$nr += 1' < $< > output/jar_awk/output5.txt
 	diff test/jar_awk/expected.output5.txt output/jar_awk/output5.txt
-	./src/jar-awk.rb -Z -l '^%' -B '$$nr = 0' -E 'puts $$nr' '	$$nr += 1' < test/jar_awk/cookies.zero.txt > output/jar_awk/output6.txt
+	./src/jar_awk.rb -Z -l '^%' -B '$$nr = 0' -E 'puts $$nr' '	$$nr += 1' < test/jar_awk/cookies.zero.txt > output/jar_awk/output6.txt
 	diff test/jar_awk/expected.output6.txt output/jar_awk/output6.txt
 
 
