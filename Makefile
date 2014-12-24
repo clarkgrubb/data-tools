@@ -82,7 +82,7 @@ install-script:
 	ln -sf $(src)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(src)/undermongo.sh $(LOCAL_INSTALL_DIR)/undermongo
-	ln -sf $(src)/utf8-viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
+	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 
@@ -297,14 +297,14 @@ test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
 .PHONY: test.utf8_viewer
 test.utf8_viewer: | output/utf8_viewer
 	-ruby -e '(0..255).each { |i| print i.chr }' \
-	| ./src/utf8-viewer.rb -bc \
+	| ./src/utf8_viewer.rb -bc \
 	> output/utf8_viewer/bytes.bcr.out
 	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
 	#
-	./src/utf8-viewer.rb -a 33 34 35 > output/utf8_viewer/arg.decimal.out
+	./src/utf8_viewer.rb -a 33 34 35 > output/utf8_viewer/arg.decimal.out
 	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.decimal.out
 	#
-	./src/utf8-viewer.rb -a 041 042 043 > output/utf8_viewer/arg.octal.out
+	./src/utf8_viewer.rb -a 041 042 043 > output/utf8_viewer/arg.octal.out
 	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.octal.out
 
 .PHONY: test.xlsx_to_csv
