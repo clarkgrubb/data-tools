@@ -391,7 +391,7 @@ CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are 
 The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
 
     csv-to-tsv
-    tsv-to-cvs
+    tsv-to-csv
 
 Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tsv` will fail if it encounters any.  There are flags to tell `csv-to-tsv` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tsv.1.md). 
 
