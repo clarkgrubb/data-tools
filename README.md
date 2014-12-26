@@ -25,8 +25,6 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
 
     highlight          highlight text matching REGEX
 
-    jar-awk            process multiline records (i.e record jars) with Ruby
-
     join-tsv           perform a relation join on two TSV files
 
     json-awk           read JSON objects from standard input and process them with Ruby
@@ -96,8 +94,6 @@ If you have special installation needs, maybe they are covered [here](https://gi
     highlight          REGEX [FILE]
     
     highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
-
-    jar-awk            -l REGEX [-F REGEX] [(-B|-E) SCRIPT] ... (-f SCRIPT_FILE | SCRIPT) [JAR_FILE] ...
 
     join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
 
