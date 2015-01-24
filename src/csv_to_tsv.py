@@ -12,8 +12,9 @@ import sys
 #
 # http://www.unicode.org/standard/reports/tr13/tr13-5.html
 
-STRIPPER_CHARS = u"\f\n\r\t\v\x85\u2028\u2029"
-PROHIBITED_REGEX = re.compile(u'([\f\n\r\t\v\x85\u2028\u2029])')
+STRIPPER_CHARS = u"\f\n\r\t\v\u0085\u2028\u2029"
+STRIPPER_TAB = {ord(ch): None for ch in STRIPPER_CHARS}
+PROHIBITED_REGEX = re.compile(u'([\f\n\r\t\v\u0085\u2028\u2029])')
 SPACES_REGEX = re.compile(' +')
 ENCODING = 'utf-8'
 
@@ -35,7 +36,7 @@ def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
 
 
 def stripper(row):
-    return [field.translate(None, STRIPPER_CHARS) for field in row]
+    return [field.translate(STRIPPER_TAB) for field in row]
 
 
 def escape(field):
@@ -43,33 +44,33 @@ def escape(field):
     str_builder = []
 
     for ch in field:
-        if ch == '\\':
-            str_builder.append('\\')
-            str_builder.append('\\')
-        elif ch == '\f':
-            str_builder.append('\\')
-            str_builder.append('f')
-        elif ch == '\n':
-            str_builder.append('\\')
-            str_builder.append('n')
-        elif ch == '\r':
-            str_builder.append('\\')
-            str_builder.append('r')
-        elif ch == '\t':
-            str_builder.append('\\')
-            str_builder.append('t')
-        elif ch == '\v':
-            str_builder.append('\\')
-            str_builder.append('v')
-        elif ch == '\x85':
-            str_builder.append('\\')
-            str_builder.append('x85')
+        if ch == u'\\':
+            str_builder.append(u'\\')
+            str_builder.append(u'\\')
+        elif ch == u'\f':
+            str_builder.append(u'\\')
+            str_builder.append(u'f')
+        elif ch == u'\n':
+            str_builder.append(u'\\')
+            str_builder.append(u'n')
+        elif ch == u'\r':
+            str_builder.append(u'\\')
+            str_builder.append(u'r')
+        elif ch == u'\t':
+            str_builder.append(u'\\')
+            str_builder.append(u't')
+        elif ch == u'\v':
+            str_builder.append(u'\\')
+            str_builder.append(u'v')
+        elif ch == u'\u0085':
+            str_builder.append(u'\\')
+            str_builder.append(u'u0085')
         elif ch == u'\u2028':
-            str_builder.append('\\')
-            str_builder.append('u2028')
+            str_builder.append(u'\\')
+            str_builder.append(u'u2028')
         elif ch == u'\u2029':
-            str_builder.append('\\')
-            str_builder.append('u2029')
+            str_builder.append(u'\\')
+            str_builder.append(u'u2029')
         else:
             str_builder.append(ch)
 
@@ -82,14 +83,14 @@ def escaper(row):
 
 def replacer(row):
 
-    return [PROHIBITED_REGEX.sub(' ', field)
+    return [PROHIBITED_REGEX.sub(u' ', field)
             for field
             in row]
 
 
 def squeezer(row):
 
-    return [SPACES_REGEX.sub(' ', PROHIBITED_REGEX.sub(' ', field))
+    return [SPACES_REGEX.sub(u' ', PROHIBITED_REGEX.sub(u' ', field))
             for field
             in row]
 
@@ -105,8 +106,8 @@ def detecter(row):
 def csv_to_tsv(input_stream,
                output_stream,
                header,
-               delimiter=',',
-               quotechar='"',
+               delimiter=u',',
+               quotechar=u'"',
                sanitizer=stripper):
 
     rows = unicode_csv_reader(input_stream,
@@ -114,9 +115,9 @@ def csv_to_tsv(input_stream,
                               quotechar=quotechar)
 
     if header:
-        output_stream.write('\t'.join(header.split(',')) + '\n')
+        output_stream.write(u'\t'.join(header.split(u',')) + u'\n')
     for row in rows:
-        output_stream.write('\t'.join(sanitizer(row)) + '\n')
+        output_stream.write(u'\t'.join(sanitizer(row)) + u'\n')
 
 
 if __name__ == '__main__':

@@ -163,6 +163,11 @@ test.csv_to_tsv: | output/csv_to_tsv
 	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
 	echo $$'λ,two\nthree,four' | ./src/csv_to_tsv.py > output/csv_to_tsv/unicode.tsv
 	diff test/csv_to_tsv/expected.unicode.tsv output/csv_to_tsv/unicode.tsv
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv_to_tsv.py --strip > output/csv_to_tsv/test.csv_to_tsv.strip.tsv
+	diff test/csv_to_tsv/expected.strip.tsv output/csv_to_tsv/test.csv_to_tsv.strip.tsv
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv_to_tsv.py --escape > output/csv_to_tsv/test.csv_to_tsv.escape.tsv
+	diff test/csv_to_tsv/expected.escape.tsv output/csv_to_tsv/test.csv_to_tsv.escape.tsv
+
 
 .PHONY: test.sv_to_xlsx
 test.csv_to_xlsx: | output/csv_to_xlsx
