@@ -21,6 +21,9 @@ output/%.tsv: test/input/%.csv | output
 tests := one two
 test_files := $(patsubst %,output/%.tsv,$(tests))
 
+state.png: state.dot
+	dot -Tpng < $< > $@
+
 .PHONY: test
 test: $(test_files)
 
