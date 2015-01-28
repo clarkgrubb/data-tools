@@ -8,15 +8,13 @@ For a definition of the tSV format we follow the [IANA](https://www.iana.org/ass
 
 # FLAGS
 
--x --strip
--r --replace
--e --escape
--p --pad
-
-
--d DELIMTER --delimiter DELIMITER
--q QUOTECHAR --quotechar QUOTECHAR
---header NAME,NAME,...
+    -x --strip
+    -r --replace
+    -e --escape
+    -p --pad
+    -d DELIMTER --delimiter DELIMITER
+    -q QUOTECHAR --quotechar QUOTECHAR
+    --header NAME,NAME,...
 
 # STATE MACHINE
 
