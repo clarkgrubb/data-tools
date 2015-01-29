@@ -40,6 +40,8 @@ The data standards we follow don't specify the character encoding.  We use UTF-8
 
 # STATE MACHINE
 
+This describes the state transitions of the C code in the default mode; i.e. when no flags are set.
+
 <img src="state.png">
 
 # TESTS
@@ -63,10 +65,6 @@ Benchmark against the Python code.
 # TODO
 
 Add `--squeeze`
-
-Update state machine for CR.
-
-Update state machine for <invalid>
 
 Install Python at `slow-csv-to-tsv` and C at `fast-csv-to-tsv`, make `csv-to-tsv`
 a link to one of them.
