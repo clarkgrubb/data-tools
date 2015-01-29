@@ -259,7 +259,7 @@ class CharFormatter
   end
 
   def print_line(width)
-    reutrn unless @code_points.size > 0
+    return unless @code_points.size > 0
 
     print "#{to_hex(@byte_offsets.first)}" if @options[:byte_offset]
 
