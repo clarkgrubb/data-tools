@@ -13,7 +13,7 @@ digraph {
         unquoted_field -> before_newline [label="\\r"];
         unquoted_field -> finish [label="<eof>"];
         unquoted_field -> fatal [label="\""];
-        unqutoed_field -> fatal [label="<invalid>"];
+        unquoted_field -> fatal [label="<invalid>"];
 
         quoted_field -> quoted_field [label="<other>"];
         quoted_field -> quoted_field_after_dquote [label="\""];
@@ -25,7 +25,7 @@ digraph {
         quoted_field_after_dquote -> outside_field [label="\\n"];
         quoted_field_after_dquote -> before_newline [label="\\r"];
         quoted_field_after_dquote -> fatal [label="<other>"];
-        dquoted_field_after_dquote -> fatal [label="<invalid>"];
+        quoted_field_after_dquote -> fatal [label="<invalid>"];
 
         before_newline -> outside_field [label="\\n"];
         before_newline -> fatal [label="<other>"];
