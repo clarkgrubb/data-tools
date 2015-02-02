@@ -19,14 +19,26 @@ The HTML/XML document is parsed using the Ruby Nokogiri library and made availab
 
 A Nokogiri DOM object is a hierarchical tree of Nodes.  Here are some of the most useful Node methods:
 
-    []           treat Node as Hash of its attributes
-    children()   return NodeSet of children
+    []            treat Node as Hash of its attributes
+    children()    return NodeSet of children
     content()
-    css()        return NodeSet which matches CSS rule
+    css()         return NodeSet which matches CSS rule
     document()
     parent()
     to_s()
-    xpath()      return NodeSet 
+    xpath()       return NodeSet
+    line()
+    name()
+    path()
+    attributes()  returns a Hash
+
+Ways to modify a Node:
+
+    []=                  set an attribute
+    content()=           set content to string
+    children()=          set content to list of nodes
+    remove_attribute()
+    prepend_child()
 
 Some useful NodeSet methods.
 
@@ -38,16 +50,17 @@ Some useful NodeSet methods.
 
 A summary of XPath and CSS selectior syntax:
 
-                         xpath                css             dom
-                         -------------------  --------------  -----------------------------
-    by id                //*[@id="foo"]       #foo            getElementById("foo")
-    by class             //*[@class="foo"]    .foo            getElementsByClassName("foo")
-    by tag               //div                div             getElementsByTagName("div")
-    by attribute         //*[@title]          [title]
-    by attribute value   //*[@title="foo"]    [title="foo"]
-    union                //h1 | //h2          h1, h2
-    child                [@class="foo"]/li    .foo > li
-    descendant           [@class="foo"]//td   .foo td
+                                xpath                css             dom
+                                -------------------  --------------  -----------------------------
+    by id                       //*[@id="foo"]       #foo            getElementById("foo")
+    by class                    //*[@class="foo"]    .foo            getElementsByClassName("foo")
+    by tag                      //div                div             getElementsByTagName("div")
+    by attribute                //*[@title]          [title]
+    by attribute value          //*[@title="foo"]    [title="foo"]
+    union                       //h1 | //h2          h1, h2
+    child                       [@class="foo"]/li    .foo > li
+    descendant                  [@class="foo"]//td   .foo td
+    search from current node    .//div
 
 
 # EXAMPLES
