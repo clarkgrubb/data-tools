@@ -1,4 +1,4 @@
-.TH HIGHTLIGHT 1 "September 12, 2013" 
+.TH HIGHLIGHT 1 "September 12, 2013" 
 .SH NAME
 .PP
 highlight \- highlight text in a stream maching a regular expression
@@ -24,8 +24,10 @@ highlight
 ...
 [FILE]
 .PP
-highlight
-(\-\-white\-background|\-\-black\-background|\-\-invert|\-i)=REGEX ...
+highlight (\-\-white\-background|\-\-black\-background)=REGEX ...
+[FILE]
+.PP
+highlight (\-\-bold|\-\-italic|\-\-underline|\-\-inverse)=REGEX ...
 [FILE]
 .SH DESCRIPTION
 .PP
@@ -92,8 +94,15 @@ REGEX in white.
 \-\-black\-background=REGEX : highlight background of text matching
 REGEX in black.
 .PP
-\-i REGEX, \-\-invert=REGEX : highlight text matching REGEX with reverse
-video.
+\-\-bold=REGEX : put text matching REGEX in bold text.
+.PP
+\-\-italic=REGEX : put text matching REGEX in italic text.
+My terminal does not support this, however.
+.PP
+\-\-underline=REGEX : underline text matching REGEX.
+.PP
+\-\-invert=REGEX, \-\-reverse=REGEX : highlight text matching REGEX with
+reverse video.
 .SH SEE ALSO
 .PP
 \f[C]grep\f[] (1)

@@ -1,4 +1,4 @@
-% HIGHTLIGHT(1)
+% HIGHLIGHT(1)
 % Clark Grubb
 % September 12, 2013
 
@@ -19,7 +19,9 @@ highlight (--red-background|--green-background|--yellow-background)=REGEX ... [F
 
 highlight (--blue-background|--magenta-background|--cyan-background)=REGEX ... [FILE]
 
-highlight (--white-background|--black-background|--invert|-i)=REGEX ... [FILE]
+highlight (--white-background|--black-background)=REGEX ... [FILE]
+
+highlight (--bold|--italic|--underline|--inverse)=REGEX ... [FILE]
 
 
 # DESCRIPTION
@@ -92,7 +94,16 @@ Highlight which shells users are using:
 \--black-background=REGEX
 : highlight background of text matching REGEX in black.
 
--i REGEX, \--invert=REGEX
+\--bold=REGEX
+: put text matching REGEX in bold text.
+
+\--italic=REGEX
+: put text matching REGEX in italic text.  My terminal does not support this, however.
+
+\--underline=REGEX
+: underline text matching REGEX.
+
+\--invert=REGEX, \--reverse=REGEX
 : highlight text matching REGEX with reverse video.
 
 # SEE ALSO

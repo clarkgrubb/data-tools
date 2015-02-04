@@ -13,7 +13,7 @@ BLUE_FOREGROUND = '\033[01;34m'
 MAGENTA_FOREGROUND = '\033[01;35m'
 CYAN_FOREGROUND = '\033[01;36m'
 WHITE_FOREGROUND = '\033[01;37m'
-INVERT = '\033[01;7m'
+
 BLACK_BACKGROUND = '\033[01;40m'
 RED_BACKGROUND = '\033[01;41m'
 GREEN_BACKGROUND = '\033[01;42m'
@@ -23,6 +23,11 @@ MAGENTA_BACKGROUND = '\033[01;45m'
 CYAN_BACKGROUND = '\033[01;46m'
 WHITE_BACKGROUND = '\033[01;47m'
 
+NORMAL = '\033[01;0m'
+BOLD = '\033[01;1m'
+ITALIC = '\033[01;3m'
+UNDERLINE = '\033[01;4m'
+INVERT = '\033[01;7m'
 
 def highlight(input_stream, output_stream, esc_seq_to_pattern):
     for line in input_stream:
@@ -62,9 +67,7 @@ if __name__ == '__main__':
     parser.add_argument('--white', '-w',
                         dest='white',
                         metavar='PATTERN')
-    parser.add_argument('--invert', '-i',
-                        dest='invert',
-                        metavar='PATTERN')
+
     parser.add_argument('--black-background',
                         dest='black_background',
                         metavar='PATTERN')
@@ -90,17 +93,36 @@ if __name__ == '__main__':
                         dest='white_background',
                         metavar='PATTERN')
 
+    parser.add_argument('--normal',
+                        dest='normal',
+                        metavar='PATTERN')
+    parser.add_argument('--bold',
+                        dest='bold',
+                        metavar='PATTERN')
+    parser.add_argument('--italic',
+                        dest='italic',
+                        metavar='PATTERN')
+    parser.add_argument('--underline',
+                        dest='underline',
+                        metavar='PATTERN')
+    parser.add_argument('--invert', '--reverse',
+                        dest='invert',
+                        metavar='PATTERN')
+
+
     args = parser.parse_args()
     pattern = None
     input_path = None
 
     if len(args.positional) == 1:
         if args.red or args.black or args.green or args.yellow or args.blue \
-           or args.magenta or args.cyan or args.white or args.invert \
+           or args.magenta or args.cyan or args.white \
            or args.black_background or args.red_background \
            or args.green_background or args.yellow_background \
            or args.blue_background or args.magenta_background \
-           or args.cyan_background or args.white_background:
+           or args.cyan_background or args.white_background \
+           or args.normal or args.bold or args.italic or args.underline \
+           or args.invert:
             input_path = args.positional[0]
         else:
             pattern = args.positional[0]
@@ -131,8 +153,7 @@ if __name__ == '__main__':
         esc_seq_to_pattern[CYAN_FOREGROUND] = args.cyan
     if args.white:
         esc_seq_to_pattern[WHITE_FOREGROUND] = args.white
-    if args.invert:
-        esc_seq_to_pattern[INVERT] = args.invert
+
     if args.black_background:
         esc_seq_to_pattern[BLACK_BACKGROUND] = args.black_background
     if args.red_background:
@@ -149,6 +170,17 @@ if __name__ == '__main__':
         esc_seq_to_pattern[CYAN_BACKGROUND] = args.cyan_background
     if args.white_background:
         esc_seq_to_pattern[WHITE_BACKGROUND] = args.white_background
+
+    if args.normal:
+        esc_seq_to_pattern[NORMAL] = args.normal
+    if args.bold:
+        esc_seq_to_pattern[BOLD] = args.bold
+    if args.italic:
+        esc_seq_to_pattern[ITALIC] = args.italic
+    if args.underline:
+        esc_seq_to_pattern[UNDERLINE] = args.underline
+    if args.invert:
+        esc_seq_to_pattern[INVERT] = args.invert
 
     if not esc_seq_to_pattern:
         sys.stderr.write("No PATTERN specified.\n")
