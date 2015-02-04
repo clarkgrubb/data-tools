@@ -7,11 +7,25 @@ highlight \- highlight text in a stream maching a regular expression
 highlight REGEX [FILE]
 .PP
 highlight
-(\-\-red|\-\-green|\-\-yellow|\-\-blue|\-\-magenta|\-\-cyan|\-\-white)=REGEX
+(\-\-red|\-\-green|\-\-yellow|\-\-blue|\-\-magenta|\-\-cyan|\-\-white|\-\-black)=REGEX
 ...
 [FILE]
 .PP
 highlight (\-r|\-g|\-y|\-b|\-m|\-c|\-w)=REGEX ...
+[FILE]
+.PP
+highlight
+(\-\-red\-background|\-\-green\-background|\-\-yellow\-background)=REGEX
+...
+[FILE]
+.PP
+highlight
+(\-\-blue\-background|\-\-magenta\-background|\-\-cyan\-background)=REGEX
+...
+[FILE]
+.PP
+highlight
+(\-\-white\-background|\-\-black\-background|\-\-invert|\-i)=REGEX ...
 [FILE]
 .SH DESCRIPTION
 .PP
@@ -53,6 +67,33 @@ highlight\ \-r\ /bin/bash\ \-g\ /bin/sh\ \-b\ /usr/bin/zsh\ \-m\ /bin/false\ <\ 
 \-w REGEX, \-\-white=REGEX : highlight text matching REGEX in white.
 .PP
 \-\-black=REGEX : highlight text matching REGEX in black.
+.PP
+\-\-red\-background=REGEX : highlight background of text matching REGEX
+in red.
+.PP
+\-\-green\-background=REGEX : highlight background of text matching
+REGEX in green.
+.PP
+\-\-yellow\-background=REGEX : highlight background of text matching
+REGEX in yellow.
+.PP
+\-\-blue\-background=REGEX : highlight background of text matching REGEX
+in blue.
+.PP
+\-\-magenta\-background=REGEX : highlight background of text matching
+REGEX in magenta.
+.PP
+\-\-cyan\-background=REGEX : highlight background of text matching REGEX
+in cyan.
+.PP
+\-\-white\-background=REGEX : highlight background of text matching
+REGEX in white.
+.PP
+\-\-black\-background=REGEX : highlight background of text matching
+REGEX in black.
+.PP
+\-i REGEX, \-\-invert=REGEX : highlight text matching REGEX with reverse
+video.
 .SH SEE ALSO
 .PP
 \f[C]grep\f[] (1)

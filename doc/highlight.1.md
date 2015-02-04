@@ -11,9 +11,16 @@ highlight - highlight text in a stream maching a regular expression
 
 highlight REGEX [FILE]
 
-highlight (--red|--green|--yellow|--blue|--magenta|--cyan|--white)=REGEX ... [FILE]
+highlight (--red|--green|--yellow|--blue|--magenta|--cyan|--white|--black)=REGEX ... [FILE]
 
 highlight (-r|-g|-y|-b|-m|-c|-w)=REGEX ... [FILE]
+
+highlight (--red-background|--green-background|--yellow-background)=REGEX ... [FILE]
+
+highlight (--blue-background|--magenta-background|--cyan-background)=REGEX ... [FILE]
+
+highlight (--white-background|--black-background|--invert|-i)=REGEX ... [FILE]
+
 
 # DESCRIPTION
 
@@ -61,6 +68,32 @@ Highlight which shells users are using:
 \--black=REGEX
 : highlight text matching REGEX in black.
 
+\--red-background=REGEX
+: highlight background of text matching REGEX in red.
+
+\--green-background=REGEX
+: highlight background of text matching REGEX in green.
+
+\--yellow-background=REGEX
+: highlight background of text matching REGEX in yellow.
+
+\--blue-background=REGEX
+: highlight background of text matching REGEX in blue.
+
+\--magenta-background=REGEX
+: highlight background of text matching REGEX in magenta.
+
+\--cyan-background=REGEX
+: highlight background of text matching REGEX in cyan.
+
+\--white-background=REGEX
+: highlight background of text matching REGEX in white.
+
+\--black-background=REGEX
+: highlight background of text matching REGEX in black.
+
+-i REGEX, \--invert=REGEX
+: highlight text matching REGEX with reverse video.
 
 # SEE ALSO
 
