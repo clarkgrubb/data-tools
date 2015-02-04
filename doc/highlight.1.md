@@ -35,6 +35,11 @@ lines which don't match REGEX at all.
 The default color is red.  The other choices are green, yellow, blue, magenta,
 cyan, white, and black.
 
+It is also possible to set the background highlight color or to invert
+the video.
+
+Furthermore it is possible to set some text effects: bold, italic, or underline.
+
 Multiple patterns can be specified, but the results when patterns overlap are
 unpredictable.
 
