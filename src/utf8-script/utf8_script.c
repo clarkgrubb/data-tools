@@ -5898,5 +5898,9 @@ main(int argc, char **argv) {
     }
   }
 
+  if (ferror(stdin)) {
+    perror("error reading from standard input: ");
+    return 1;
+  }
   return 0;
 }
