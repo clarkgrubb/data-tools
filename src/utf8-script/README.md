@@ -85,12 +85,12 @@ the decision tree short for ASCII characters.
 
 It looks like `wc` is 10 times faster than `utf8-script`:
 
-    time ./utf8-script < ~/Local/etc/shakes.txt 
+    $ time ./utf8-script < ~/Local/etc/shakes.txt 
     1785016	Common
     3804871	Latin
     ./utf8-script < ~/Local/etc/shakes.txt  0.37s user 0.00s system 99% cpu 0.378 total
 
-    time wc < ~/Local/etc/shakes.txt 
+    $ time wc < ~/Local/etc/shakes.txt 
       124787  904061 5589889
     wc < ~/Local/etc/shakes.txt  0.03s user 0.00s system 98% cpu 0.034 total
 
