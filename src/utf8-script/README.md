@@ -38,22 +38,21 @@ characters.
 
 A simple implementation would for each character check each of the
 1404 ranges.  This would mean up to 2808 comparisons would be
-performed for each character.  We can exit early when we find the
-correct range.  Most characters, at least in the USA, are ASCII
-characters, so if we perform the low point comparisons first, the
-script might be reasonably fast on most inputs.
+performed for each character.
 
-It seems better, however, to implement a decision tree which
-implements some sort of bisection algorithm.  An optimal solution
-might take into account the likelihood of the scripts or the
-characters.  Not having such data, we will assume each range is
-equally likely.  In some ways this is a bad assumption, but at least
-it should minimize the maximum depth of our tree.  At each node of the
-tree we compare the character `ch` against a new value `x`.
+It seems better to implement a decision tree which implements some
+sort of bisection algorithm.  An optimal solution might take into
+account the likelihood of the scripts or the characters.  Not having
+such data, we will assume each range is equally likely.  In some ways
+this is a bad assumption, but at least it minimizes the maximum depth
+of our tree.  At each node of the tree we compare the character `ch`
+against a new value `x` to get two new intervals:
 
     [low, x)  [x, high)
     
-Initially `low` is 0 and `high` is 0x120000.
+At the root node `low` is 0 and `high` is 0x120000.
+
+# Checking Whether Interval Intersect
 
 If we want to test whether `[left, right]` intersects `[start,
 ending)`, it is easier to check whether they are disjoint, which
@@ -79,7 +78,7 @@ We compute `P([a, b))` by assuming each range is equally likely:
 # An Optimization for ASCII
 
 Although most decision points are computed in the above manner, we
-perform the first comparision at x = 128.  This keeps the path taken through
+perform the first comparision at x = 128.  This keeps the path through
 the decision tree short for ASCII characters.
 
 [1]: http://unicode.org/Public/UNIDATA/Scripts.txt
