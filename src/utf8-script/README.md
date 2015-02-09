@@ -81,7 +81,7 @@ Although most decision points are computed in the above manner, we
 perform the first comparision at x = 128.  This keeps the path through
 the decision tree short for ASCII characters.
 
-# Benchmarks
+# Benchmark
 
 It looks like `wc` is 10 times faster than `utf8-script`:
 
