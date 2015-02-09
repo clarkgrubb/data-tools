@@ -1,22 +1,26 @@
 # Overview
 
-This script takes UTF-8 encoded input and counts the number of
-characters in each script.
+This script takes UTF-8 encoded input and tallies the characters
+by Unicode script.
 
 # Unicode Scripts
 
-Each Unicode character belongs to a script.  Some examples are Latin,
-Greek, Cyrillic, Hebrew, Arabic, Devanagari, Hangul, Hiragana,
-Katakana, and Han.
+Each Unicode character belongs to a Unicode script.  Examples of
+Unicode scripts are Latin, Greek, Cyrillic, Hebrew, Arabic,
+Devanagari, Hangul, Hiragana, Katakana, and Han.
 
-Some Unicode characters are in the Common and Inherited "scripts".
-The Common characters include punctuation symbols and other symbols
-which are widely shared.  The Inherited characters are combining
-marks.
+Some Unicode characters are classified as belonging to the Common,
+Inherited, or Unknown scripts.
+
+The Common characters include symbols which are shared by the scripts.
+This includes most punctuation.  The Inherited characters are
+combining marks  The Unknown characters are Unicode points to
+which the Unicode standard has not assigned a character.
 
 The mapping from Unicode point to script is described in
-[Scripts.txt][1] If a character is not in one of these ranges, it
-belongs to the script Unknown.
+[Scripts.txt][1].
+
+# Implementation
 
 In Unicode 7.0, there are 126 scripts if we include Unknown.  The
 characters in a script often don't have contiguous points, so they are
