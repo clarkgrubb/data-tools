@@ -52,7 +52,7 @@ against a new value `x` to get two new intervals:
     
 At the root node `low` is 0 and `high` is 0x120000.
 
-# Checking Whether Interval Intersect
+# Checking Whether Intervals Intersect
 
 If we want to test whether `[left, right]` intersects `[start,
 ending)`, it is easier to check whether they are disjoint, which
