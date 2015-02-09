@@ -14,7 +14,7 @@ utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate.rb $^ > $@
 
 utf8-script: utf8_script.c
-	gcc -std=c11 -o $@ $<
+	gcc -O2 -std=c11 -o $@ $<
 
 .PHONY: all
 all: utf8-script
@@ -22,12 +22,12 @@ all: utf8-script
 output:
 	mkdir $@
 
-output/%.tsv: test/input/%.csv | output
+output/%: test/input/% | output
 	./utf8-script < $< > $@
-	diff test/expected.output/$*.tsv $@
+	diff test/expected.output/$* $@
 
-tests := one two
-test_files := $(patsubst %,output/%.tsv,$(tests))
+tests := one two three
+test_files := $(patsubst %,output/%.txt,$(tests))
 
 .PHONY: test
 test: $(test_files)

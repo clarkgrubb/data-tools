@@ -3,18 +3,18 @@
 require 'erb'
 require 'pp'
 
-INDENT = "  "
+INDENT = '  '
 
 class DecisionNode
   attr_reader :left_node, :right_node, :left, :right, :x, :n, :script
 
-  def initialize(scripts, left, right, x=nil)
+  def initialize(scripts, left, right, x = nil)
     @scripts = scripts
     @left = left
     @right = right
     @n = @scripts.ranges_intersecting_interval(left, right)
     if @n > 1
-      raise "software error" if right - left <= 1
+      fail 'software error' if right - left <= 1
       @x = x.nil? ? best_x : x
       @left_node = DecisionNode.new(scripts, @left, @x)
       @right_node = DecisionNode.new(scripts, @x, @right)
@@ -40,9 +40,7 @@ class DecisionNode
         best_x = x
       end
     end
-    if best_x.nil?
-      raise "software error: #{@left} #{@right} #{@n}"
-    end
+    fail "software error: #{@left} #{@right} #{@n}" if best_x.nil?
     best_x
   end
 
@@ -53,7 +51,7 @@ class DecisionNode
       s += @left_node.render_increment_counts(indent + INDENT) + "\n"
       s += indent + "} else {\n"
       s += @right_node.render_increment_counts(indent + INDENT) + "\n"
-      s += indent + "}"
+      s += indent + '}'
     else
       s += indent + 'counts[' + @script.downcase + '] += 1;'
     end
@@ -101,14 +99,14 @@ class Scripts
   def render_enum
     s = "enum unicode_script {\n"
     @script_map.each_with_index do |script, i|
-      s += INDENT + script.downcase + " = " + i.to_s + ",\n"
+      s += INDENT + script.downcase + ' = ' + i.to_s + ",\n"
     end
-    s += "};"
+    s += '};'
     s
   end
 
   def render_script_strings
-    s = "char *scripts[] = {\n";
+    s = "char *scripts[] = {\n"
     s += INDENT
     s += @script_map.map { |script| '"' + script + '"' }.join(",\n" + INDENT)
     s += "\n};"
@@ -116,9 +114,7 @@ class Scripts
   end
 
   def starts
-    if @starts.nil?
-      @starts = ranges.collect { |o| o[0] }.sort
-    end
+    @starts = ranges.collect { |o| o[0] }.sort if @starts.nil?
     @starts
   end
 
@@ -137,10 +133,10 @@ class Scripts
   def name_of_intersecting_script(start, ending)
     @data.each do |script, a|
       a.each do |left, right|
-        return script if !(left >= ending || right < start)
+        return script unless left >= ending || right < start
       end
     end
-    raise "software error"
+    fail 'software error'
   end
 
   def probability(start, ending)
@@ -153,14 +149,14 @@ class Scripts
   end
 
   def add_unknown_ranges
-    unknown = [true] * 0x10ffff;
-    @data.each do |script, a|
+    unknown = [true] * 0x10ffff
+    @data.each do |_, a|
       a.each do |start, ending|
         (start..ending).each do |i|
           if unknown[i]
             unknown[i] = false
           else
-            raise "point #{'%x' % i} used multiple times"
+            fail "point #{'%x' % i} used multiple times"
           end
         end
       end
@@ -170,7 +166,7 @@ class Scripts
     ending = nil
     (0..0x10ffff).each do |i|
       if unknown[i]
-        start = i if start == nil
+        start = i if start.nil?
         ending = i
       else
         unless start.nil?
@@ -190,7 +186,7 @@ class Scripts
       new_a = []
       last_start, last_ending = nil, nil
       a.each do |start, ending|
-        if last_ending and start == last_ending + 1
+        if last_ending && start == last_ending + 1
           last_ending = ending
         elsif last_ending
           new_a << [last_start, last_ending]
