@@ -1,0 +1,32 @@
+#include <locale.h>
+#include <stdio.h>
+#include <wchar.h>
+
+<%= enum %>
+
+<%= script_strings %>
+
+int
+main(int argc, char **argv) {
+  wchar_t ch;
+  size_t counts[<%= num_scripts %>];
+
+  int i;
+  for (i = 0; i < <%= num_scripts %>; ++i) {
+    counts[i] = 0;
+  }
+
+  setlocale(LC_ALL, "");
+
+  while ((ch = getwchar()) != WEOF) {
+<%= increment_counts %>
+  }
+
+  for (i = 0; i < <%= num_scripts %>; ++i) {
+    if (counts[i] > 0) {
+      printf("%lu\t%s\n", counts[i], scripts[i]);
+    }
+  }
+
+  return 0;
+}
