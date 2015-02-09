@@ -3,9 +3,9 @@
 This utility takes UTF-8 encoded input and tallies the characters
 by Unicode script.  For example:
 
-    $ echo βετα αλπηα foo bar | utf8-script
+    $ echo αλφα βετα foo bar | utf8-script
     4	Common
-    9	Greek
+    8	Greek
     6	Latin
 
 
