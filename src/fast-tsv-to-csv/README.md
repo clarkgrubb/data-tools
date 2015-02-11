@@ -18,8 +18,6 @@ If the field does not contain these characters, then quoting is optional.  The e
 
 Thus, we adopt we scan each field to see whether it has characters which require quoting.  This means we must pass over the data twice.  However, we don't want to dynamically allocate any memory, so if the field exceeds the size of our buffer we quote it.
 
-Our buffer scheme is as follows.  We read pages of bytes in size 4096.  We alternately read pages into two buffers.  If a field is longer than our page size, we quote it.  The two buffers guarantee that we can always back up at least 4096 characters when we find the end of the field, unless it exceeds our limit, in which case we quote it.
-
 # CHARACTER ENCODING
 
 The data standards we follow don't specify the character encoding.  We use UTF-8.  Use `iconv` or some other conversion tool to convert to this format.
