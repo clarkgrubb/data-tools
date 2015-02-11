@@ -40,7 +40,7 @@ main(int argc, char **argv) {
   wchar_t buf[BUFSIZE];
   size_t i = 0;
   size_t write_i = 0;
-  bool escape_field = true;
+  bool escape_field = false;
   bool open_field = true;
 
   setlocale(LC_ALL, "");
