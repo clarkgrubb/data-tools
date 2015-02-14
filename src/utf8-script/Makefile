@@ -6,18 +6,29 @@ SHELL := bash
 .SUFFIXES:
 
 scripts_url := http://unicode.org/Public/UNIDATA/Scripts.txt
+unicode_data_url := ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 Scripts.txt:
 	wget $(scripts_url)
 
+UnicodeData.txt:
+	wget $(unicode_data_url)
+
 utf8_script.c: Scripts.txt utf8_script.c.erb
-	./generate.rb $^ > $@
+	./generate_script.rb $^ > $@
 
 utf8-script: utf8_script.c
 	gcc -O2 -std=c11 -o $@ $<
 
+utf8_category.c: UnicodeData.txt utf8_category.c.erb
+	./generate_category.rb $^ > $@
+
+utf8-category: utf8_category.c
+	gcc -O2 -std=c11 -o $@ $<
+
+
 .PHONY: all
-all: utf8-script
+all: utf8-script utf8-category
 
 output:
 	mkdir $@

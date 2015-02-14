@@ -14,18 +14,18 @@ static struct option long_opts[] = {
 
 <%= enum %>
 
-<%= script_strings %>
+<%= category_strings %>
 
 void
 usage(int exit_status) {
-  fprintf(stderr, "USAGE: utf8-script [--count-ascii | --skip-ascii]\n");
+  fprintf(stderr, "USAGE: utf8-category [--count-ascii | --skip-ascii]\n");
   exit(exit_status);
 }
 
 int
 main(int argc, char **argv) {
   wchar_t ch;
-  size_t counts[<%= num_scripts %>];
+  size_t counts[<%= num_categories %>];
   int flag, flag_count = 0;
   char *endptr;
   bool count_ascii = false;
@@ -54,7 +54,7 @@ main(int argc, char **argv) {
     usage(1);
 
   int i;
-  for (i = 0; i < <%= num_scripts %>; ++i) {
+  for (i = 0; i < <%= num_categories %>; ++i) {
     counts[i] = 0;
   }
 
@@ -72,9 +72,9 @@ main(int argc, char **argv) {
 
   if (count_ascii)
     printf("%lu\t%s\n", ascii_cnt, "ASCII");
-  for (i = 0; i < <%= num_scripts %>; ++i) {
+  for (i = 0; i < <%= num_categories %>; ++i) {
     if (counts[i] > 0) {
-      printf("%lu\t%s\n", counts[i], scripts[i]);
+      printf("%lu\t%s\n", counts[i], categories[i]);
     }
   }
 

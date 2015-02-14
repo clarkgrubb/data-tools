@@ -319,7 +319,7 @@ main(int argc, char **argv) {
       continue;
     if (count_ascii && iswascii(ch)) {
       ++ascii_cnt;
-      break;
+      continue;
     }
     if (ch < 128) {
       if (ch < 91) {
