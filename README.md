@@ -47,6 +47,10 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
 
     tsv-to-json        convert TSV to JSON
 
+    utf8-category      tally UTF-8 encoded characters by general category
+    
+    utf8-script        tally UTF-8 encoded characters by script
+
     utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
     
     xls-to-csv         convert XLS to CSV
@@ -112,6 +116,10 @@ If you have special installation needs, maybe they are covered [here](https://gi
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 
     tsv-to-json        [TSV_FILE]
+
+    utf8-category      [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]
+
+    utf8-script        [-c|--count-ascii|-s|--skip-ascii]
 
     utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
 
