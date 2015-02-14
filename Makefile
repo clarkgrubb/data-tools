@@ -80,7 +80,6 @@ install-script:
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
 	ln -sf $(src)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
-	ln -sf $(src)/undermongo.sh $(LOCAL_INSTALL_DIR)/undermongo
 	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
