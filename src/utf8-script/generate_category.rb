@@ -5,6 +5,47 @@ require 'pp'
 
 INDENT = '  '
 
+LONG_CATEGORIES = {
+  'Lu' => 'Uppercase_Letter',
+  'Ll' => 'Lowercase_Letter',
+  'Lt' => 'Titlecase_Letter',
+  'LC' => 'Cased_Letter',
+  'Lm' => 'Modifier_Letter',
+  'Lo' => 'Other_Letter',
+  'L' => 'Letter',
+  'Mn' => 'Nonspacing_Mark',
+  'Mc' => 'Spacing_Mark',
+  'Me' => 'Enclosing_Mark',
+  'M' => 'Mark',
+  'Nd' => 'Decimal_Number',
+  'Nl' => 'Letter_Number',
+  'No' => 'Other_Number',
+  'N' => 'Number',
+  'Pc' => 'Connector_Punctuation',
+  'Pd' => 'Dash_Punctuation',
+  'Ps' => 'Open_Punctuation',
+  'Pe' => 'Close_Punctuation',
+  'Pi' => 'Initial_Punctuation',
+  'Pf' => 'Final_Punctuation',
+  'Po' => 'Other_Punctuation',
+  'P' => 'Punctuation',
+  'Sm' => 'Math_Symbol',
+  'Sc' => 'Currency_Symbol',
+  'Sk' => 'Modifier_Symbol',
+  'So' => 'Other_Symbol',
+  'S' => 'Symbol',
+  'Zs' => 'Space_Separator',
+  'Zl' => 'Line_Separator',
+  'Zp' => 'Paragraph_Separator',
+  'Z' => 'Separator',
+  'Cc' => 'Control',
+  'Cf' => 'Format',
+  'Cs' => 'Surrogate',
+  'Co' => 'Private_Use',
+  'Cn' => 'Unassigned',
+  'C' => 'Other'
+}
+
 class DecisionNode
   attr_reader :left_node, :right_node, :left, :right, :x, :n, :category
 
@@ -68,11 +109,20 @@ class Categories
   def initialize(path)
     @data = Hash.new { |h, k| h[k] = [] }
     File.open(path) do |f|
+      start = nil
+      point = nil
+      category = nil
       f.each do |line|
         a = line.split(';')
         point, category = a[0].to_i(16), a[2]
-        @data[category] << [point, point]
+        if start.nil?
+          start = point
+        elsif start != point
+          @data[category] << [start, point - 1]
+          start = point
+        end
       end
+      @data[category] << [start, point]
     end
     collapse_ranges
     add_unknown_ranges
@@ -103,6 +153,20 @@ class Categories
     s = "char *categories[] = {\n"
     s += INDENT
     s += @category_map.map { |category| '"' + category + '"' }.join(",\n" + INDENT)
+    s += "\n};"
+    s
+  end
+
+  def render_long_category_strings
+    s = "char *long_categories[] = {\n"
+    s += INDENT
+    s += @category_map.map do |category|
+      if LONG_CATEGORIES.key?(category)
+        '"' + LONG_CATEGORIES[category] + '"'
+      else
+        '"Unknown"'
+      end
+    end.join(",\n" + INDENT)
     s += "\n};"
     s
   end
@@ -199,6 +263,7 @@ end
 def generate(categories, tree, template, output_stream)
   enum = categories.render_enum
   category_strings = categories.render_category_strings
+  long_category_strings = categories.render_long_category_strings
   num_categories = categories.count
   increment_counts = tree.render_increment_counts
   output_stream.puts ERB.new(File.open(template).read).result(binding)

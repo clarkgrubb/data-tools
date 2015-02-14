@@ -9,12 +9,15 @@
 static struct option long_opts[] = {
   {"count-ascii", 0, NULL, 'c'},
   {"skip-ascii", 0, NULL, 's'},
+  {"long-names", 0, NULL, 'l'},
   {0, 0, 0, 0}
 };
 
 <%= enum %>
 
 <%= category_strings %>
+
+<%= long_category_strings %>
 
 void
 usage(int exit_status) {
@@ -31,9 +34,10 @@ main(int argc, char **argv) {
   bool count_ascii = false;
   size_t ascii_cnt = 0;
   bool skip_ascii = false;
+  bool long_names = false;
 
   while (true) {
-    flag = getopt_long(argc, argv, "cs", long_opts, NULL);
+    flag = getopt_long(argc, argv, "cls", long_opts, NULL);
     if (-1 == flag)
       break;
     switch(flag) {
@@ -41,6 +45,10 @@ main(int argc, char **argv) {
       count_ascii = true;
       flag_count += 1;
       break;
+    case 'l':
+      long_names = true;
+      flag_count += 1;
+      break;  
     case 's':
       skip_ascii = true;
       flag_count += 1;
@@ -74,7 +82,10 @@ main(int argc, char **argv) {
     printf("%lu\t%s\n", ascii_cnt, "ASCII");
   for (i = 0; i < <%= num_categories %>; ++i) {
     if (counts[i] > 0) {
-      printf("%lu\t%s\n", counts[i], categories[i]);
+      if (long_names)
+        printf("%lu\t\%s\n", counts[i], long_categories[i]);
+      else
+        printf("%lu\t%s\n", counts[i], categories[i]);
     }
   }
 
