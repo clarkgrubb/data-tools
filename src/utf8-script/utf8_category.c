@@ -114,7 +114,7 @@ char *long_categories[] = {
 
 void
 usage(int exit_status) {
-  fprintf(stderr, "USAGE: utf8-category [--count-ascii | --skip-ascii]\n");
+  fprintf(stderr, "USAGE: utf8-category [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]\n");
   exit(exit_status);
 }
 
