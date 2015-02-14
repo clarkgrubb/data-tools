@@ -1,15 +1,57 @@
+#include <getopt.h>
 #include <locale.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <wchar.h>
+#include <wctype.h>
+
+static struct option long_opts[] = {
+  {"count-ascii", 0, NULL, 'c'},
+  {"skip-ascii", 0, NULL, 's'},
+  {0, 0, 0, 0}
+};
 
 <%= enum %>
 
 <%= script_strings %>
 
+void
+usage(int exit_status) {
+  fprintf(stderr, "USAGE: utf8-script [--count-ascii | --skip-ascii]\n");
+  exit(exit_status);
+}
+
 int
 main(int argc, char **argv) {
   wchar_t ch;
   size_t counts[<%= num_scripts %>];
+  int flag, flag_count = 0;
+  char *endptr;
+  bool count_ascii = false;
+  size_t ascii_cnt = 0;
+  bool skip_ascii = false;
+
+  while (true) {
+    flag = getopt_long(argc, argv, "cs", long_opts, NULL);
+    if (-1 == flag)
+      break;
+    switch(flag) {
+    case 'c':
+      count_ascii = true;
+      flag_count += 1;
+      break;
+    case 's':
+      skip_ascii = true;
+      flag_count += 1;
+      break;
+    default:
+      usage(1);
+    }
+  } 
+
+  if ( argc - flag_count > 1)
+    usage(1);
 
   int i;
   for (i = 0; i < <%= num_scripts %>; ++i) {
@@ -19,9 +61,17 @@ main(int argc, char **argv) {
   setlocale(LC_ALL, "");
 
   while ((ch = getwchar()) != WEOF) {
+    if (skip_ascii && iswascii(ch))
+      continue;
+    if (count_ascii && iswascii(ch)) {
+      ++ascii_cnt;
+      break;
+    }
 <%= increment_counts %>
   }
 
+  if (count_ascii)
+    printf("%lu\t%s\n", ascii_cnt, "ASCII");
   for (i = 0; i < <%= num_scripts %>; ++i) {
     if (counts[i] > 0) {
       printf("%lu\t%s\n", counts[i], scripts[i]);
