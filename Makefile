@@ -40,6 +40,10 @@ tawk := $(tawk_dir)/tawk
 $(tawk):
 	(cd $(tawk_dir); make tawk)
 
+.PHONY: utf8-script
+utf8-script:
+	(cd src/utf8-script; make)
+
 .PHONY: build-hexedit
 build-hexedit: $(hexedit)
 
@@ -47,7 +51,7 @@ build-hexedit: $(hexedit)
 build-tawk: $(tawk)
 
 .PHONY: build
-build: install-hexedit install-tawk
+build: install-hexedit install-tawk install-utf8-script
 
 .PHONY: install-hexedit
 install-hexedit: $(hexedit)
@@ -56,6 +60,11 @@ install-hexedit: $(hexedit)
 .PHONY: install-tawk
 install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
+
+.PHONY: install-utf8-script
+install-utf8-script: utf8-script
+	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
+	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
 
 .PHONY: install-build
 install-build: install-hexedit install-tawk

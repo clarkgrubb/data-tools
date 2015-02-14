@@ -10528,7 +10528,7 @@ main(int argc, char **argv) {
   }
 
   if (count_ascii)
-    printf("%lu\t%s\n", ascii_cnt, "ASCII");
+    printf("%lu\t%s\n", ascii_cnt, long_names ? "ASCII" : "As");
   for (i = 0; i < 30; ++i) {
     if (counts[i] > 0) {
       if (long_names)
