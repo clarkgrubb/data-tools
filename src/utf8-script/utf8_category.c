@@ -10532,7 +10532,7 @@ main(int argc, char **argv) {
   for (i = 0; i < 30; ++i) {
     if (counts[i] > 0) {
       if (long_names)
-        printf("%lu\t\%s\n", counts[i], long_categories[i]);
+        printf("%lu\t%s\n", counts[i], long_categories[i]);
       else
         printf("%lu\t%s\n", counts[i], categories[i]);
     }
