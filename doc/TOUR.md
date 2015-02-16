@@ -120,6 +120,22 @@ If you have access to `python` or `ruby`:
      
     $ ruby -e 'puts "\u03bb"'
  
+The *data tools* provide `utf8-category` and `utf8-script`, which summarize the characters by general category and script:
+ 
+    echo 'It is greater than ∞!' | utf8-category -l
+    1	Control
+    14	Lowercase_Letter
+    1	Uppercase_Letter
+    5	Other_Punctuation
+    1	Math_Symbol
+ 
+    $ echo 'αλφα βητα foo bar' | utf8-script
+    4	Common
+    8	Greek
+    6	Latin
+ 
+Both tools have `-c` and `-s` flags for counting ASCII characters separately or omitting them from the tally entirely.
+ 
 <a name="unicode"/>
 ## unicode
 
