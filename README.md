@@ -40,6 +40,8 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
     set-intersect      find lines common to two files
     
     tawk               awk, but uses tabs for FS and OFS by default
+    
+    tokenize           extract words from English language text
 
     trim-tsv           trim whitespace from fields of TSV file
     
@@ -110,6 +112,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     set-diff           FILE1 FILE2
 
     set-intersect      FILE1 FILE2
+    
+    tokenize           [-n]
 
     trim-tsv           [TSV_FILE]
 

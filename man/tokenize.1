@@ -1,0 +1,48 @@
+.TH TOKENIZE 1 "February 15, 2105" 
+.SH NAME
+.PP
+tokenize - extract words from English language text
+.SH SYNOPSIS
+.PP
+tokenize [-n]
+.SH DESCRIPTION
+.PP
+Exract words from English language text.
+Words consist of adjacent letters, numbers, and this punctuation:
+.IP
+.nf
+\f[C]
+\[aq]*+-/=\\^_`|~
+\f[]
+.fi
+.PP
+Control characters and this punctuation delimit words and are removed:
+.IP
+.nf
+\f[C]
+!#$%&(),:;<>?\@[]{}
+\f[]
+.fi
+.PP
+Space characters also delimit words.
+The words are written out separated by spaces unless the \f[C]-n\f[]
+flag is used, in which case they are separated by newlines.
+.PP
+Non-ASCII characters delimit words and are removed.
+It might be desirable to replace accented Latin characters with the
+unaccented versions.
+This command can be used:
+.IP
+.nf
+\f[C]
+$\ iconv\ -f\ utf-8\ -t\ ascii//TRANSLIT
+\f[]
+.fi
+.SH OPTIONS
+.PP
+-n : write the words out one per line.
+.SH SEE ALSO
+.PP
+\f[C]iconv\f[] (1)
+.SH AUTHORS
+Clark Grubb.
