@@ -44,6 +44,10 @@ This command strips all non-ASCII characters:
 
     $ iconv -c -f UTF-8 -t ASCII < INPUT_FILE > OUTPUT_FILE
 
+One can try to transliterate the non-ASCII characters:
+
+    $ iconv -f UTF-8 -t ASCII//TRANSLIT < INPUT_FILE > OUTPUT_FILE
+
 Here is a way to find non-ASCII bytes:
 
     $ grep --color='auto' -P -n "[\x80-\xFF]+"
