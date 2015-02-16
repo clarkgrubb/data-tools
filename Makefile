@@ -86,6 +86,7 @@ install-script:
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
+	ln -sf $(src)/tokenize.sh $(LOCAL_INSTALL_DIR)/tokenize
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
 	ln -sf $(src)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
