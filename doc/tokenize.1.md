@@ -1,6 +1,6 @@
 % TOKENIZE(1)
 % Clark Grubb
-% February 15, 2105
+% February 15, 2015
 
 # NAME
 
@@ -13,11 +13,11 @@ tokenize [-n]
 # DESCRIPTION
 
 Exract words from English language text.  Words consist of adjacent letters, numbers, and
-this punctuation:
+these punctuation characters:
 
     '*+-/=\^_`|~
 
-Control characters and this punctuation delimit words and are removed:
+Control characters and these punctuation characters delimit words and are removed:
 
     !#$%&(),:;<>?@[]{}
 
