@@ -71,6 +71,7 @@ install-build: install-hexedit install-tawk
 
 .PHONY: install-script
 install-script:
+	ln -sf $(src)/check-tsv.sh $(LOCAL_INSTALL_DIR)/check-tsv
 	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(src)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
@@ -88,6 +89,7 @@ install-script:
 	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(src)/tokenize.sh $(LOCAL_INSTALL_DIR)/tokenize
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
+	ln -sf $(src)/tsv-header.sh $(LOCAL_INSTALL_DIR)/tsv-header
 	ln -sf $(src)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
@@ -150,8 +152,16 @@ output/highlight output/normalize_utf8 output/counting_sort:
 output/join_tsv output/json_awk output/json_diff output/reservoir_sample output/trim_tsv:
 	mkdir -p $@
 
+output/tsv_header:
+	mkdir -p $@
+
 output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
 	mkdir -p $@
+
+.PHONY: test.check_tsv
+test.check_tsv:
+	./src/check-tsv.sh test/check_tsv/input.good.tsv
+	! ./src/check-tsv.sh test/check_tsv/input.bad.tsv
 
 .PHONY: test.counting_sort
 test.counting_sort: counting_sort/input.txt | output/counting_sort
@@ -273,6 +283,11 @@ test.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
 	./src/reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
 	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
 
+.PHONY: test.tsv_header
+test.tsv_header: | output/tsv_header
+	./src/tsv-header.sh test/tsv_header/input.tsv > output/tsv_header/output.txt
+	diff test/tsv_header/expected.output.txt output/tsv_header/output.txt
+
 .PHONY: test.trim_tsv
 test.trim_tsv: | output/trim_tsv
 	echo -n $$' one \t two \n three \t four' | ./src/trim_tsv.py > output/trim_tsv/trim_tsv.tsv
@@ -329,7 +344,7 @@ python.harness: $(python_harnesses)
 ruby_base := dom_awk json_awk utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
-shell.harness: test.json_diff
+shell.harness: test.check_tsv test.json_diff test.tsv_header
 
 .PHONY: ruby.harness
 ruby.harness: $(ruby_harnesses)

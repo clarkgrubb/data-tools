@@ -7,6 +7,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
 This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/data-tools/blob/master/doc/TOUR.md) describes them in detail.
 
+    check-tsv          verify rows in TSV file are same length
+
     counting-sort      sort a file using counting sort
 
     csv-to-json        convert CSV to JSON
@@ -45,6 +47,8 @@ This page describe the tools in brief; the [tour](https://github.com/clarkgrubb/
 
     trim-tsv           trim whitespace from fields of TSV file
     
+    tsv-header         show TSV header with ordinal position of each column
+    
     tsv-to-csv         convert TSV to CSV
 
     tsv-to-json        convert TSV to JSON
@@ -78,6 +82,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
 <a name="how-to-run"/>
 # HOW TO RUN
+
+    check-tsv          [TSV_FILE]
 
     counting-sort      [FILE]
 
@@ -116,6 +122,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     tokenize           [-n]
 
     trim-tsv           [TSV_FILE]
+
+    tsv-header         [TSV_FILE]
 
     tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
 

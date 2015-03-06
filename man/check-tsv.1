@@ -1,0 +1,25 @@
+.TH CHECK\-TSV 1 "March 6, 2015" 
+.SH NAME
+.PP
+check\-tsv \- check whether all rows in a TSV file have the same number
+of columns
+.SH SYNOPSIS
+.PP
+check\-tsv [TSV_FILE]
+.SH DESCRIPTION
+.PP
+Check whether all rows in a TSV file have the same number of columns.
+.PP
+The exit status is 0 if all rows have the same number of fields and 1 if
+they do not.
+.PP
+For each number of fields the number of rows is printed out.
+.SH OPTIONS
+.PP
+none
+.SH SEE ALSO
+.PP
+\f[C]awk\f[] (1), \f[C]tawk\f[] (1), \f[C]tsv\-header\f[] (1),
+\f[C]trim\-tsv\f[] (1)
+.SH AUTHORS
+Clark Grubb.
