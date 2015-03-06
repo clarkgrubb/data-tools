@@ -61,9 +61,9 @@ main(int argc, char **argv) {
   setlocale(LC_ALL, "");
 
   while ((ch = getwchar()) != WEOF) {
-    if (skip_ascii && iswascii(ch))
+    if (skip_ascii && ch >= 0 && ch < 128)
       continue;
-    if (count_ascii && iswascii(ch)) {
+    if (count_ascii && ch >= 0 && ch < 128) {
       ++ascii_cnt;
       continue;
     }

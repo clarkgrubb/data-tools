@@ -18,13 +18,13 @@ utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate_script.rb $^ > $@
 
 utf8-script: utf8_script.c
-	gcc -O2 -std=c11 -o $@ $<
+	gcc -O2 -o $@ $<
 
 utf8_category.c: UnicodeData.txt utf8_category.c.erb
 	./generate_category.rb $^ > $@
 
 utf8-category: utf8_category.c
-	gcc -O2 -std=c11 -o $@ $<
+	gcc -O2 -o $@ $<
 
 
 .PHONY: all
