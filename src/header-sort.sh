@@ -8,11 +8,11 @@ fi
 
 file="${!#}"
 
-if [ ! -f $file ]
+if [ ! -f "$file" ]
 then
     echo "USAGE: $0 [OPTIONS] FILE"
     exit 1
 fi
 
-head -1 $file
-tail -n +2 $file | sort "${@:1:$(($#-1))}"
+head -1 "$file"
+tail -n +2 "$file" | sort "${@:1:$((${#}-1))}"

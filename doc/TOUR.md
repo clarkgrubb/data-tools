@@ -56,7 +56,7 @@ The `-P` option is not provided by the version of `grep` distributed with Mac OS
 
     $ highlight '[\x80-\xFF]+'
 
-To find the first occurence of bytes which are not valid UTF-8, use `iconv`:
+To find the first occurrence of bytes which are not valid UTF-8, use `iconv`:
 
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24

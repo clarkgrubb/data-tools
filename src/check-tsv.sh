@@ -10,7 +10,7 @@ then
     exit 1
 elif [ "$#" -eq 1 ]
 then
-    awk "$script" $1
+    awk "$script" "$1"
 else
     awk "$script"
 fi

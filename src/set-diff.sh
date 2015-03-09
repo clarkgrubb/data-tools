@@ -9,7 +9,7 @@ fi
 sorted1=$(mktemp /tmp/set-diff-XXXXX)
 sorted2=$(mktemp /tmp/set-diff-XXXXX)
 
-sort -u $1 > $sorted1
-sort -u $2 > $sorted2
-comm -23 $sorted1 $sorted2
-rm $sorted1 $sorted2
+sort -u "$1" > "$sorted1"
+sort -u "$2" > "$sorted2"
+comm -23 "$sorted1" "$sorted2"
+rm "$sorted1" "$sorted2"

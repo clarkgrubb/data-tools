@@ -18,28 +18,28 @@ normalized1=$(mktemp /tmp/json-diff-XXXXX)
 normalized2=$(mktemp /tmp/json-diff-XXXXX)
 
 function cleanup {
-    rm -f $normalized1 $normalized2
+    rm -f "$normalized1" "$normalized2"
 }
 
 trap cleanup ERR
 
 function cleanup_and_exit {
     cleanup
-    exit $1
+    exit "$1"
 }
 
-if ! python -mjson.tool < $file1 > $normalized1
+if ! python -mjson.tool < "$file1" > "$normalized1"
 then
     cleanup_and_exit 2
 fi
-if ! python -mjson.tool < $file2 > $normalized2
+if ! python -mjson.tool < "$file2" > "$normalized2"
 then
     cleanup_and_exit 2
 fi
 
 set +u
-diff "${args[@]}" $normalized1 $normalized2
+diff "${args[@]}" "$normalized1" "$normalized2"
 diff_retval=$?
 set -u
 
-cleanup_and_exit $diff_retval
+cleanup_and_exit "$diff_retval"

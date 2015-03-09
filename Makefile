@@ -375,6 +375,10 @@ pep8:
 pylint:
 	find . -name '*.py' | xargs pylint --disable=missing-docstring
 
+.PHONY: shellcheck
+shellcheck:
+	find src -name '*.sh' | xargs shellcheck
+
 .PHONY: clean
 clean:
 	-find . -name '*.pyc' | xargs rm

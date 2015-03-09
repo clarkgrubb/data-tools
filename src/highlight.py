@@ -28,6 +28,7 @@ ITALIC = '\033[01;3m'
 UNDERLINE = '\033[01;4m'
 INVERT = '\033[01;7m'
 
+
 def highlight(input_stream, output_stream, esc_seq_to_pattern):
     for line in input_stream:
         output_line = line
@@ -107,7 +108,6 @@ if __name__ == '__main__':
     parser.add_argument('--invert', '--reverse',
                         dest='invert',
                         metavar='PATTERN')
-
 
     args = parser.parse_args()
     pattern = None

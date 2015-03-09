@@ -8,7 +8,7 @@ then
     exit 1
 elif [ "$#" -eq 1 ]
 then
-    head -1 $1 | tr '\t' '\n' | nl
+    head -1 "$1" | tr '\t' '\n' | nl
 else
     head -1 | tr '\t' '\n' | nl
 fi
