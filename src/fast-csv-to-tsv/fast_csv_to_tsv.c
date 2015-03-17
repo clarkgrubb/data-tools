@@ -1,6 +1,8 @@
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <wchar.h>
 
 enum parse_state {
@@ -8,6 +10,13 @@ enum parse_state {
   quoted_field,
   quoted_field_after_dquote,
   unquoted_field
+};
+
+enum invalid_char {
+  invalid_char_fail,
+  invalid_char_escape,
+  invalid_char_replace,
+  invalid_char_strip
 };
 
 void
@@ -18,7 +27,7 @@ fatal(char *msg, size_t lineno, size_t offsetno) {
 }
 
 int
-main(int argc, char **argv) {
+fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
   wint_t ch;
   enum parse_state state = outside_of_field;
   size_t lineno = 1, offsetno = 0, fieldno = 0;
@@ -119,4 +128,57 @@ main(int argc, char **argv) {
   }
 
   return 0;
+}
+
+int
+main(int argc, char **argv) {
+  static struct option long_opts[] = {
+    {"escape", no_argument, NULL, 'e'},
+    {"header", required_argument, NULL, 'h'},
+    {"pad", required_argument, NULL, 'p'},
+    {"replace", no_argument, NULL, 'r'},
+    {"strip", no_argument, NULL, 'x'},
+    {0, 0, 0, 0}
+  };
+
+  int ch;
+  int opti;
+  char *endptr;
+  enum invalid_char invalid_char_treatment = invalid_char_fail;
+  long pad = 0;
+  char *header = NULL;
+
+  while (1) {
+    ch = getopt_long(argc, argv, "dt:", long_opts, &opti);
+    if (-1 == ch) {
+      break;
+    }
+
+    switch (ch) {
+    case 'e':
+      invalid_char_treatment = invalid_char_escape;
+      break;
+    case 'x':
+      invalid_char_treatment = invalid_char_strip;
+      break;
+    case 'r':
+      invalid_char_treatment = invalid_char_replace;
+      break;
+    case 'h':
+      header = strdup(optarg);
+      break;
+    case 'p':
+      pad = strtol(optarg, &endptr, 10);
+      if (*endptr != 0) {
+        fprintf(stderr, "expected integer: %s\n", optarg);
+        exit(1);
+      }
+      break;
+    default:
+      fprintf(stderr, "unexpected arg: %d\n", ch);
+      exit(1);
+    }
+  }
+
+  return fast_csv_to_tsv(invalid_char_treatment, pad, header);
 }

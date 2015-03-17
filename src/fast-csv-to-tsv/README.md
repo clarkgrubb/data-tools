@@ -33,9 +33,7 @@ The data standards we follow don't specify the character encoding.  We use UTF-8
     -x --strip
     -r --replace
     -e --escape
-    -p --pad
-    -d DELIMTER --delimiter DELIMITER
-    -q QUOTECHAR --quotechar QUOTECHAR
+    -p --pad NUM_FIELDS
     --header NAME,NAME,...
 
 # STATE MACHINE
@@ -62,12 +60,3 @@ Profiling info.
 
 Benchmark against the Python code.
 
-# TODO
-
-Add `--squeeze`
-
-Install Python at `slow-csv-to-tsv` and C at `fast-csv-to-tsv`, make `csv-to-tsv`
-a link to one of them.
-
-Advantages of Python: possibly easier to install, no dependencies other than
-a recent version of Python.  Also, may handle more variant CSV inputs.
