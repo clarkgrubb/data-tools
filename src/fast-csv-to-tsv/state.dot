@@ -5,6 +5,7 @@ digraph {
         outside_field -> before_newline [label="\\r"];
         outside_field -> outside_field [label=","];
         outside_field -> finish [label="<eof>"];
+        outside_field -> unquoted_field [label="\\"];
         outside_field -> unquoted_field [label="<other>"];
         outside_field -> fatal [label="\\t"];
 
@@ -14,11 +15,13 @@ digraph {
         unquoted_field -> unquoted_field [label="<other>"];
         unquoted_field -> finish [label="<eof>"];
         unquoted_field -> fatal [label="\""];
+        unquoted_field -> unquoted_field [label="\\"];
         unquoted_field -> fatal [label="\\t"];
 
         quoted_field -> quoted_field [label="<other>"];
         quoted_field -> quoted_field_after_dquote [label="\""];
         quoted_field -> fatal [label="<eof>"];
+        quoted_field -> quoted_field [label="\\"];
         quoted_field -> fatal [label="\\t"];
         quoted_field -> fatal [label="\\n"];
         quoted_field -> fatal [label="\\r"];

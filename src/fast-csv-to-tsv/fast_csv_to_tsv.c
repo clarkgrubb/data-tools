@@ -6,10 +6,11 @@
 #include <wchar.h>
 
 enum parse_state {
-  outside_of_field,
+  outside_field,
   quoted_field,
   quoted_field_after_dquote,
-  unquoted_field
+  unquoted_field,
+  before_newline
 };
 
 enum invalid_char {
@@ -29,18 +30,62 @@ fatal(char *msg, size_t lineno, size_t offsetno) {
 int
 fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
   wint_t ch;
-  enum parse_state state = outside_of_field;
+  enum parse_state state = outside_field;
   size_t lineno = 1, offsetno = 0, fieldno = 0;
 
   while ((ch = getwchar()) != WEOF) {
     offsetno += 1;
+
     switch (ch) {
     case L'\t':
-      /* TODO: flag for replacing with space or escaping */
+      switch (state) {
+      case outside_field:
+        state = unquoted_field;
+      case quoted_field:
+      case unquoted_field:
+        if (invalid_char_treatment == invalid_char_fail)
+          fatal("tab in data", lineno, offsetno);
+        else if (invalid_char_treatment == invalid_char_escape) {
+          putwchar(L'\\');
+          putwchar(L't');
+        }
+        else if (invalid_char_treatment == invalid_char_replace)
+          putwchar(L' ');
+        else if (invalid_char_treatment == invalid_char_strip)
+          break;
+        else
+          fatal("unexpected invalid character treatment", lineno, offsetno);
+        break;
+      case quoted_field_after_dquote:
+      case before_newline:
+        fatal("unexpected tab", lineno, offsetno);
+        break;
+      default:
+        fatal("unexpected state", lineno, offsetno);
+      }
       break;
+
+    case L'\\':
+      switch (state) {
+      case outside_field:
+        state = unquoted_field;
+      case quoted_field:
+      case unquoted_field:
+        if (invalid_char_treatment == invalid_char_escape)
+          putwchar(L'\\');
+        putwchar(L'\\');
+      case quoted_field_after_dquote:
+      case before_newline:
+        fatal("unexpected backslash", lineno, offsetno);
+        break;
+      default:
+        fatal("unexpected state", lineno, offsetno);
+      }
+      break;
+
     case L'"':
       switch (state) {
-      case outside_of_field:
+      case outside_field:
         state = quoted_field;
         break;
       case quoted_field:
@@ -51,15 +96,17 @@ fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header
         state = quoted_field;
         break;
       case unquoted_field:
+      case before_newline:
         fatal("unexpected double quote", lineno, offsetno);
         break;
       default:
         fatal("unexpected state", lineno, offsetno);
       }
       break;
+
     case L',':
       switch (state) {
-      case outside_of_field:
+      case outside_field:
         putwchar(L'\t');
         fieldno += 1;
         break;
@@ -68,39 +115,44 @@ fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header
         break;
       case quoted_field_after_dquote:
         putwchar(L'\t');
-        state = outside_of_field;
+        state = outside_field;
         fieldno += 1;
         break;
       case unquoted_field:
         putwchar(L'\t');
         fieldno += 1;
-        state = outside_of_field;
+        state = outside_field;
         break;
+      case before_newline:
+        fatal("unexpected comma", lineno, offsetno);
       default:
         fatal("unexpected state", lineno, offsetno);
       }
       break;
+
     case L'\n':
       switch (state) {
       case quoted_field:
         /* TODO: flag for escaping or replacing */
         break;
-      case outside_of_field:
+      case outside_field:
       case quoted_field_after_dquote:
       case unquoted_field:
+      case before_newline:
         putwchar(L'\n');
         lineno += 1;
         offsetno = 0;
         fieldno = 0;
-        state = outside_of_field;
+        state = outside_field;
         break;
       default:
         fatal("unexpected state", lineno, offsetno);
       }
       break;
+
     default:
       switch (state) {
-      case outside_of_field:
+      case outside_field:
         putwchar(ch);
         state = unquoted_field;
         break;
@@ -113,6 +165,7 @@ fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header
       case unquoted_field:
         putwchar(ch);
         break;
+      case before_newline:
       default:
         fatal("unexpected state", lineno, offsetno);
       }
