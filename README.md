@@ -738,7 +738,7 @@ This code assumes that the top level keys don't contain newlines.  One could che
 
     $ cat foo.json | json-awk 'puts $_.keys.select {|k| /\n/.match(k)}'
 
-The value associated with each key can be null, boolean, numeric, string, array, or JSON object.  The value associated with a key should have a consistent type in all of the data.  In the case of the a null value, [Google](https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml) recommends omitting the key entirely.
+The value associated with each key can be null, boolean, numeric, string, array, or JSON object.  The value associated with a key should have a consistent type in all of the data.  Rather than having a key with a null value, consider omitting the key entirely.
 
 Be careful that booleans and numeric values, e.g. `true`, `false`, `42`, `3.14`, don't accidentally get stored as strings in JSON, e.g. `"true"`, `"false"`, `"42"`, `"3.14"`.
 
@@ -762,7 +762,7 @@ can be replaced with:
       "address.state": "VA"
     }
 
-[Google](https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml) recommends using plural names for keys when the values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
+Use plural names for keys when the values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
 
     ["123 Main", "Jamestown", "VA"]
     
