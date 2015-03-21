@@ -478,7 +478,7 @@ The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the f
 <a name="tsv"/>
 ## tsv
 
-The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.
+The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.  By default Hadoop uses tabs as a field separator.
 
 Tabs receive criticism, and deservedly, because they are indistinguishable as normally rendered from spaces.   Trailing spaces in fields can be hidden by tabs, causing joins to mysteriously fail, for example.  `cat -te` can be used to expose trailing spaces.  The *data tool* `trim-tsv` can be used to clean up a TSV file.
 
@@ -521,28 +521,6 @@ The `join` method in Python and similar languages can be used to generate a TSV 
         for row in rows:
             f.write(u'\t'.join([tsv_strip(field) for field in row]))
             f.write(u'\n')
-
-How to export data from a PostgreSQL table in TSV format:
-
-    $ psql
-    > \a
-    Output format is unaligned.
-    > \pset fieldsep '\t'
-    Field separator is "	".
-    > \pset footer off
-    Default footer is off.
-    > sums.tsv
-    > select 1 + 1 as sum1, 2 + 2 as sum2;
-    sum1	sum2
-    2	4
-
-A non-interactive example:
-
-    echo 'select 1 + 1 as sum1, 2 + 2 as sum2' | psql -A -F$'\t' -P footer=off > sums.tsv
-
-Replacing any tabs and end-of-line characters in column `foo` with spaces:
-
-    select translate(foo, chr(9) || chr(10) || chr(11) || chr(12) || chr(13) || chr(133) || chr(8232) || chr(8233), '        ')
 
 <a name="csv"/>
 ## csv
