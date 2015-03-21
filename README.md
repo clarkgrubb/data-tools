@@ -148,6 +148,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
 <a name="intro"/>
 # INTRODUCTION
 
+ [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
+
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
 The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
