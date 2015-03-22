@@ -109,7 +109,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     csv-to-postgres    -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
     
-    csv-to-tsv         [-e|-x|-r[z]] [CSV_FILE]
+    csv-to-tsv         [-e|-x|-r] [CSV_FILE]
 
     csv-to-xlsx        -o XLSX_FILE CSV_FILE ...
 
@@ -147,7 +147,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     tsv-header         [TSV_FILE]
 
-    tsv-to-csv         [-d DELIMITER] [-q QUOTECHAR] [-u] [TSV_FILE]
+    tsv-to-csv         [-u] [TSV_FILE]
 
     tsv-to-json        [TSV_FILE]
 

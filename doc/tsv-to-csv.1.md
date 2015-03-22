@@ -21,12 +21,6 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tsv` 
 
 # OPTIONS
 
--d DELIMITER, \--delimiter=DELIMITER
-: Used to read CSV files which use DELIMITER to separate fields instead of a comma.
-
--q QUOTECHAR, \--quotechar=QUOTECHAR
-: Used to read CSV files which use QUOTECHAR to quote fields instead of double quotes.
-
 -u, \--unescape
 : Interpret the following backslash sequences when encountered in the data: \n, \r, \t, \\.
 
