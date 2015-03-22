@@ -17,6 +17,7 @@ do
         U) psql="$psql -U $OPTARG" ;;
         w) psql="$psql -w" ;;
         W) psql="$psql -W" ;;
+        ?) table='' ; break ;;
     esac
 done
 

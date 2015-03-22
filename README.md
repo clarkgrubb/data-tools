@@ -12,6 +12,8 @@ Command line tools for data extraction, data manipulation, and file format conve
     counting-sort      sort a file using counting sort
 
     csv-to-json        convert CSV to JSON
+    
+    csv-to-postgres    import a CSV file into a PostgreSQL table
 
     csv-to-tsv         convert CSV to TSV
 
@@ -34,6 +36,8 @@ Command line tools for data extraction, data manipulation, and file format conve
     json-diff          show differences between two JSON documents
 
     normalize-utf8     write UTF-8 encoded input to standard out in normalized form
+    
+    postgres-to-csv    write a PostgreSQL table to stdout in CSV format
 
     reservoir-sample   select N lines from standard input randomly
 
@@ -89,6 +93,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
+    csv-to-postgres -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    
     csv-to-tsv         [-e|-x|-r[z]] [CSV_FILE]
 
     csv-to-xlsx        -o XLSX_FILE CSV_FILE ...
@@ -112,6 +118,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     json-diff          [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
     normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
+
+    postgres-to-csv -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
 
     reservoir-sample   [-r SEED] -s NUM [FILE]
 

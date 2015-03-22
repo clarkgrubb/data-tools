@@ -1,0 +1,41 @@
+.TH CSV-TO-POSTGRES 1 "March 21, 2015" 
+.SH NAME
+.PP
+csv-to-postgres - import a CSV file to a PostgreSQL table
+.SH SYNOPSIS
+.PP
+csv-to-postgres -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U
+USER] [-w|-W]
+.SH DESCRIPTION
+.PP
+Import a CSV file into a PostgreSQL table.
+.PP
+The table is not emptied before the new rows are imported.
+.PP
+All options other than \f[C]-t\f[] and \f[C]-f\f[] are passed to
+\f[C]psql\f[].
+.PP
+The \f[C]PGPASSWORD\f[] environment variable can be used to pass the
+PostgreSQL password to \f[C]psql\f[].
+.SH OPTIONS
+.PP
+-d DB : name of the PostgreSQL database
+.PP
+-f PATH : path of the CSV file
+.PP
+-h HOST : PostgreSQL server host
+.PP
+-p PORT : the port number.
+.PP
+-t TABLE : the name of the PostgreSQL table to export
+.PP
+-U USER : the PostgreSQL user to connect as
+.PP
+-w : do not prompt for PostgreSQL password
+.PP
+-W : prompt for PostgreSQL password
+.SH SEE ALSO
+.PP
+\f[C]postgres-to-csv\f[] (1)
+.SH AUTHORS
+Clark Grubb.

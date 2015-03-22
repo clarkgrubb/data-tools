@@ -74,6 +74,7 @@ install-script:
 	ln -sf $(src)/check-tsv.sh $(LOCAL_INSTALL_DIR)/check-tsv
 	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
+	ln -sf $(src)/csv-to-postgres.sh $(LOCAL_INSTALL_DIR)/csv-to-postgres
 	ln -sf $(src)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
@@ -84,6 +85,7 @@ install-script:
 	ln -sf $(src)/json_awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
+	ln -sf $(src)/postgres-to-csv.sh $(LOCAL_INSTALL_DIR)/postgres-to-csv
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
 	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
 	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect

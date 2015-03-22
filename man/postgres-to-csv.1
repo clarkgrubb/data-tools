@@ -1,0 +1,35 @@
+.TH POSTGRES-TO-CSV 1 "March 21, 2015" 
+.SH NAME
+.PP
+postgres-to-csv - export a PostgreSQL table to a CSV file
+.SH SYNOPSIS
+.PP
+postgres-to-csv -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+.SH DESCRIPTION
+.PP
+Write a PostgreSQL table to standard out in CSV format.
+.PP
+All options other than \f[C]-t\f[] are passed to \f[C]psql\f[].
+.PP
+The \f[C]PGPASSWORD\f[] environment variable can be used to pass the
+PostgreSQL password to \f[C]psql\f[].
+.SH OPTIONS
+.PP
+-d DB : name of the PostgreSQL database
+.PP
+-h HOST : PostgreSQL server host
+.PP
+-p PORT : the port number.
+.PP
+-t TABLE : the name of the PostgreSQL table to export
+.PP
+-U USER : the PostgreSQL user to connect as
+.PP
+-w : do not prompt for PostgreSQL password
+.PP
+-W : prompt for PostgreSQL password
+.SH SEE ALSO
+.PP
+\f[C]csv-to-postgres\f[] (1)
+.SH AUTHORS
+Clark Grubb.
