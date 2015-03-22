@@ -187,7 +187,7 @@ test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 	./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
 
 .PHONY: test.csv_to_tsv
-test.csv_to_tsv: | output/csv_to_tsv
+test.csv_to_tsv: | csv-to-tsv output/csv_to_tsv
 	echo -n $$'one,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/test.csv_to_tsv.tsv
 	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
 	echo $$'λ,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/unicode.tsv
@@ -304,7 +304,7 @@ test.trim_tsv: | output/trim_tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
 #.PHONY: test.tsv_to_csv
-#test.tsv_to_csv: tsv_to_csv/escapes.tsv | output/tsv_to_csv
+#test.tsv_to_csv: tsv_to_csv/escapes.tsv | tsv-to-csv csv-to-tsv output/tsv_to_csv
 #	./src/tsv-to-csv/tsv-to-csv -u $< | ./src/csv-to-tsv/csv-to-tsv -e > output/tsv_to_csv/escape.tsv
 #	diff $< output/tsv_to_csv/escape.tsv
 
