@@ -1,6 +1,6 @@
 [summary](#summary) | [setup](#setup) | [how to run](#how-to-run) | <img src="https://travis-ci.org/clarkgrubb/data-tools.svg?branch=master" alt="build status"/>
 
-[introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
+[encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
 # SUMMARY
@@ -66,6 +66,20 @@ Command line tools for data extraction, data manipulation, and file format conve
     xls-to-csv         convert XLS to CSV
     
     xlsx-to-csv        convert XLSX to CSV
+
+The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
+
+The *data tools* are for working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
+
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  This accords with the *principle of least knowledge*.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
+
+Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
+
+* UTF-8 as character encoding (or 8-bit encoded ASCII)
+* LF as newline
+* TSV format for relational data
+
+The *data tools* include *format conversion tools* for when we encounter byte streams in other formats.
 
 <a name="setup"/>
 # SETUP
@@ -153,29 +167,10 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     xlsx-to-csv        --list XLSX_FILE
 
-<a name="intro"/>
-# INTRODUCTION
-
- [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
-
-The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
-
-The theme of the *data tools* repo is working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra.  Still, building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
-
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  This accords with the *principle of least knowledge*.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
-
-Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
-
-* UTF-8 as character encoding (or 8-bit encoded ASCII)
-* LF as newline
-* TSV format for relational data
-
-When we encounter byte streams in other formats, we invoke *format conversion tools* on them.  The *data tools* repo offers several such tools.
-
 <a name="encodings"/>
 # ENCODINGS
 
-[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode) | [whitespace](#whitespace)
+[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode)
 
 <a name="iconv"/>
 ## iconv
@@ -321,38 +316,6 @@ When performing a string comparison, the two sequences should often
 be regarded as identifical.  The easiest way to accomplish this is to put
 the strings to be compared into a normalized form.  The Unicode standard defines
 [four normal forms](http://unicode.org/reports/tr15/).  The *data tool* `normalize-utf8` can be used to put a UTF-8 encoded file or stream into any of them.
-
-<a name="whitespace"/>
-## whitespace
-
-How to get the non-control character whitespace characters:
-
-    $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
-
-    $ awk -F';' '$3 ~ /^Z/ {print $1, $2}' /tmp/UnicodeData.txt
-
-    0020 SPACE
-    00A0 NO-BREAK SPACE
-    1680 OGHAM SPACE MARK
-    180E MONGOLIAN VOWEL SEPARATOR
-    2000 EN QUAD
-    2001 EM QUAD
-    2002 EN SPACE
-    2003 EM SPACE
-    2004 THREE-PER-EM SPACE
-    2005 FOUR-PER-EM SPACE
-    2006 SIX-PER-EM SPACE
-    2007 FIGURE SPACE
-    2008 PUNCTUATION SPACE
-    2009 THIN SPACE
-    200A HAIR SPACE
-    2028 LINE SEPARATOR
-    2029 PARAGRAPH SEPARATOR
-    202F NARROW NO-BREAK SPACE
-    205F MEDIUM MATHEMATICAL SPACE
-    3000 IDEOGRAPHIC SPACE
-
-Line feed, carriage return, and horizontal tab are not in the list because all ASCII control characters are assigned a General Category value of "Cc".
 
 <a name="newlines"/>
 # NEWLINES
@@ -602,7 +565,7 @@ When relational data is in flat files, we don't have the benefit of uniqueness c
 <a name="joins"/>
 # JOINS
 
-[tab](#join-tab) | [tsv](#join-tsv) | [database](#join-database) | [r](#join-r) | [pandas](#join-pandas)
+[tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres)| [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [pig](#pig)
 
 <a name="join-tab"/>
 ## tab
@@ -644,8 +607,8 @@ The output is in TSV format, and in particular it has a header.  The order of co
 
 `join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
  
-<a name="join-database"/>
-## database
+<a name="sqlite"/>
+## sqlite
 
 Using SQLite to perform a join:
 
@@ -666,6 +629,9 @@ Using SQLite to perform a join:
     > .output /tmp/pw_grp.tab
     
     > select * from pw join grp on pw.gid = grp.gid;
+
+<a name="postgres"/>
+## postgres
 
 <a name="join-r"/>
 ## r
@@ -698,6 +664,27 @@ Using the Python library *pandas* to perform a join:
     > j = pd.merge(pw, grp, left_on='gid', right_on='gid')
     
     > j.to_csv('/tmp/pw_grp.tsv', sep='\t', index=False)
+
+<a name="hive"/>
+## hive
+
+The native format of Hive is to use `^A` (`%x01`) as field delimiters and newlines as row delimiters.
+
+    $ hive -hiveconf mapred.job.tracker=local -hiveconf fs.default.name=file:///tmp -hiveconf hive.metastore.warehouse.dir=file:///Users/clark/Data/test_hive
+    
+    > create table passwd ( user string, passwd string, uid int, gid int, gecos string, home string, shell string ) row format delimited fields terminated by '\t' stored as textfile;
+    
+    > load data local inpath '/tmp/pw.tab' overwrite into table passwd;
+
+    > create table group ( group string, passwd string, gid int, members string ) row format delimited fields terminated by '\t' stored as textfile;
+    
+    > load data local inpath '/tmp/grp.tab' overwrite into table group;
+    
+    > insert overwrite local directory '/tmp/hive.out' row format delimited fields terminated by '\t' select * from passwd p join group g on p.gid = g.gid;
+
+<a name="pig"/>
+## pig
+
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
