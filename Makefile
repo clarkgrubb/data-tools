@@ -42,7 +42,15 @@ $(tawk):
 
 .PHONY: utf8-script
 utf8-script:
-	(cd src/utf8-script; make)
+	(cd src/$@; make)
+
+.PHONY: csv-to-tsv
+csv-to-tsv:
+	(cd src/$@; make)
+
+.PHONY: tsv-to-csv
+tsv-to-csv:
+	(cd src/$@; make)
 
 .PHONY: build-hexedit
 build-hexedit: $(hexedit)
@@ -51,7 +59,7 @@ build-hexedit: $(hexedit)
 build-tawk: $(tawk)
 
 .PHONY: build
-build: install-hexedit install-tawk install-utf8-script
+build: install-hexedit install-tawk install-c
 
 .PHONY: install-hexedit
 install-hexedit: $(hexedit)
@@ -61,10 +69,12 @@ install-hexedit: $(hexedit)
 install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 
-.PHONY: install-utf8-script
-install-utf8-script: utf8-script
+.PHONY: install-c
+install-c: utf8-script csv-to-tsv tsv-to-csv
 	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
+	ln -sf $(pwd)/src/csv-to-tsv/csv-to-tsv $(LOCAL_INSTALL_DIR)/csv-to-tsv
+	ln -sf $(pwd)/src/tsv-to-csv/tsv-to-csv $(LOCAL_INSTALL_DIR)/tsv-to-csv
 
 .PHONY: install-build
 install-build: install-hexedit install-tawk
@@ -75,7 +85,6 @@ install-script:
 	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(src)/csv-to-postgres.sh $(LOCAL_INSTALL_DIR)/csv-to-postgres
-	ln -sf $(src)/csv_to_tsv.py $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
@@ -92,7 +101,6 @@ install-script:
 	ln -sf $(src)/tokenize.sh $(LOCAL_INSTALL_DIR)/tokenize
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
 	ln -sf $(src)/tsv-header.sh $(LOCAL_INSTALL_DIR)/tsv-header
-	ln -sf $(src)/tsv_to_csv.py $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
@@ -180,13 +188,11 @@ test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 
 .PHONY: test.csv_to_tsv
 test.csv_to_tsv: | output/csv_to_tsv
-	echo -n $$'one,two\nthree,four' | ./src/csv_to_tsv.py > output/csv_to_tsv/test.csv_to_tsv.tsv
+	echo -n $$'one,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/test.csv_to_tsv.tsv
 	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
-	echo $$'λ,two\nthree,four' | ./src/csv_to_tsv.py > output/csv_to_tsv/unicode.tsv
+	echo $$'λ,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/unicode.tsv
 	diff test/csv_to_tsv/expected.unicode.tsv output/csv_to_tsv/unicode.tsv
-	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv_to_tsv.py --strip > output/csv_to_tsv/test.csv_to_tsv.strip.tsv
-	diff test/csv_to_tsv/expected.strip.tsv output/csv_to_tsv/test.csv_to_tsv.strip.tsv
-	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv_to_tsv.py --escape > output/csv_to_tsv/test.csv_to_tsv.escape.tsv
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tsv/csv-to-tsv --escape > output/csv_to_tsv/test.csv_to_tsv.escape.tsv
 	diff test/csv_to_tsv/expected.escape.tsv output/csv_to_tsv/test.csv_to_tsv.escape.tsv
 
 
@@ -297,10 +303,10 @@ test.trim_tsv: | output/trim_tsv
 	./src/trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
-.PHONY: test.tsv_to_csv
-test.tsv_to_csv: tsv_to_csv/escapes.tsv | output/tsv_to_csv
-	./src/tsv_to_csv.py -u $< | ./src/csv_to_tsv.py -e > output/tsv_to_csv/escape.tsv
-	diff $< output/tsv_to_csv/escape.tsv
+#.PHONY: test.tsv_to_csv
+#test.tsv_to_csv: tsv_to_csv/escapes.tsv | output/tsv_to_csv
+#	./src/tsv-to-csv/tsv-to-csv -u $< | ./src/csv-to-tsv/csv-to-tsv -e > output/tsv_to_csv/escape.tsv
+#	diff $< output/tsv_to_csv/escape.tsv
 
 .PHONY: test.tsv_to_json
 test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
@@ -336,7 +342,7 @@ test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 
 python_base := counting_sort csv_to_json csv_to_tsv
 python_base += csv_to_xlsx highlight join_tsv
-python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_csv tsv_to_json
+python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv
 python_harnesses := $(patsubst %,test.%,$(python_base))
 

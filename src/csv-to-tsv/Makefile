@@ -5,21 +5,24 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-fast-tsv-to-csv: fast_tsv_to_csv.c
+csv-to-tsv: csv_to_tsv.c
 	gcc -std=c11 -o $@ $<
 
 .PHONY: all
-all: fast-tsv-to-csv
+all: csv-to-tsv
 
 output:
 	mkdir $@
 
 output/%.tsv: test/input/%.csv | output
-	./fast-csv-to-tsv < $< > $@
+	./csv-to-tsv < $< > $@
 	diff test/expected.output/$*.tsv $@
 
 tests := one two
 test_files := $(patsubst %,output/%.tsv,$(tests))
+
+state.png: state.dot
+	dot -Tpng < $< > $@
 
 .PHONY: test
 test: $(test_files)
@@ -28,4 +31,4 @@ clean:
 	rm -rf output
 
 clobber: clean
-	rm fast-tsv-to-csv
+	rm csv-to-tsv
