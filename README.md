@@ -93,7 +93,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
-    csv-to-postgres -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    csv-to-postgres    -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
     
     csv-to-tsv         [-e|-x|-r[z]] [CSV_FILE]
 
@@ -119,7 +119,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 
-    postgres-to-csv -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    postgres-to-csv    -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
 
     reservoir-sample   [-r SEED] -s NUM [FILE]
 
