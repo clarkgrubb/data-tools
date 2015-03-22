@@ -1,4 +1,5 @@
 #include <getopt.h>
+#include <locale.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -200,6 +201,8 @@ main(int argc, char **argv) {
   enum invalid_char invalid_char_treatment = invalid_char_fail;
   long pad = 0;
   char *header = NULL;
+
+  setlocale(LC_ALL, "");
 
   while (1) {
     ch = getopt_long(argc, argv, "dt:", long_opts, &opti);
