@@ -1,6 +1,6 @@
 [summary](#summary) | [setup](#setup) | [how to run](#how-to-run) | <img src="https://travis-ci.org/clarkgrubb/data-tools.svg?branch=master" alt="build status"/>
 
-[introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
+[introduction](#intro) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
 # SUMMARY
@@ -576,6 +576,28 @@ By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change 
 The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spreadsheet to CSV.  It has the same interface as `xlsx-to-csv`.
 
 The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file on the command line becomes a worksheet in the workbook.  The worksheet names are derived from the CSV file names; see the man page for details.
+
+<a name="keys"/>
+# KEYS
+
+A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
+
+Candidate keys are a property of the data; they aren't necessarily declared in the schema.  To verify a candidate key, one checks whether the number of rows in table is the same as the number of distinct values of a column or a set of columns:
+
+    > SELECT COUNT(*) FROM customers;
+    > SELECT COUNT(DISTINCT name) FROM customers;
+    > SELECT COUNT(*) FROM (SELECT DISTNCT first_name, last_name FROM customers);
+
+Strictly speaking, one should also verify that no proper subset of the columns is also a candidate key.
+
+When we perform a `SELECT` on a single table, there is an implicit candidate key in the result set.  If the candidate key is a proper subset of a candidate key on the `FROM` table, there is a possibility of duplicate rows or rows with incomplete results in the result set.  This can be rectified with the `DISTINCT` operator or the `GROUP BY` clause, with aggregation functions on the non-candidate key columns, but in general failure to identify a candidate key correctly is a source errors.  Good database design mitigates this; ideally the candidate keys should be obvious from the name of the table.
+
+When relational data is in flat files, we don't have the benefit of uniqueness constraints, so extra case is in order:
+
+    $ wc -l /etc/passwd
+    $ awk -F: '{print $1}' /etc/passwd | sort -u | wc -l
+    $ awk -F: 'Pprint $1, $2}' /etc/passwd | sort -u | wc -l
+
 
 <a name="joins"/>
 # JOINS
