@@ -670,21 +670,53 @@ Using the Python library *pandas* to perform a join:
 
 The native format of Hive is to use `^A` (`%x01`) as field delimiters and newlines as row delimiters.
 
-    $ hive -hiveconf mapred.job.tracker=local -hiveconf fs.default.name=file:///tmp -hiveconf hive.metastore.warehouse.dir=file:///Users/clark/Data/test_hive
+    $ hive -hiveconf mapred.job.tracker=local -hiveconf fs.default.name=file:///tmp -hiveconf hive.metastore.warehouse.dir=file:///tmp/test_hive
     
     > create table passwd ( user string, passwd string, uid int, gid int, gecos string, home string, shell string ) row format delimited fields terminated by '\t' stored as textfile;
-    
     > load data local inpath '/tmp/pw.tab' overwrite into table passwd;
-
     > create table group ( group string, passwd string, gid int, members string ) row format delimited fields terminated by '\t' stored as textfile;
-    
     > load data local inpath '/tmp/grp.tab' overwrite into table group;
-    
-    > insert overwrite local directory '/tmp/hive.out' row format delimited fields terminated by '\t' select * from passwd p join group g on p.gid = g.gid;
+    > insert overwrite local directory '/tmp/pw_grp' row format delimited fields terminated by '\t' select * from passwd p join group g on p.gid = g.gid;
+
+Suppose that we have data in a file which is not in first normal form.  Here the 4th column contains the name of the children, separated by pipes:
+
+    $ cat /tmp/families.tab
+    Simpson	Homer	Marge	Bart|Lisa|Maggie
+    Cleaver	Ward	June	Wally|Beaver
+
+We can use Hive to normalize the data:
+
+    > create table families (surname string, father string, mother string, children string) row format delimited fields terminated by '\t' stored as textfile;
+    > load data local inpath '/tmp/families.tab' overwrite into table families;
+    > create table families2 as select surname, father, mother, split(children, '\\|') as children from families;
+    > select surname, father, mother, child from families2 lateral view explode(children) foo as child;
+
+The result is the table:
+
+    Simpson	Homer	Marge	Bart
+    Simpson	Homer	Marge	Lisa
+    Simpson	Homer	Marge	Maggie
+    Cleaver	Ward	June	Wally
+    Cleaver	Ward	June	Beaver
+
+The [list of Hive functions](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-explode) is more extensive that the [list of Pig functions](http://pig.apache.org/docs/r0.9.1/func.html).
 
 <a name="pig"/>
 ## pig
 
+    $ pig -x local
+    
+    > pw = load '/tmp/pw.tab' as ( user:chararray, password:chararray, uid:int, gid:int, gecos:chararray, home:chararray, shell:chararray);
+    > grp = load '/tmp/grp.tab' as ( group:chararray, password:chararray, gid:int, members:chararray );
+    > j = join pw by gid, grp by gid
+    > store j into '/tmp/pw_grp.tab';
+    
+Pig does not require that the types of the columns be declared; if not declared they will be given the type `bytearray`.  In fact, the columns don't have to be given names at all.  They can be referred to by position: `$0`, `$1`, ...:
+
+    > pw = LOAD '/tmp/pw.tab';
+    > grp = LOAD '/tmp/grp.tab';
+    > j = join pw by $3, grp by $2
+    > store j into '/tmp/pw_grp.tab';
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
@@ -704,12 +736,12 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
 
     $ echo '{"foo":1, "bar": 2, "baz": [1,2,3]}' | python -mjson.tool
     {
-        "bar": 2, 
+        "bar": 2,
         "baz": [
-            1, 
-            2, 
+            1,
+            2,
             3
-        ], 
+        ],
         "foo": 1
     }
 
