@@ -628,6 +628,21 @@ There is no way to escape the separator when importing files into SQLite.
 <a name="postgres"/>
 ## postgres
 
+    $ tsv-to-csv < /tmp/pw.tab > /tmp/pw.csv
+    $ tsv-to-csv < /tmp/grp.tab > /tmp/grp.csv
+    
+    $ psql
+    > create table pw ( name text, pw text, uid int, gid int, gecos text, home text, shell text );
+    > create table grp ( name text, pw text, gid int, list text );
+    
+    $ ( echo 'copy pw from stdin with (format csv); '; cat /tmp/pw.csv ) | psql
+    $ ( echo 'copy grp from stdin with (format csv); '; cat /tmp/grp.csv ) | psql
+    
+    $ psql
+    > create table pw_grp as select pw.name as pw_name, grp.name as grp_name from pw join grp on pw.gid = grp.gid;
+    
+    $ echo 'copy pw_grp to stdout with (format csv);' | psql > /tmp/pw_grp.csv
+
 <a name="join-r"/>
 ## r
 
