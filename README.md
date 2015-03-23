@@ -615,20 +615,15 @@ Using SQLite to perform a join:
     $ sqlite3
     
     > create table pw ( name text, pw text, uid int, gid int, gecos text, home text, shell text );
-    
     > create table grp ( name text, pw text, gid int, list text );
-    
     > .separator \t
-    
     > .import /tmp/pw.tab pw
-    
     > .import /tmp/grp.tab grp
-    
-    > .mode tabs
-    
-    > .output /tmp/pw_grp.tab
-    
+    > .mode csv
+    > .output /tmp/pw_grp.csv
     > select * from pw join grp on pw.gid = grp.gid;
+
+There is no way to escape the separator when importing files into SQLite.
 
 <a name="postgres"/>
 ## postgres
