@@ -565,7 +565,7 @@ When relational data is in flat files, we don't have the benefit of uniqueness c
 <a name="joins"/>
 # JOINS
 
-[tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres)| [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [pig](#pig)
+[tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres)| [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [spark](#spark)
 
 <a name="join-tab"/>
 ## tab
@@ -678,6 +678,8 @@ Using the Python library *pandas* to perform a join:
 <a name="hive"/>
 ## hive
 
+[Hive functions](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-explode)
+
 The native format of Hive is to use `^A` (`%x01`) as field delimiters and newlines as row delimiters.
 
     $ hive -hiveconf mapred.job.tracker=local -hiveconf fs.default.name=file:///tmp -hiveconf hive.metastore.warehouse.dir=file:///tmp/test_hive
@@ -709,24 +711,14 @@ The result is the table:
     Cleaver	Ward	June	Wally
     Cleaver	Ward	June	Beaver
 
-The [list of Hive functions](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-explode) is more extensive that the [list of Pig functions](http://pig.apache.org/docs/r0.9.1/func.html).
+<a name="spark"/>
+## spark
 
-<a name="pig"/>
-## pig
-
-    $ pig -x local
-    
-    > pw = load '/tmp/pw.tab' as ( user:chararray, password:chararray, uid:int, gid:int, gecos:chararray, home:chararray, shell:chararray);
-    > grp = load '/tmp/grp.tab' as ( group:chararray, password:chararray, gid:int, members:chararray );
-    > j = join pw by gid, grp by gid
-    > store j into '/tmp/pw_grp.tab';
-    
-Pig does not require that the types of the columns be declared; if not declared they will be given the type `bytearray`.  In fact, the columns don't have to be given names at all.  They can be referred to by position: `$0`, `$1`, ...:
-
-    > pw = LOAD '/tmp/pw.tab';
-    > grp = LOAD '/tmp/grp.tab';
-    > j = join pw by $3, grp by $2
-    > store j into '/tmp/pw_grp.tab';
+    $ spark-shell
+    > val pw = sc.textFile("/etc/passwd").filter(line => line(0) != '#').map(line => line.split(":"))
+    > val grp = sc.textFile("/etc/group").filter(line => line(0) != '#').map(line => line.split(":"))
+    > val j = pw_gid.join(grp_gid).map(tup => List(tup._1) ++ tup._2._1 ++ tup._2._1)
+    > j.map(row => row.mkString("\t")).saveAsTextFile("/tmp/pw_grp")
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
