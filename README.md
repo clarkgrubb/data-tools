@@ -12,7 +12,7 @@ Command line tools for data extraction, data manipulation, and file format conve
     counting-sort      sort a file using counting sort
 
     csv-to-json        convert CSV to JSON
-    
+
     csv-to-postgres    import a CSV file into a PostgreSQL table
 
     csv-to-tsv         convert CSV to TSV
@@ -36,7 +36,7 @@ Command line tools for data extraction, data manipulation, and file format conve
     json-diff          show differences between two JSON documents
 
     normalize-utf8     write UTF-8 encoded input to standard out in normalized form
-    
+
     postgres-to-csv    write a PostgreSQL table to stdout in CSV format
 
     reservoir-sample   select N lines from standard input randomly
@@ -44,9 +44,9 @@ Command line tools for data extraction, data manipulation, and file format conve
     set-diff           find lines in first file which are not in the second
 
     set-intersect      find lines common to two files
-    
+
     tawk               awk, but uses tabs for FS and OFS by default
-    
+ 
     tokenize           extract words from English language text
 
     trim-tsv           trim whitespace from fields of TSV file
@@ -175,7 +175,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 encoded data.  Recall that 8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
+The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
     
@@ -229,6 +229,24 @@ If some of the bytes in a file are ASCII, such as when the encoding is one of th
     $ ruby -e '(0..255).each { |i| print i.chr }' | iconv -f mac -t utf8 | od -c
     
 `od -c` uses C backslash sequences or octal bytes for non-ASCII and non-printing ASCII characters.  
+
+`xxd` displays the data in rows of 16 bytes.  Each row is displayed in 3 columns.  The first column is the hex offset of the first byte in the row, the second column is the bytes in hex, and third column is the ASCII characters for the bytes, which a period `.` standing in for control characters and upper 8-bit bytes.  The `-c` flag changes the number of bytes per row:
+
+    $ xxd /bin/ls
+    $ xxd -c 32 /bin/ls
+    
+The `-i` flag will convert the data to a C source literal.  The `-r` flag will convert the output of `xxd` back to the original binary format:
+    
+    $ xxd -i /bin/ls
+    $ xxd /bin/sl | xxd -r
+
+The `-s` flag and the `-l` flag specify the start byte and the total number of bytes to display:
+
+    $ xxd -s 10 -l 20 /bin/ls
+
+Another way to pick out bytes from a file is `dd`:
+
+    $ dd bs=1 iseek=10 count=20 if=/etc/passwd 2> /dev/null
 
 `cat -te` uses a unique escape sequence for each byte, but unlike `od`, it does not display
 a fixed number of bytes per line; the mapping from input to output is not injective.  Still, since it doesn't introduce line breaks at regular intervals, it may be easier to interpret.  An example:
@@ -343,7 +361,12 @@ For LF to CRLF conversions, another option is the following tools (which might n
     unix2dos
    
 The Unicode Consortium provides a [complete list](http://www.unicode.org/standard/reports/tr13/tr13-5.html) of Unicode characters that might be treated as EOL markers.  In a line-delimited file format these characters should be escaped or removed.
-   
+
+The terminal wraps long lines without any indication that it has done so.  The `cut` command and the environment variable `COLUMNS` can be used to truncate long lines instead:
+
+    $ cut -c 1-$COLUMNS FILE
+    $ cut -c $(( $COLUMNS + 1 ))-$(( 2 * $COLUMNS ))
+
 <a name="set-op"/>
 ## set operations
 
@@ -736,7 +759,7 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
 
 `python -mjson.tool` can be used to pretty print JSON and test whether the JSON is well formed.
 
-    $ echo '{"foo":1, "bar": 2, "baz": [1,2,3]}' | python -mjson.tool
+    $ echo '{"foo": 1, "bar": 2, "baz": [1, 2, 3]}' | python -mjson.tool
     {
         "bar": 2,
         "baz": [
@@ -747,6 +770,7 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
         "foo": 1
     }
 
+
 The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
 
 The *data tools* utility `json-awk` can be used to convert JSON to TSV.
@@ -754,6 +778,12 @@ The *data tools* utility `json-awk` can be used to convert JSON to TSV.
     $ json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
 
 The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-awk` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
+
+An alternative to `python -mjson.tool` and `json-awk` is the `node` based `json` command line tool:
+
+    $ npm install json
+
+    $ echo '{"foo": 1, "bar": 2, "baz": [1,2,3]}' | json
 
 There are some practices which producers of JSON should follow to reduce the complexity of the client.
 
