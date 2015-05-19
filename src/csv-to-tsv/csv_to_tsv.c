@@ -29,7 +29,7 @@ fatal(char *msg, size_t lineno, size_t offsetno) {
 }
 
 int
-fast_csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
+csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
   wint_t ch;
   enum parse_state state = outside_field;
   size_t lineno = 1, offsetno = 0, fieldno = 0;
@@ -205,7 +205,7 @@ main(int argc, char **argv) {
   setlocale(LC_ALL, "");
 
   while (1) {
-    ch = getopt_long(argc, argv, "dt:", long_opts, &opti);
+    ch = getopt_long(argc, argv, "dert:x", long_opts, &opti);
     if (-1 == ch) {
       break;
     }
@@ -236,5 +236,5 @@ main(int argc, char **argv) {
     }
   }
 
-  return fast_csv_to_tsv(invalid_char_treatment, pad, header);
+  return csv_to_tsv(invalid_char_treatment, pad, header);
 }
