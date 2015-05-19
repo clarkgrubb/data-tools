@@ -69,7 +69,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The *data tools* are for working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is sometimes useful that `awk`, `sort`, and `join` can be used to implement relational algebra, but building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
+The *data tools* are for working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra, but building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
 
 Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  This accords with the *principle of least knowledge*.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
 
@@ -175,7 +175,9 @@ If you have special installation needs, maybe they are covered [here](https://gi
 <a name="iconv"/>
 ## iconv
 
-The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is valid UTF-8.  We can use `iconv` to convert a file in a different encoding:
+The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is valid UTF-8.
+
+We can use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
     
