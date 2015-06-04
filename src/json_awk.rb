@@ -23,7 +23,7 @@
 require 'getoptlong'
 
 def usage
-  $stderr.puts 'USAGE: json-awk  [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...'
+  $stderr.puts 'USAGE: json-awk  [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...'
   exit 1
 end
 
