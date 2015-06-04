@@ -32,6 +32,8 @@ opts = GetoptLong.new(
    GetoptLong::OPTIONAL_ARGUMENT],
   ['--json', '-j',
    GetoptLong::NO_ARGUMENT],
+  ['--ignore-invalid-json', '-i',
+   GetoptLong::NO_ARGUMENT],
   ['--tsv', '-t',
    GetoptLong::NO_ARGUMENT],
   ['--help', '-h',
@@ -40,6 +42,7 @@ opts = GetoptLong.new(
 
 script = nil
 output_format = nil
+ignore = false
 
 opts.each do |opt, arg|
   case opt
@@ -47,6 +50,8 @@ opts.each do |opt, arg|
     script = File.open(arg).read
   when '--json'
     output_format = :json
+  when '--ignore'
+    ignore = true
   when '--tsv'
     output_format = :tsv
   when '--help'
@@ -67,9 +72,13 @@ cmd = ['ruby', '-n']
 cmd << '-e'
 cmd << 'BEGIN {require "rubygems"; require "json"; $nr = 0}'
 cmd << '-e'
-cmd << '$_ = JSON.parse($_); $nr += 1'
+if ignore
+  cmd << 'begin; $_ = JSON.parse($_); rescue; $stderr.write("ERROR: invalid json: #{$_}"); $_ = nil; end; $nr += 1'
+else
+  cmd << '$_ = JSON.parse($_); $nr += 1'
+end
 cmd << '-e'
-cmd << script
+cmd << 'if $_; ' + script + '; end'
 
 case output_format
 when :json

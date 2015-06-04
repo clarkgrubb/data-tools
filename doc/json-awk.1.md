@@ -9,7 +9,7 @@ json-awk - read JSON objects from a file or standard input and process them with
 
 # SYNOPSIS
 
-json-awk [-j|-t] (-f RUBY\_PATH | RUBY\_SCRIPT) [JSON\_INPUT] ...
+json-awk [-j|-t] [-i] (-f RUBY\_PATH | RUBY\_SCRIPT) [JSON\_INPUT] ...
 
 # DESCRIPTION
 
@@ -19,10 +19,15 @@ The Ruby script can be provided on the command line or read from the file RUBY\_
 
 BEGIN and END blocks can be defined in the manner of `awk` to define Ruby code which executes at the start or end of execution.
      
+By default the script exits with an error if a line contains invalid JSON.  Use the `-i` flag to keep going.
+     
 # OPTIONS
 
 -f PATH, \--file=PATH
 : execute the Ruby script in the file at PATH.
+
+-i, \--ignore
+: ignore lines containing invalid JSON.  A notice is written to standard error.
 
 -j, \--json
 : after the Ruby script is executed, write the contents of $_ to standard output as JSON.

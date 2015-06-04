@@ -127,7 +127,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
 
-    json-awk           [-j|-t] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
+    json-awk           [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
     json-diff          [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 

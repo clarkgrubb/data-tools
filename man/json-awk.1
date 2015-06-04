@@ -1,11 +1,11 @@
-.TH JSON\-AWK 1 "February 17, 2013" 
+.TH JSON-AWK 1 "February 17, 2013" 
 .SH NAME
 .PP
-json\-awk \- read JSON objects from a file or standard input and process
+json-awk - read JSON objects from a file or standard input and process
 them with Ruby
 .SH SYNOPSIS
 .PP
-json\-awk [\-j|\-t] (\-f RUBY_PATH | RUBY_SCRIPT) [JSON_INPUT] ...
+json-awk [-j|-t] [-i] (-f RUBY_PATH | RUBY_SCRIPT) [JSON_INPUT] ...
 .SH DESCRIPTION
 .PP
 Read input containing one JSON object per line and parse it.
@@ -17,16 +17,23 @@ file RUBY_PATH.
 .PP
 BEGIN and END blocks can be defined in the manner of \f[C]awk\f[] to
 define Ruby code which executes at the start or end of execution.
+.PP
+By default the script exits with an error if a line contains invalid
+JSON.
+Use the \f[C]-i\f[] flag to keep going.
 .SH OPTIONS
 .PP
-\-f PATH, \-\-file=PATH : execute the Ruby script in the file at PATH.
+-f PATH, --file=PATH : execute the Ruby script in the file at PATH.
 .PP
-\-j, \-\-json : after the Ruby script is executed, write the contents of
-$_ to standard output as JSON.
+-i, --ignore : ignore lines containing invalid JSON.
+A notice is written to standard error.
 .PP
-\-t, \-\-tsv : after the Ruby script is executed, write the contents of
-$_, which is expected to be an Array, to standard output in tab
-separated values format.
+-j, --json : after the Ruby script is executed, write the contents of $_
+to standard output as JSON.
+.PP
+-t, --tsv : after the Ruby script is executed, write the contents of $_,
+which is expected to be an Array, to standard output in tab separated
+values format.
 .SH SEE ALSO
 .PP
 \f[C]awk\f[] (1)
