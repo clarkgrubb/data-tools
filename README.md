@@ -772,6 +772,11 @@ The following *data tools* are provided to convert CSV or TSV files to the Mongo
         "foo": 1
     }
 
+Other tools for pretty printing JSON are `jq` and `json` which can be installed using the operating system package manager and `npm`, respectively:
+
+    $ echo '{"foo": 1, "bar": 2, "baz": [1, 2, 3]}' | jq '.'
+
+    $ echo '{"foo": 1, "bar": 2, "baz": [1, 2, 3]}' | json
 
 The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
 
