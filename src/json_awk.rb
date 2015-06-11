@@ -78,7 +78,7 @@ else
   cmd << '$_ = JSON.parse($_); $nr += 1'
 end
 cmd << '-e'
-cmd << 'if $_; ' + script + '; end'
+cmd << script
 
 case output_format
 when :json
