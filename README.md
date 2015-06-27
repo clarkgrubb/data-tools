@@ -9,6 +9,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     check-tsv          verify rows in TSV file are same length
 
+    check-yaml         verify YAML is valid
+
     counting-sort      sort a file using counting sort
 
     csv-to-json        convert CSV to JSON
@@ -102,6 +104,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
 # HOW TO RUN
 
     check-tsv          [TSV_FILE]
+
+    check-yaml         [YAML_FILE]
 
     counting-sort      [FILE]
 
