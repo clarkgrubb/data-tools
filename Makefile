@@ -14,7 +14,7 @@ man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
 src := $(pwd)/src
 gem_pkgs := json nokogiri
-pip_pkgs := openpyxl xlrd yaml
+pip_pkgs := openpyxl xlrd PyYAML
 VPATH = test
 
 .PHONY: setup.ruby
