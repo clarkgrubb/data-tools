@@ -588,7 +588,7 @@ Strictly speaking, one should also verify that no proper subset of the columns i
 
 When we perform a `SELECT` on a single table, there is an implicit candidate key in the result set.  If the candidate key is a proper subset of a candidate key on the `FROM` table, there is a possibility of duplicate rows or rows with incomplete results in the result set.  This can be rectified with the `DISTINCT` operator or the `GROUP BY` clause, with aggregation functions on the non-candidate key columns, but in general failure to identify a candidate key correctly is a source errors.  Good database design mitigates this; ideally the candidate keys should be obvious from the name of the table.
 
-When relational data is in flat files, we don't have the benefit of uniqueness constraints, so extra case is in order:
+When relational data is in flat files, we don't have the benefit of uniqueness constraints, so extra care is in order:
 
     $ wc -l /etc/passwd
     $ awk -F: '{print $1}' /etc/passwd | sort -u | wc -l
