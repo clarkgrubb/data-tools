@@ -852,7 +852,7 @@ This forces the client to determine the meaning of the positions and hard code t
 <a name="yaml"/>
 ## yaml
 
-To verify that a YAML file is valid
+To verify YAML is valid:
 
     check-yaml foo.yml
     
