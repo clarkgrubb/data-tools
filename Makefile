@@ -106,6 +106,7 @@ install-script:
 	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
+	ln -sf $(src)/yaml_to_json.py $(LOCAL_INSTALL_DIR)/yaml-to-json
 
 # To generate the man pages `pandoc` must be installed.  On Mac go to
 #
@@ -163,7 +164,7 @@ output/highlight output/normalize_utf8 output/counting_sort:
 output/join_tsv output/json_awk output/json_diff output/reservoir_sample output/trim_tsv:
 	mkdir -p $@
 
-output/tsv_header:
+output/tsv_header output/yaml_to_json:
 	mkdir -p $@
 
 output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
@@ -346,10 +347,15 @@ test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	diff output/xlsx_to_csv/spaces.csv test/xlsx_to_csv/expected.spaces.csv
 	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
 
+.PHONY: test.yaml_to_json
+test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
+	./src/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
+	./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
+
 python_base := check_yaml counting_sort csv_to_json csv_to_tsv
 python_base += csv_to_xlsx highlight join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
-python_base += xlsx_to_csv
+python_base += xlsx_to_csv yaml_to_json
 python_harnesses := $(patsubst %,test.%,$(python_base))
 
 .PHONY: python.harness

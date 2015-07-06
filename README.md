@@ -69,6 +69,8 @@ Command line tools for data extraction, data manipulation, and file format conve
     
     xlsx-to-csv        convert XLSX to CSV
 
+    yaml-to-json       convert YAML to JSON
+
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
 The *data tools* are for working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra, but building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
@@ -170,6 +172,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     xlsx-to-csv        [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
     
     xlsx-to-csv        --list XLSX_FILE
+
+    yaml-to-json       [FILE]
 
 <a name="encodings"/>
 # ENCODINGS
@@ -848,6 +852,13 @@ This forces the client to determine the meaning of the positions and hard code t
 <a name="yaml"/>
 ## yaml
 
+To verify that a YAML file is valid
+
+    check-yaml foo.yml
+    
+To process YAML, convert it to JSON and use tools such as `json-awk`, `jq` and `json`:
+
+    yaml-to-json .travis.yml | jq '.script' 
 
 <a name="html"/>
 ## html
