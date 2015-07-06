@@ -244,7 +244,7 @@ If some of the bytes in a file are ASCII, such as when the encoding is one of th
 The `-i` flag will convert the data to a C source literal.  The `-r` flag will convert the output of `xxd` back to the original binary format:
     
     $ xxd -i /bin/ls
-    $ xxd /bin/sl | xxd -r
+    $ xxd /bin/ls | xxd -r
 
 The `-s` flag and the `-l` flag specify the start byte and the total number of bytes to display:
 
