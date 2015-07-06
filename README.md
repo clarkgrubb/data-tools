@@ -371,7 +371,7 @@ The Unicode Consortium provides a [complete list](http://www.unicode.org/standar
 The terminal wraps long lines without any indication that it has done so.  The `cut` command and the environment variable `COLUMNS` can be used to truncate long lines instead:
 
     $ cut -c 1-$COLUMNS FILE
-    $ cut -c $(( $COLUMNS + 1 ))-$(( 2 * $COLUMNS ))
+    $ cut -c $(( $COLUMNS + 1 ))-$(( 2 * $COLUMNS )) FILE
 
 <a name="set-op"/>
 ## set operations
