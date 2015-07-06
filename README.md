@@ -313,7 +313,7 @@ Both tools have `-c` and `-s` flags for counting ASCII characters separately or 
 <a name="unicode"/>
 ## unicode
 
-How to lookup a Unicode point:
+How to look up a Unicode point:
 
     $ curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
     
