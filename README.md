@@ -752,6 +752,9 @@ The result is the table:
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
 
+[json](#json) | [yaml](#yaml) | [html](#html) | [xml](#xml)
+
+<a name="json"/>
 ## json
 
 [json.org](http://json.org/)
@@ -842,12 +845,18 @@ for
     
 This forces the client to determine the meaning of the positions and hard code those positions in code.
 
+<a name="yaml"/>
+## yaml
+
+
+<a name="html"/>
 ## html
 
 The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an HTML file.  Here is an example of getting the links from a web page:
 
     $ curl www.google.com | dom-awk '$_.xpath("//a").each {|o| puts o["href"] }'
 
+<a name="xml"/>
 ## xml
 
 To check whether an XML file is well-formed, use:
