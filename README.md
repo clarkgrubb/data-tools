@@ -332,7 +332,7 @@ frequency table such as used when breaking ciphers is useful in this context:
 
 
 Unicode contains different character sequences which are
-rendered the same way.  An example is SMALL LETTER C WITH CEDILLA,
+rendered the same way.  An example is SMALL LETTER C WITH CEDILLA `ç`,
 which can be represented as a single character: U+00E7 or as SMALL LETTER C
 followed by COMBINING CEDILLA: U+0063 U+0327.
 
