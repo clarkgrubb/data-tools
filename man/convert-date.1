@@ -1,0 +1,53 @@
+.TH "CONVERT\-DATE" "1" "July 18, 2015" "" ""
+.SH NAME
+.PP
+convert\-date \- convert the date format of a column of tab\-delimited
+data
+.SH SYNOPSIS
+.PP
+convert\-date [\-i FMT] [\-o FMT] [\-c COLUMN] [\-H]
+.SH DESCRIPTION
+.PP
+Convert the dates in a specified column of a tab\-delimited file.
+.PP
+By default the first column is processed.
+Use the \f[C]\-c\f[] flag to specify a different column (the first
+column is indexed as zero).
+.PP
+If the file has a header, use the \f[C]\-H\f[] flag to not process it.
+.PP
+Use the \f[C]\-i\f[] and \f[C]\-o\f[] flags to set the input and output
+date formats.
+.PP
+If one of the formats is set to \f[C]%s\f[] (i.e.
+Unix epoch) and the other format is unspecified, it will be set to
+\f[C]%Y\-%m\-%dT%H:%M:%S\f[] (ISO 8601 format).
+.PP
+Conversely, if one of the formats is set to \f[C]%Y\-%m%dT%H:%M:%S\f[]
+and the other is unspecified it will be set to \f[C]%s\f[].
+.SH OPTIONS
+.TP
+.B \-c COLUMN
+the column number (zero\-based) of the column to convert.
+.RS
+.RE
+.TP
+.B \-H / \-\-header
+do not process the first line
+.RS
+.RE
+.TP
+.B \-i FMT / \-\-input\-format FMT
+the strftime\-style format used to parse the input
+.RS
+.RE
+.TP
+.B \-o FMT / \-\-output\-format FMT
+the stftime\-style format used to format the output.
+.RS
+.RE
+.SH SEE ALSO
+.PP
+\f[C]date\f[] (1), \f[C]strftime\f[] (3), \f[C]strptime\f[] (3)
+.SH AUTHORS
+Clark Grubb.

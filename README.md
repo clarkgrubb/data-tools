@@ -9,7 +9,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     check-tsv          verify rows in TSV file are same length
 
-    check-yaml         verify YAML is valid
+    convert-date       convert dates in tabular data using strftime-style formats
 
     counting-sort      sort a file using counting sort
 
@@ -107,7 +107,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     check-tsv          [TSV_FILE]
 
-    check-yaml         [YAML_FILE]
+    convert-date       [-i FMT] [-o FMT] [-c COLUMN] [-H]
 
     counting-sort      [FILE]
 
@@ -850,13 +850,11 @@ This forces the client to determine the meaning of the positions and hard code t
 <a name="yaml"/>
 ## yaml
 
-To verify YAML is valid:
-
-    check-yaml foo.yml
-    
 To process YAML, convert it to JSON and use tools such as `json-awk`, `jq` and `json`:
 
     yaml-to-json .travis.yml | jq '.script' 
+
+This can also be used to verify that YAML is valid.
 
 <a name="html"/>
 ## html

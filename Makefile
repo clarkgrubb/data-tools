@@ -82,7 +82,7 @@ install-build: install-hexedit install-tawk
 .PHONY: install-script
 install-script:
 	ln -sf $(src)/check-tsv.sh $(LOCAL_INSTALL_DIR)/check-tsv
-	ln -sf $(src)/check_yaml.py $(LOCAL_INSTALL_DIR)/check-yaml
+	ln -sf $(src)/convert_date.py $(LOCAL_INSTALL_DIR)/convert-date
 	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(src)/csv-to-postgres.sh $(LOCAL_INSTALL_DIR)/csv-to-postgres
@@ -175,10 +175,14 @@ test.check_tsv:
 	./src/check-tsv.sh test/check_tsv/input.good.tsv
 	! ./src/check-tsv.sh test/check_tsv/input.bad.tsv
 
-.PHONY: test.check_yaml
-test.check_yaml:
-	./src/check_yaml.py test/check_yaml/good.yaml
-	! ./src/check_yaml.py test/check_yaml/bad.yaml 2> /dev/null
+.PHONY: test.convert_date
+test.convert_date:
+	cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
+	| ./src/convert_date.py -i %Y-%m-%dT%H:%M:%S -o %s \
+	| diff - test/convert_date/input.txt
+	cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
+	| ./src/convert_date.py -o %s \
+	| diff - test/convert_date/input.txt
 
 .PHONY: test.counting_sort
 test.counting_sort: counting_sort/input.txt | output/counting_sort
@@ -352,7 +356,7 @@ test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
 	./src/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
 	./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
-python_base := check_yaml counting_sort csv_to_json csv_to_tsv
+python_base := convert_date counting_sort csv_to_json csv_to_tsv
 python_base += csv_to_xlsx highlight join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json
