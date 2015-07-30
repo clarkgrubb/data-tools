@@ -141,7 +141,7 @@ def date_seq(start,
         fmt = '%Y%m%d%H'
     elif len(start) == 12:
         delta = datetime.timedelta(minutes=1)
-        fmt = '%Y%m%d%H%S'
+        fmt = '%Y%m%d%H%M'
     elif len(start) == 14:
         delta = datetime.timedelta(seconds=1)
         fmt = '%Y%m%d%H%M%S'
