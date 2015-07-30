@@ -21,6 +21,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     csv-to-xlsx        convert CSV files to XLSX worksheets
 
+    date-fill          fill in missing rows in a TSV file with a time series column
+
     date-seq           create a sequence of dates
 
     dom-awk            read HTML or XML into DOM object and process it with Ruby
@@ -118,6 +120,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     csv-to-tsv         [-e|-x|-r] [CSV_FILE]
 
     csv-to-xlsx        -o XLSX_FILE CSV_FILE ...
+
+    date-fill          --date-column NUM --format FORMAT
 
     date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 

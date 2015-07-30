@@ -87,6 +87,7 @@ install-script:
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
 	ln -sf $(src)/csv-to-postgres.sh $(LOCAL_INSTALL_DIR)/csv-to-postgres
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
+	ln -sf $(src)/date_fill.py $(LOCAL_INSTALL_DIR)/date-fill
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
@@ -155,19 +156,10 @@ all: build
 	@echo '   $$ make install'
 	@echo
 
-output output/csv_to_json output/csv_to_tsv output/csv_to_xlsx output/dom_awk:
+output:
 	mkdir -p $@
 
-output/highlight output/normalize_utf8 output/counting_sort:
-	mkdir -p $@
-
-output/join_tsv output/json_awk output/json_diff output/reservoir_sample output/trim_tsv:
-	mkdir -p $@
-
-output/tsv_header output/yaml_to_json:
-	mkdir -p $@
-
-output/tsv_to_csv output/tsv_to_json output/utf8_viewer output/xlsx_to_csv:
+output/%:
 	mkdir -p $@
 
 .PHONY: test.check_tsv
@@ -212,6 +204,12 @@ test.csv_to_xlsx: | output/csv_to_xlsx
 	./src/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
 	test/csv_files/no-header.csv \
 	test/csv_files/unicode.csv
+
+.PHONY: test.date_fill
+test.date_fill: | output/date_fill
+	./src/date_fill.py --date-column=0 --format=%Y-%m-%dT%H -i test/date_fill/input.tsv \
+	> output/date_fill/output.tsv
+	diff output/date_fill/output.tsv test/date_fill/expected.output.tsv
 
 .PHONY: test.dom_awk
 test.dom_awk: dom_awk/input.txt | output/dom_awk
@@ -357,7 +355,7 @@ test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
 	./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
 python_base := convert_date counting_sort csv_to_json csv_to_tsv
-python_base += csv_to_xlsx highlight join_tsv
+python_base += csv_to_xlsx date_fill highlight join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json
 python_harnesses := $(patsubst %,test.%,$(python_base))
