@@ -92,6 +92,7 @@ install-script:
 	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
+	ln -sf $(src)/json_array_to_stream.py $(LOCAL_INSTALL_DIR)/json-array-to-stream
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json_awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
