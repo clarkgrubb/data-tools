@@ -18,7 +18,7 @@ output/%.json: test/input/%.json | output
 	./json-array-to-stream < $< > $@
 	diff test/expected.output/$*.json $@
 
-tests := sample
+tests := sample sample2
 test_files := $(patsubst %,output/%.json,$(tests))
 
 .PHONY: test
