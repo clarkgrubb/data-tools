@@ -7,71 +7,73 @@
 
 Command line tools for data extraction, data manipulation, and file format conversion.
 
-    check-tsv          verify rows in TSV file are same length
+    check-tsv              verify rows in TSV file are same length
 
-    convert-date       convert dates in tabular data using strftime-style formats
+    convert-date           convert dates in tabular data using strftime-style formats
 
-    counting-sort      sort a file using counting sort
+    counting-sort          sort a file using counting sort
 
-    csv-to-json        convert CSV to JSON
+    csv-to-json            convert CSV to JSON
 
-    csv-to-postgres    import a CSV file into a PostgreSQL table
+    csv-to-postgres        import a CSV file into a PostgreSQL table
 
-    csv-to-tsv         convert CSV to TSV
+    csv-to-tsv             convert CSV to TSV
 
-    csv-to-xlsx        convert CSV files to XLSX worksheets
+    csv-to-xlsx            convert CSV files to XLSX worksheets
 
-    date-fill          fill in missing rows in a TSV file with a time series column
+    date-fill              fill in missing rows in a TSV file with a time series column
 
-    date-seq           create a sequence of dates
+    date-seq               create a sequence of dates
 
-    dom-awk            read HTML or XML into DOM object and process it with Ruby
+    dom-awk                read HTML or XML into DOM object and process it with Ruby
 
-    header-sort        sort file, keeping header in place
+    header-sort            sort file, keeping header in place
 
-    hexedit            edit a binary file
+    hexedit                edit a binary file
 
-    highlight          highlight text matching REGEX
+    highlight              highlight text matching REGEX
 
-    join-tsv           perform a relation join on two TSV files
+    join-tsv               perform a relation join on two TSV files
+    
+    json-array-to-stream   convert JSON array to JSON stream 
 
-    json-awk           read JSON objects from standard input and process them with Ruby
+    json-awk               read JSON objects from standard input and process them with Ruby
 
-    json-diff          show differences between two JSON documents
+    json-diff              show differences between two JSON documents
 
-    normalize-utf8     write UTF-8 encoded input to standard out in normalized form
+    normalize-utf8         write UTF-8 encoded input to standard out in normalized form
 
-    postgres-to-csv    write a PostgreSQL table to stdout in CSV format
+    postgres-to-csv        write a PostgreSQL table to stdout in CSV format
 
-    reservoir-sample   select N lines from standard input randomly
+    reservoir-sample       select N lines from standard input randomly
 
-    set-diff           find lines in first file which are not in the second
+    set-diff               find lines in first file which are not in the second
 
-    set-intersect      find lines common to two files
+    set-intersect          find lines common to two files
 
-    tawk               awk, but uses tabs for FS and OFS by default
+    tawk                   awk, but uses tabs for FS and OFS by default
  
-    tokenize           extract words from English language text
+    tokenize               extract words from English language text
 
-    trim-tsv           trim whitespace from fields of TSV file
+    trim-tsv               trim whitespace from fields of TSV file
     
-    tsv-header         show TSV header with ordinal position of each column
+    tsv-header             show TSV header with ordinal position of each column
     
-    tsv-to-csv         convert TSV to CSV
+    tsv-to-csv             convert TSV to CSV
 
-    tsv-to-json        convert TSV to JSON
+    tsv-to-json            convert TSV to JSON
 
-    utf8-category      tally UTF-8 encoded characters by general category
+    utf8-category          tally UTF-8 encoded characters by general category
     
-    utf8-script        tally UTF-8 encoded characters by script
+    utf8-script            tally UTF-8 encoded characters by script
 
-    utf8-viewer        display Unicode points and optionally names of UTF-8 encoded file
+    utf8-viewer            display Unicode points and optionally names of UTF-8 encoded file
     
-    xls-to-csv         convert XLS to CSV
+    xls-to-csv             convert XLS to CSV
     
-    xlsx-to-csv        convert XLSX to CSV
+    xlsx-to-csv            convert XLSX to CSV
 
-    yaml-to-json       convert YAML to JSON
+    yaml-to-json           convert YAML to JSON
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
@@ -107,77 +109,79 @@ If you have special installation needs, maybe they are covered [here](https://gi
 <a name="how-to-run"/>
 # HOW TO RUN
 
-    check-tsv          [TSV_FILE]
+    check-tsv              [TSV_FILE]
 
-    convert-date       [-i FMT] [-o FMT] [-c COLUMN] [-H]
+    convert-date           [-i FMT] [-o FMT] [-c COLUMN] [-H]
 
-    counting-sort      [FILE]
+    counting-sort          [FILE]
 
-    csv-to-json        [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
+    csv-to-json            [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
-    csv-to-postgres    -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    csv-to-postgres        -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
     
-    csv-to-tsv         [-e|-x|-r] [CSV_FILE]
+    csv-to-tsv             [-e|-x|-r] [CSV_FILE]
 
-    csv-to-xlsx        -o XLSX_FILE CSV_FILE ...
+    csv-to-xlsx            -o XLSX_FILE CSV_FILE ...
 
-    date-fill          --date-column NUM --format FORMAT
+    date-fill              --date-column NUM --format FORMAT
 
-    date-seq           [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
+    date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-awk            [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
+    dom-awk                [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
 
-    header-sort        [OPTIONS] FILE
+    header-sort            [OPTIONS] FILE
 
-    hexedit            [-m|-s] FILE
+    hexedit                [-m|-s] FILE
 
-    highlight          REGEX [FILE]
+    highlight              REGEX [FILE]
     
-    highlight          (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
+    highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
-    join-tsv           -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
-
-    json-awk           [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
-
-    json-diff          [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
-
-    normalize-utf8     [--nfc|--nfd|--nfkc|--nfkd] [FILE]
-
-    postgres-to-csv    -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
-
-    reservoir-sample   [-r SEED] -s NUM [FILE]
-
-    set-diff           FILE1 FILE2
-
-    set-intersect      FILE1 FILE2
+    join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     
-    tokenize           [-n]
+    json-array-to-stream   < FILE
 
-    trim-tsv           [TSV_FILE]
+    json-awk               [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
-    tsv-header         [TSV_FILE]
+    json-diff              [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
-    tsv-to-csv         [-u] [TSV_FILE]
+    normalize-utf8         [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 
-    tsv-to-json        [TSV_FILE]
+    postgres-to-csv        -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
 
-    utf8-category      [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]
+    reservoir-sample       [-r SEED] -s NUM [FILE]
 
-    utf8-script        [-c|--count-ascii|-s|--skip-ascii]
+    set-diff               FILE1 FILE2
 
-    utf8-viewer        [-b|-c|-n] [-w NUM] [FILE]
-
-    utf8-viewer        [-b|-c|-n] -a BYTE ...
-
-    xls-to-csv         <same as xlsx-to-csv>
-
-    xlsx-to-csv        [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
-
-    xlsx-to-csv        [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
+    set-intersect          FILE1 FILE2
     
-    xlsx-to-csv        --list XLSX_FILE
+    tokenize               [-n]
 
-    yaml-to-json       [FILE]
+    trim-tsv               [TSV_FILE]
+
+    tsv-header             [TSV_FILE]
+
+    tsv-to-csv             [-u] [TSV_FILE]
+
+    tsv-to-json            [TSV_FILE]
+
+    utf8-category          [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]
+
+    utf8-script            [-c|--count-ascii|-s|--skip-ascii]
+
+    utf8-viewer            [-b|-c|-n] [-w NUM] [FILE]
+
+    utf8-viewer            [-b|-c|-n] -a BYTE ...
+
+    xls-to-csv             <same as xlsx-to-csv>
+
+    xlsx-to-csv            [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
+
+    xlsx-to-csv            [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
+    
+    xlsx-to-csv            --list XLSX_FILE
+
+    yaml-to-json           [FILE]
 
 <a name="encodings"/>
 # ENCODINGS

@@ -48,6 +48,10 @@ utf8-script:
 csv-to-tsv:
 	(cd src/$@; make)
 
+.PHONY: json-array-to-stream
+json-array-to-stream:
+	(cd src/$@; make)
+
 .PHONY: tsv-to-csv
 tsv-to-csv:
 	(cd src/$@; make)
@@ -70,11 +74,12 @@ install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 
 .PHONY: install-c
-install-c: utf8-script csv-to-tsv tsv-to-csv
+install-c: utf8-script csv-to-tsv tsv-to-csv json-array-to-stream
 	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
 	ln -sf $(pwd)/src/csv-to-tsv/csv-to-tsv $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(pwd)/src/tsv-to-csv/tsv-to-csv $(LOCAL_INSTALL_DIR)/tsv-to-csv
+	ln -sf $(pwd)/src/json-array-to-stream/json-array-to-stream $(LOCAL_INSTALL_DIR)/json-array-to-stream
 
 .PHONY: install-build
 install-build: install-hexedit install-tawk
@@ -92,7 +97,6 @@ install-script:
 	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
-	ln -sf $(src)/json_array_to_stream.py $(LOCAL_INSTALL_DIR)/json-array-to-stream
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json_awk.rb $(LOCAL_INSTALL_DIR)/json-awk
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
