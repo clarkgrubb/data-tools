@@ -82,7 +82,7 @@ install-c: utf8-script csv-to-tsv tsv-to-csv json-array-to-stream
 	ln -sf $(pwd)/src/json-array-to-stream/json-array-to-stream $(LOCAL_INSTALL_DIR)/json-array-to-stream
 
 .PHONY: install-build
-install-build: install-hexedit install-tawk
+install-build: install-hexedit install-tawk install-c
 
 .PHONY: install-script
 install-script:
