@@ -771,6 +771,21 @@ The result is the table:
 
 The MongoDB export format is a file of serialized JSON objects, one per line.  Whitespace can be added or removed anywhere to a serialized JSON object without changing the data the JSON object represents (except inside strings, and newlines must be escaped in strings).  Thus it is always possible to write a JSON object on a single line.
 
+It is easier for most clients to process a large data set in the MongoDB export format, e.g.
+
+    {"foo": 1}
+    {"bar": 2}
+    {"baz": 3}
+    ...
+    
+than to process a large JSON array, e.g.
+
+    [{"foo":1},{"bar":2},{"baz":3},...]
+    
+This is because the latter format forces most clients to read the entire data set into memory.  The *data tools* repo contains a utility for dealing with a large JSON array:
+
+    json-array-to-stream < big_array.json > mongo_format.json
+
 The following *data tools* are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
 
     csv-to-json
