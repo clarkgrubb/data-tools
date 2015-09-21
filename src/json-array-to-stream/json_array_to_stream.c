@@ -189,7 +189,7 @@ json_array_to_stream() {
   }
 
   if (array_depth != 0) {
-    fatal("more left bracket than right brackets", lineno - 1, offsetno);
+    fatal("more left brackets than right brackets", lineno - 1, offsetno);
   }
 
   putwchar(L'\n');
