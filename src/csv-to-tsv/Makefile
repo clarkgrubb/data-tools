@@ -6,7 +6,7 @@ SHELL := bash
 .SUFFIXES:
 
 csv-to-tsv: csv_to_tsv.c
-	gcc -o $@ $<
+	gcc -O2 -o $@ $<
 
 .PHONY: all
 all: csv-to-tsv

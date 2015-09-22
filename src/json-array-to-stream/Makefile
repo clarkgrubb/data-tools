@@ -6,7 +6,7 @@ SHELL := bash
 .SUFFIXES:
 
 json-array-to-stream: json_array_to_stream.c
-	gcc -o $@ $<
+	gcc -O2 -o $@ $<
 
 .PHONY: all
 all: json-array-to-stream
