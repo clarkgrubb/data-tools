@@ -5,17 +5,17 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-json-array-to-stream: json_array_to_stream.c
+json-pluck: json_pluck.c
 	gcc -O2 -o $@ $<
 
 .PHONY: all
-all: json-array-to-stream
+all: json-pluck
 
 output:
 	mkdir $@
 
 output/%.json: test/input/%.json | output
-	./json-array-to-stream < $< > $@
+	./json-pluck < $< > $@
 	diff test/expected.output/$*.json $@
 
 tests := sample sample2

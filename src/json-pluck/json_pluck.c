@@ -57,7 +57,7 @@ pop_stack(json_type_stack *stack) {
 }
 
 int
-json_array_to_stream() {
+json_pluck() {
   wint_t ch;
   size_t lineno = 1, offsetno = 0;
 
@@ -201,5 +201,5 @@ int
 main(int argc, char **argv) {
   setlocale(LC_ALL, "");
 
-  return json_array_to_stream();
+  return json_pluck();
 }

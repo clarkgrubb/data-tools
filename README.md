@@ -35,7 +35,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     join-tsv               perform a relation join on two TSV files
     
-    json-array-to-stream   convert JSON array to JSON stream 
+    json-pluck             convert JSON array to JSON stream 
 
     json-awk               read JSON objects from standard input and process them with Ruby
 
@@ -139,7 +139,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     
-    json-array-to-stream   < FILE
+    json-pluck             < FILE
 
     json-awk               [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
@@ -784,7 +784,7 @@ than to process a large JSON array, e.g.
     
 This is because the latter format forces most clients to read the entire data set into memory.  The *data tools* repo contains a utility for dealing with a large JSON array:
 
-    json-array-to-stream < big_array.json > mongo_format.json
+    json-pluck < big_array.json > mongo_format.json
 
 The following *data tools* are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
 

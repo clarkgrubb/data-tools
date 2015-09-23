@@ -48,8 +48,8 @@ utf8-script:
 csv-to-tsv:
 	(cd src/$@; make)
 
-.PHONY: json-array-to-stream
-json-array-to-stream:
+.PHONY: json-pluck
+json-pluck:
 	(cd src/$@; make)
 
 .PHONY: tsv-to-csv
@@ -74,12 +74,12 @@ install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 
 .PHONY: install-c
-install-c: utf8-script csv-to-tsv tsv-to-csv json-array-to-stream
+install-c: utf8-script csv-to-tsv tsv-to-csv json-pluck
 	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
 	ln -sf $(pwd)/src/csv-to-tsv/csv-to-tsv $(LOCAL_INSTALL_DIR)/csv-to-tsv
 	ln -sf $(pwd)/src/tsv-to-csv/tsv-to-csv $(LOCAL_INSTALL_DIR)/tsv-to-csv
-	ln -sf $(pwd)/src/json-array-to-stream/json-array-to-stream $(LOCAL_INSTALL_DIR)/json-array-to-stream
+	ln -sf $(pwd)/src/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
 
 .PHONY: install-build
 install-build: install-hexedit install-tawk install-c
