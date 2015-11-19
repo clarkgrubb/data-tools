@@ -8,6 +8,7 @@ digraph {
         outside_field -> unquoted_field [label="\\"];
         outside_field -> unquoted_field [label="<other>"];
         outside_field -> fatal [label="\\t"];
+        outside_field -> quoted_field [label="\""];
 
         unquoted_field -> outside_field [label=","];
         unquoted_field -> outside_field [label="\\n"];
