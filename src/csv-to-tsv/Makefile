@@ -18,7 +18,7 @@ output/%.tsv: test/input/%.csv | output
 	./csv-to-tsv < $< > $@
 	diff test/expected.output/$*.tsv $@
 
-tests := one two
+tests := one two three
 test_files := $(patsubst %,output/%.tsv,$(tests))
 
 state.png: state.dot

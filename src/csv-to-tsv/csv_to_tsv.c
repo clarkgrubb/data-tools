@@ -151,6 +151,18 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       }
       break;
 
+    case L'\r':
+      switch (state) {
+      case quoted_field_after_dquote:
+      case unquoted_field:
+      case outside_field:
+        state = before_newline;
+        break;
+      default:
+        fatal("unexpected carriage return", lineno, offsetno);
+      }
+      break;
+
     default:
       switch (state) {
       case outside_field:
