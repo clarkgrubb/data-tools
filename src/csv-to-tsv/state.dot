@@ -12,12 +12,21 @@ digraph {
 
         unquoted_field -> outside_field [label=","];
         unquoted_field -> outside_field [label="\\n"];
-        unquoted_field -> before_newline [label="\\r"];
         unquoted_field -> unquoted_field [label="<other>"];
         unquoted_field -> finish [label="<eof>"];
         unquoted_field -> fatal [label="\""];
         unquoted_field -> unquoted_field [label="\\"];
         unquoted_field -> fatal [label="\\t"];
+        unquoted_field -> unquoted_field_after_cr [label="\\r"];
+
+        unquoted_field_after_cr -> outside_field [label=","];
+        unquoted_field_after_cr -> outside_field [label="\\n"];
+        unquoted_field_after_cr -> unquoted_field [label="<other>"];
+        unquoted_field_after_cr -> finish [label="<eof>"];
+        unquoted_field_after_cr -> fatal [label="\""];
+        unquoted_field_after_cr -> unquoted_field [label="\\"];
+        unquoted_field_after_cr -> fatal [label="\\t"];
+        unquoted_field_after_cr -> unquoted_field_after_cr [label="\\r"];
 
         quoted_field -> quoted_field [label="<other>"];
         quoted_field -> quoted_field_after_dquote [label="\""];
