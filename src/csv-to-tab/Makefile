@@ -21,6 +21,12 @@ output/%.tab: test/input/%.csv csv-to-tab | output
 tests := one two three four
 test_files := $(patsubst %,output/%.tab,$(tests))
 
+.PHONY: test.default
+test.default: csv-to-tab
+	./csv-to-tab -x < test/input/backslash.csv > output/backslash.default.tab
+	diff test/expected.output/backslash.default.tab output/backslash.default.tab
+
+
 .PHONY: test.escape
 test.escape: csv-to-tab
 	./csv-to-tab -e < test/input/tab.csv > output/tab.escape.tab
@@ -29,6 +35,8 @@ test.escape: csv-to-tab
 	diff test/expected.output/cr.escape.tab output/cr.escape.tab
 	./csv-to-tab -e < test/input/newline.csv > output/newline.escape.tab
 	diff test/expected.output/newline.escape.tab output/newline.escape.tab
+	./csv-to-tab -e < test/input/backslash.csv > output/backslash.escape.tab
+	diff test/expected.output/backslash.escape.tab output/backslash.escape.tab
 
 .PHONY: test.replace
 test.replace: csv-to-tab
@@ -38,6 +46,8 @@ test.replace: csv-to-tab
 	diff test/expected.output/cr.replace.tab output/cr.replace.tab
 	./csv-to-tab -r < test/input/newline.csv > output/newline.replace.tab
 	diff test/expected.output/newline.replace.tab output/newline.replace.tab
+	./csv-to-tab -r < test/input/backslash.csv > output/backslash.replace.tab
+	diff test/expected.output/backslash.replace.tab output/backslash.replace.tab
 
 
 .PHONY: test.strip
@@ -48,9 +58,11 @@ test.strip: csv-to-tab
 	diff test/expected.output/cr.strip.tab output/cr.strip.tab
 	./csv-to-tab -x < test/input/newline.csv > output/newline.strip.tab
 	diff test/expected.output/newline.strip.tab output/newline.strip.tab
+	./csv-to-tab -x < test/input/backslash.csv > output/backslash.strip.tab
+	diff test/expected.output/backslash.strip.tab output/backslash.strip.tab
 
 .PHONY: test
-test: $(test_files) test.escape test.replace test.strip
+test: $(test_files) test.default test.escape test.replace test.strip
 
 .PHONY: cppcheck
 cppcheck:
