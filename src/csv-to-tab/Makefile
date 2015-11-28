@@ -14,12 +14,12 @@ all: csv-to-tab
 output:
 	mkdir $@
 
-output/%.tsv: test/input/%.csv | output
+output/%.tab: test/input/%.csv | output
 	./csv-to-tab < $< > $@
-	diff test/expected.output/$*.tsv $@
+	diff test/expected.output/$*.tab $@
 
 tests := one two three
-test_files := $(patsubst %,output/%.tsv,$(tests))
+test_files := $(patsubst %,output/%.tab,$(tests))
 
 state.png: state.dot
 	dot -Tpng < $< > $@

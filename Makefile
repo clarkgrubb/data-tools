@@ -196,12 +196,12 @@ test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 
 .PHONY: test.csv_to_tab
 test.csv_to_tab: | csv-to-tab output/csv_to_tab
-	echo -n $$'one,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/test.csv_to_tab.tsv
-	diff test/csv_to_tab/expected.tsv output/csv_to_tab/test.csv_to_tab.tsv
-	echo $$'λ,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tab/unicode.tsv
-	diff test/csv_to_tab/expected.unicode.tsv output/csv_to_tab/unicode.tsv
-	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tsv/csv-to-tsv --escape > output/csv_to_tab/test.csv_to_tab.escape.tsv
-	diff test/csv_to_tab/expected.escape.tsv output/csv_to_tab/test.csv_to_tab.escape.tsv
+	echo -n $$'one,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/test.csv_to_tab.tab
+	diff test/csv_to_tab/expected.tab output/csv_to_tab/test.csv_to_tab.tab
+	echo $$'λ,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/unicode.tab
+	diff test/csv_to_tab/expected.unicode.tab output/csv_to_tab/unicode.tab
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tab/csv-to-tab --escape > output/csv_to_tab/test.csv_to_tab.escape.tab
+	diff test/csv_to_tab/expected.escape.tab output/csv_to_tab/test.csv_to_tab.escape.tab
 
 
 .PHONY: test.sv_to_xlsx
@@ -318,8 +318,8 @@ test.trim_tsv: | output/trim_tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
 #.PHONY: test.tsv_to_csv
-#test.tsv_to_csv: tsv_to_csv/escapes.tsv | tsv-to-csv csv-to-tsv output/tsv_to_csv
-#	./src/tsv-to-csv/tsv-to-csv -u $< | ./src/csv-to-tsv/csv-to-tsv -e > output/tsv_to_csv/escape.tsv
+#test.tsv_to_csv: tsv_to_csv/escapes.tsv | tsv-to-csv csv-to-tab output/tsv_to_csv
+#	./src/tsv-to-csv/tsv-to-csv -u $< | ./src/csv-to-tab/csv-to-tab -e > output/tsv_to_csv/escape.tsv
 #	diff $< output/tsv_to_csv/escape.tsv
 
 .PHONY: test.tsv_to_json
