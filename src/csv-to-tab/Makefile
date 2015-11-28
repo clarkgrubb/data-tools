@@ -74,7 +74,7 @@ check: cppcheck test
 state.png: state.dot
 	dot -Tpng < $< > $@
 
-.PHONY: clean.output
-clean: clean.output
+.PHONY: clean
+clean:
 	rm csv-to-tab
 	rm -rf output
