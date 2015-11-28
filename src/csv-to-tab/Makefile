@@ -18,7 +18,7 @@ output/%.tab: test/input/%.csv csv-to-tab | output
 	./csv-to-tab < $< > $@
 	diff test/expected.output/$*.tab $@
 
-tests := one two three
+tests := one two three four
 test_files := $(patsubst %,output/%.tab,$(tests))
 
 .PHONY: test.escape
