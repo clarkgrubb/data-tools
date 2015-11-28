@@ -5,21 +5,21 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-tsv-to-csv: tsv_to_csv.c
+tab-to-csv: tab_to_csv.c
 	gcc -O2 -o $@ $<
 
 .PHONY: all
-all: tsv-to-csv
+all: tab-to-csv
 
 output:
 	mkdir $@
 
-output/%.tsv: test/input/%.tsv | output
-	./tsv-to-csv < $< > $@
+output/%.csv: test/input/%.tab | output
+	./tab-to-csv < $< > $@
 	diff test/expected.output/$*.csv $@
 
-tests := one two
-test_files := $(patsubst %,output/%.tsv,$(tests))
+tests := one
+test_files := $(patsubst %,output/%.csv,$(tests))
 
 .PHONY: test
 test: $(test_files)
@@ -28,4 +28,4 @@ clean:
 	rm -rf output
 
 clobber: clean
-	rm tsv-to-csv
+	rm tab-to-csv

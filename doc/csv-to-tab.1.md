@@ -1,4 +1,4 @@
-% CSV-TO-TSV(1)
+% CSV-TO-TAB(1)
 % Clark Grubb
 % February 16, 2013
 
@@ -33,7 +33,7 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tab` 
 
 # SEE ALSO
 
-`tsv-to-csv` (1)
+`tab-to-csv` (1)
 
 http://www.ietf.org/rfc/rfc4180.txt
 

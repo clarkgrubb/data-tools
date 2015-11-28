@@ -51,6 +51,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     set-intersect          find lines common to two files
 
+    tab-to-csv             convert tab delimited file to CSV
+
     tawk                   awk, but uses tabs for FS and OFS by default
  
     tokenize               extract words from English language text
@@ -59,8 +61,6 @@ Command line tools for data extraction, data manipulation, and file format conve
     
     tsv-header             show TSV header with ordinal position of each column
     
-    tsv-to-csv             convert TSV to CSV
-
     tsv-to-json            convert TSV to JSON
 
     utf8-category          tally UTF-8 encoded characters by general category
@@ -155,13 +155,13 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     set-intersect          FILE1 FILE2
     
+    tab-to-csv             [-u] [TAB_DELIMITED_FILE]
+
     tokenize               [-n]
 
     trim-tsv               [TSV_FILE]
 
     tsv-header             [TSV_FILE]
-
-    tsv-to-csv             [-u] [TSV_FILE]
 
     tsv-to-json            [TSV_FILE]
 
@@ -546,7 +546,7 @@ CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are 
 The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
 
     csv-to-tab
-    tsv-to-csv
+    tab-to-csv
 
 Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tab` will fail if it encounters any.  There are flags to tell `csv-to-tab` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tab.1.md). 
 
@@ -667,7 +667,7 @@ There is no way to escape the separator when importing files into SQLite.
 <a name="postgres"/>
 ## postgres
 
-    $ tsv-to-csv < /tmp/pw.tab > /tmp/pw.csv
+    $ tab-to-csv < /tmp/pw.tab > /tmp/pw.csv
     $ tsv-to-csv < /tmp/grp.tab > /tmp/grp.csv
     
     $ psql
