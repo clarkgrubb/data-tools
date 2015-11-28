@@ -14,25 +14,55 @@ all: csv-to-tab
 output:
 	mkdir $@
 
-output/%.tab: test/input/%.csv | output
+output/%.tab: test/input/%.csv csv-to-tab | output
 	./csv-to-tab < $< > $@
 	diff test/expected.output/$*.tab $@
 
-tests := one two three four
+tests := one two three
 test_files := $(patsubst %,output/%.tab,$(tests))
 
-state.png: state.dot
-	dot -Tpng < $< > $@
+.PHONY: test.escape
+test.escape: csv-to-tab
+	./csv-to-tab -e < test/input/tab.csv > output/tab.escape.tab
+	diff test/expected.output/tab.escape.tab output/tab.escape.tab
+	./csv-to-tab -e < test/input/cr.csv > output/cr.escape.tab
+	diff test/expected.output/cr.escape.tab output/cr.escape.tab
+	./csv-to-tab -e < test/input/newline.csv > output/newline.escape.tab
+	diff test/expected.output/newline.escape.tab output/newline.escape.tab
+
+.PHONY: test.replace
+test.replace: csv-to-tab
+	./csv-to-tab -r < test/input/tab.csv > output/tab.replace.tab
+	diff test/expected.output/tab.replace.tab output/tab.replace.tab
+	./csv-to-tab -r < test/input/cr.csv > output/cr.replace.tab
+	diff test/expected.output/cr.replace.tab output/cr.replace.tab
+	./csv-to-tab -r < test/input/newline.csv > output/newline.replace.tab
+	diff test/expected.output/newline.replace.tab output/newline.replace.tab
+
+
+.PHONY: test.strip
+test.strip: csv-to-tab
+	./csv-to-tab -x < test/input/tab.csv > output/tab.strip.tab
+	diff test/expected.output/tab.strip.tab output/tab.strip.tab
+	./csv-to-tab -x < test/input/cr.csv > output/cr.strip.tab
+	diff test/expected.output/cr.strip.tab output/cr.strip.tab
+	./csv-to-tab -x < test/input/newline.csv > output/newline.strip.tab
+	diff test/expected.output/newline.strip.tab output/newline.strip.tab
 
 .PHONY: test
-test: $(test_files)
+test: $(test_files) test.escape test.replace test.strip
 
 .PHONY: cppcheck
 cppcheck:
 	cppcheck --enable=all csv_to_tab.c
 
-clean:
-	rm -rf output
+.PHONY: check
+check: cppcheck test
 
-clobber: clean
+state.png: state.dot
+	dot -Tpng < $< > $@
+
+.PHONY: clean.output
+clean: clean.output
 	rm csv-to-tab
+	rm -rf output

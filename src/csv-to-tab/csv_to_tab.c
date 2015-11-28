@@ -23,10 +23,31 @@ enum invalid_char {
 };
 
 void
-fatal(char *msg, size_t lineno, size_t offsetno) {
-  fprintf(stderr, "ERROR: line: %zu: offset: %zu: %s\n",
-          lineno, offsetno, msg);
+fatal(char *msg, size_t lineno, size_t offsetno, size_t src_lineno) {
+  fprintf(stderr, "ERROR: line: %zu: offset: %zu: source: %zu: %s\n",
+          lineno, offsetno, src_lineno, msg);
   exit(1);
+}
+
+void
+handle_invalid_char(wint_t replacement,
+                    char *msg,
+                    enum invalid_char invalid_char_treatment,
+                    size_t lineno,
+                    size_t offsetno,
+                    size_t src_lineno) {
+  if (invalid_char_treatment == invalid_char_fail)
+    fatal(msg, lineno, offsetno, src_lineno);
+  else if (invalid_char_treatment == invalid_char_escape) {
+    putwchar(L'\\');
+    putwchar(replacement);
+  }
+  else if (invalid_char_treatment == invalid_char_replace)
+    putwchar(L' ');
+  else if (invalid_char_treatment == invalid_char_strip)
+    return;
+  else
+    fatal("unexpected invalid character treatment", lineno, offsetno, src_lineno);
 }
 
 int
@@ -46,25 +67,15 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
       case quoted_field:
       case unquoted_field:
       case unquoted_field_after_cr:
-        if (invalid_char_treatment == invalid_char_fail)
-          fatal("tab in data", lineno, offsetno);
-        else if (invalid_char_treatment == invalid_char_escape) {
-          putwchar(L'\\');
-          putwchar(L't');
-        }
-        else if (invalid_char_treatment == invalid_char_replace)
-          putwchar(L' ');
-        else if (invalid_char_treatment == invalid_char_strip)
-          break;
-        else
-          fatal("unexpected invalid character treatment", lineno, offsetno);
+        handle_invalid_char(L't', "tab in data", invalid_char_treatment, lineno, offsetno,
+                            __LINE__);
         break;
       case quoted_field_after_dquote:
       case before_newline:
-        fatal("unexpected tab", lineno, offsetno);
+        fatal("unexpected tab", lineno, offsetno, __LINE__);
         break;
       default:
-        fatal("unexpected state", lineno, offsetno);
+        fatal("unexpected state", lineno, offsetno, __LINE__);
       }
       break;
 
@@ -103,10 +114,10 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
       case unquoted_field_after_cr:
       case unquoted_field:
       case before_newline:
-        fatal("unexpected double quote", lineno, offsetno);
+        fatal("unexpected double quote", lineno, offsetno, __LINE__);
         break;
       default:
-        fatal("unexpected state", lineno, offsetno);
+        fatal("unexpected state", lineno, offsetno, __LINE__);
       }
       break;
 
@@ -123,7 +134,8 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         state = outside_field;
         break;
       case unquoted_field_after_cr:
-        putwchar(L'\r');
+        handle_invalid_char(L'r', "carriage return in data", invalid_char_treatment, lineno,
+                            offsetno, __LINE__);
         putwchar(L'\t');
         state = outside_field;
         break;
@@ -132,9 +144,9 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         state = outside_field;
         break;
       case before_newline:
-        fatal("unexpected comma", lineno, offsetno);
+        fatal("unexpected comma", lineno, offsetno, __LINE__);
       default:
-        fatal("unexpected state", lineno, offsetno);
+        fatal("unexpected state", lineno, offsetno, __LINE__);
       }
       break;
 
@@ -143,7 +155,8 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
       offsetno = 0;
       switch (state) {
       case quoted_field:
-        /* TODO: flag for escaping or replacing */
+        handle_invalid_char(L'n', "newline in data", invalid_char_treatment, lineno, offsetno,
+                            __LINE__);
         break;
       case outside_field:
       case quoted_field_after_dquote:
@@ -154,7 +167,7 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         state = outside_field;
         break;
       default:
-        fatal("unexpected state", lineno, offsetno);
+        fatal("unexpected state", lineno, offsetno, __LINE__);
       }
       break;
 
@@ -168,14 +181,15 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         state = before_newline;
         break;
       case unquoted_field_after_cr:
-        putwchar(L'\r');
+        handle_invalid_char(L'r', "carriage return in data", invalid_char_treatment, lineno,
+                            offsetno, __LINE__);
         state = unquoted_field_after_cr;
         break;
       case unquoted_field:
         state = unquoted_field_after_cr;
         break;
       default:
-        fatal("unexpected carriage return", lineno, offsetno);
+        fatal("unexpected carriage return", lineno, offsetno, __LINE__);
       }
       break;
 
@@ -189,10 +203,11 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         putwchar(ch);
         break;
       case quoted_field_after_dquote:
-        fatal("unescaped double quote", lineno, offsetno);
+        fatal("unescaped double quote", lineno, offsetno, __LINE__);
         break;
       case unquoted_field_after_cr:
-        putwchar(L'\r');
+        handle_invalid_char(L'r', "carriage return in data", invalid_char_treatment, lineno,
+                            offsetno, __LINE__);
         putwchar(ch);
         break;
       case unquoted_field:
@@ -200,13 +215,13 @@ csv_to_tab(enum invalid_char invalid_char_treatment) {
         break;
       case before_newline:
       default:
-        fatal("unexpected state", lineno, offsetno);
+        fatal("unexpected state", lineno, offsetno, __LINE__);
       }
     }
   }
 
   if (state == quoted_field)
-    fatal("unterminated double quote", lineno, offsetno);
+    fatal("unterminated double quote", lineno, offsetno, __LINE__);
 
   if (ferror(stdin)) {
     perror("error reading input stream");
