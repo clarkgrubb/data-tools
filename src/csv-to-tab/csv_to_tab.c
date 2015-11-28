@@ -30,7 +30,7 @@ fatal(char *msg, size_t lineno, size_t offsetno) {
 }
 
 int
-csv_to_tab(enum invalid_char invalid_char_treatment, long pad) {
+csv_to_tab(enum invalid_char invalid_char_treatment) {
   wint_t ch;
   enum parse_state state = outside_field;
   size_t lineno = 1, offsetno = 0;
@@ -220,7 +220,6 @@ int
 main(int argc, char **argv) {
   static struct option long_opts[] = {
     {"escape", no_argument, NULL, 'e'},
-    {"pad", required_argument, NULL, 'p'},
     {"replace", no_argument, NULL, 'r'},
     {"strip", no_argument, NULL, 'x'},
     {0, 0, 0, 0}
@@ -229,7 +228,6 @@ main(int argc, char **argv) {
   int opti;
   char *endptr;
   enum invalid_char invalid_char_treatment = invalid_char_fail;
-  long pad = 0;
 
   setlocale(LC_ALL, "");
 
@@ -249,18 +247,11 @@ main(int argc, char **argv) {
     case 'r':
       invalid_char_treatment = invalid_char_replace;
       break;
-    case 'p':
-      pad = strtol(optarg, &endptr, 10);
-      if (*endptr != 0) {
-        fprintf(stderr, "expected integer: %s\n", optarg);
-        exit(1);
-      }
-      break;
     default:
       fprintf(stderr, "unexpected arg: %d\n", ch);
       exit(1);
     }
   }
 
-  return csv_to_tab(invalid_char_treatment, pad);
+  return csv_to_tab(invalid_char_treatment);
 }

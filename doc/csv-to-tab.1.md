@@ -24,9 +24,6 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tab` 
 -e, \--escape
 : Use backslash escape sequences to escape tabs, carriage returns, newlines, and backslashes.
 
-\--header=NAME[,NAME...]
-: comma-separated list of column names.  Use if CSV does not have a header row.
-
 -r, \--replace
 : replaces tabs and characters that should be interpreted as newlines as newlines with spaces.  The characters treated as newlines are: \\f \\n \\r \\v \\x85 \\u2028 \\u2029.
 
