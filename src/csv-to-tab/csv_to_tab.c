@@ -30,7 +30,7 @@ fatal(char *msg, size_t lineno, size_t offsetno) {
 }
 
 int
-csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
+csv_to_tab(enum invalid_char invalid_char_treatment, long pad, char *header) {
   wint_t ch;
   enum parse_state state = outside_field;
   size_t lineno = 1, offsetno = 0;
@@ -254,5 +254,5 @@ main(int argc, char **argv) {
     }
   }
 
-  return csv_to_tsv(invalid_char_treatment, pad, header);
+  return csv_to_tab(invalid_char_treatment, pad, header);
 }

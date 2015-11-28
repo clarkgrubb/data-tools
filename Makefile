@@ -44,8 +44,8 @@ $(tawk):
 utf8-script:
 	(cd src/$@; make)
 
-.PHONY: csv-to-tsv
-csv-to-tsv:
+.PHONY: csv-to-tab
+csv-to-tab:
 	(cd src/$@; make)
 
 .PHONY: json-pluck
@@ -74,10 +74,10 @@ install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 
 .PHONY: install-c
-install-c: utf8-script csv-to-tsv tsv-to-csv json-pluck
+install-c: utf8-script csv-to-tab tsv-to-csv json-pluck
 	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
-	ln -sf $(pwd)/src/csv-to-tsv/csv-to-tsv $(LOCAL_INSTALL_DIR)/csv-to-tsv
+	ln -sf $(pwd)/src/csv-to-tab/csv-to-tab $(LOCAL_INSTALL_DIR)/csv-to-tab
 	ln -sf $(pwd)/src/tsv-to-csv/tsv-to-csv $(LOCAL_INSTALL_DIR)/tsv-to-csv
 	ln -sf $(pwd)/src/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
 
@@ -194,14 +194,14 @@ test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 	echo $$'λ,two\nthree,four' | \
 	./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
 
-.PHONY: test.csv_to_tsv
-test.csv_to_tsv: | csv-to-tsv output/csv_to_tsv
-	echo -n $$'one,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/test.csv_to_tsv.tsv
-	diff test/csv_to_tsv/expected.tsv output/csv_to_tsv/test.csv_to_tsv.tsv
-	echo $$'λ,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tsv/unicode.tsv
-	diff test/csv_to_tsv/expected.unicode.tsv output/csv_to_tsv/unicode.tsv
-	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tsv/csv-to-tsv --escape > output/csv_to_tsv/test.csv_to_tsv.escape.tsv
-	diff test/csv_to_tsv/expected.escape.tsv output/csv_to_tsv/test.csv_to_tsv.escape.tsv
+.PHONY: test.csv_to_tab
+test.csv_to_tab: | csv-to-tab output/csv_to_tab
+	echo -n $$'one,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/test.csv_to_tab.tsv
+	diff test/csv_to_tab/expected.tsv output/csv_to_tab/test.csv_to_tab.tsv
+	echo $$'λ,two\nthree,four' | ./src/csv-to-tsv/csv-to-tsv > output/csv_to_tab/unicode.tsv
+	diff test/csv_to_tab/expected.unicode.tsv output/csv_to_tab/unicode.tsv
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tsv/csv-to-tsv --escape > output/csv_to_tab/test.csv_to_tab.escape.tsv
+	diff test/csv_to_tab/expected.escape.tsv output/csv_to_tab/test.csv_to_tab.escape.tsv
 
 
 .PHONY: test.sv_to_xlsx
@@ -359,7 +359,7 @@ test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
 	./src/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
 	./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
-python_base := convert_date counting_sort csv_to_json csv_to_tsv
+python_base := convert_date counting_sort csv_to_json csv_to_tab
 python_base += csv_to_xlsx date_fill highlight join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json

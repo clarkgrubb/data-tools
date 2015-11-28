@@ -5,19 +5,19 @@
 
 # NAME
 
-csv-to-tsv - convert CSV to TSV
+csv-to-tab - convert CSV to tab delimited
 
 # SYNOPSIS
 
-csv-to-tsv OPTIONS [CSV_FILE]
+csv-to-tab OPTIONS [CSV_FILE]
 
 # DESCRIPTION
 
-Read a CSV file from file specified on command line or standard input and write the corresponding TSV file to standard output.
+Read a CSV file from file specified on command line or standard input and write the corresponding tab delimited file to standard output.
 
-In the TSV format fields are delimited by tabs and records are terminated by an end-of-line marker.  `csv-to-tsv` uses newline as the end-of-line marker.
+In the tab delimited format fields are delimited by tabs and records are terminated by an end-of-line marker.  `csv-to-tab` uses newline as the end-of-line marker.
 
-There is no mechanism for quoting tabs or newlines, and by default `csv-to-tsv` will fail if they occur in the fields of the CSV file.  
+There is no mechanism for quoting tabs or newlines, and by default `csv-to-tab` will fail if they occur in the fields of the CSV file.  
 
 # OPTIONS
 

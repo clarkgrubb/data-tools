@@ -17,7 +17,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     csv-to-postgres        import a CSV file into a PostgreSQL table
 
-    csv-to-tsv             convert CSV to TSV
+    csv-to-tab             convert CSV to tab delimited
 
     csv-to-xlsx            convert CSV files to XLSX worksheets
 
@@ -119,7 +119,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     csv-to-postgres        -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
     
-    csv-to-tsv             [-e|-x|-r] [CSV_FILE]
+    csv-to-tab             [-e|-x|-r] [CSV_FILE]
 
     csv-to-xlsx            -o XLSX_FILE CSV_FILE ...
 
@@ -545,10 +545,10 @@ CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are 
 
 The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
 
-    csv-to-tsv
+    csv-to-tab
     tsv-to-csv
 
-Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tsv` will fail if it encounters any.  There are flags to tell `csv-to-tsv` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tsv.1.md). 
+Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tab` will fail if it encounters any.  There are flags to tell `csv-to-tab` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tab.1.md). 
 
 <a name="xlsx"/>
 ## xlsx

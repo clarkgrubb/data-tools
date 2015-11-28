@@ -5,17 +5,17 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-csv-to-tsv: csv_to_tsv.c
+csv-to-tab: csv_to_tab.c
 	gcc -O2 -o $@ $<
 
 .PHONY: all
-all: csv-to-tsv
+all: csv-to-tab
 
 output:
 	mkdir $@
 
 output/%.tsv: test/input/%.csv | output
-	./csv-to-tsv < $< > $@
+	./csv-to-tab < $< > $@
 	diff test/expected.output/$*.tsv $@
 
 tests := one two three
@@ -31,4 +31,4 @@ clean:
 	rm -rf output
 
 clobber: clean
-	rm csv-to-tsv
+	rm csv-to-tab
