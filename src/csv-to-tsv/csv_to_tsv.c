@@ -11,6 +11,7 @@ enum parse_state {
   quoted_field,
   quoted_field_after_dquote,
   unquoted_field,
+  quoted_field_after_cr,
   before_newline
 };
 
@@ -32,7 +33,7 @@ int
 csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
   wint_t ch;
   enum parse_state state = outside_field;
-  size_t lineno = 1, offsetno = 0, fieldno = 0;
+  size_t lineno = 1, offsetno = 0;
 
   while ((ch = getwchar()) != WEOF) {
     offsetno += 1;
@@ -66,6 +67,7 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       }
       break;
 
+      /*
     case L'\\':
       switch (state) {
       case outside_field:
@@ -83,6 +85,7 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
         fatal("unexpected state", lineno, offsetno);
       }
       break;
+      */
 
     case L'"':
       switch (state) {
@@ -90,6 +93,10 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
         state = quoted_field;
         break;
       case quoted_field:
+        state = quoted_field_after_dquote;
+        break;
+      case quoted_field_after_cr:
+        putwchar(L'\r');
         state = quoted_field_after_dquote;
         break;
       case quoted_field_after_dquote:
@@ -109,7 +116,6 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       switch (state) {
       case outside_field:
         putwchar(L'\t');
-        fieldno += 1;
         break;
       case quoted_field:
         putwchar(ch);
@@ -117,11 +123,9 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       case quoted_field_after_dquote:
         putwchar(L'\t');
         state = outside_field;
-        fieldno += 1;
         break;
       case unquoted_field:
         putwchar(L'\t');
-        fieldno += 1;
         state = outside_field;
         break;
       case before_newline:
@@ -132,6 +136,8 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       break;
 
     case L'\n':
+      lineno += 1;
+      offsetno = 0;
       switch (state) {
       case quoted_field:
         /* TODO: flag for escaping or replacing */
@@ -141,9 +147,6 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
       case unquoted_field:
       case before_newline:
         putwchar(L'\n');
-        lineno += 1;
-        offsetno = 0;
-        fieldno = 0;
         state = outside_field;
         break;
       default:
@@ -153,6 +156,9 @@ csv_to_tsv(enum invalid_char invalid_char_treatment, long pad, char *header) {
 
     case L'\r':
       switch (state) {
+      case quoted_field:
+        /* TODO: flag for escaping or replacing */
+        break;
       case quoted_field_after_dquote:
       case unquoted_field:
       case outside_field:
