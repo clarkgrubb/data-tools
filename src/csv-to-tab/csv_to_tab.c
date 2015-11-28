@@ -226,7 +226,6 @@ main(int argc, char **argv) {
   };
 
   int opti;
-  char *endptr;
   enum invalid_char invalid_char_treatment = invalid_char_fail;
 
   setlocale(LC_ALL, "");
