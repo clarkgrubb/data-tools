@@ -24,7 +24,6 @@ There is no mechanism for quoting tabs or newlines, and by default `csv-to-tab` 
 -u, \--unescape
 : Interpret the following backslash sequences when encountered in the data: \n, \r, \t, \\.
 
-
 # SEE ALSO
 
 `csv-to-tab` (1)
