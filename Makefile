@@ -52,8 +52,8 @@ csv-to-tab:
 json-pluck:
 	(cd src/$@; make)
 
-.PHONY: tsv-to-csv
-tsv-to-csv:
+.PHONY: tab-to-csv
+tab-to-csv:
 	(cd src/$@; make)
 
 .PHONY: build-hexedit
@@ -74,11 +74,11 @@ install-tawk: $(tawk)
 	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
 
 .PHONY: install-c
-install-c: utf8-script csv-to-tab tsv-to-csv json-pluck
+install-c: utf8-script csv-to-tab tab-to-csv json-pluck
 	ln -sf $(pwd)/src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
 	ln -sf $(pwd)/src/csv-to-tab/csv-to-tab $(LOCAL_INSTALL_DIR)/csv-to-tab
-	ln -sf $(pwd)/src/tsv-to-csv/tsv-to-csv $(LOCAL_INSTALL_DIR)/tsv-to-csv
+	ln -sf $(pwd)/src/tab-to-csv/tab-to-csv $(LOCAL_INSTALL_DIR)/tab-to-csv
 	ln -sf $(pwd)/src/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
 
 .PHONY: install-build
@@ -317,10 +317,10 @@ test.trim_tsv: | output/trim_tsv
 	./src/trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
-#.PHONY: test.tsv_to_csv
-#test.tsv_to_csv: tsv_to_csv/escapes.tsv | tsv-to-csv csv-to-tab output/tsv_to_csv
-#	./src/tsv-to-csv/tsv-to-csv -u $< | ./src/csv-to-tab/csv-to-tab -e > output/tsv_to_csv/escape.tsv
-#	diff $< output/tsv_to_csv/escape.tsv
+#.PHONY: test.tab_to_csv
+#test.tab_to_csv: tab_to_csv/escapes.tsv | tab-to-csv csv-to-tab output/tab_to_csv
+#	./src/tab-to-csv/tab-to-csv -u $< | ./src/csv-to-tab/csv-to-tab -e > output/tab_to_csv/escape.tsv
+#	diff $< output/tab_to_csv/escape.tsv
 
 .PHONY: test.tsv_to_json
 test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
