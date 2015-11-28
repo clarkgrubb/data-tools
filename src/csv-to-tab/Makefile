@@ -18,7 +18,7 @@ output/%.tab: test/input/%.csv | output
 	./csv-to-tab < $< > $@
 	diff test/expected.output/$*.tab $@
 
-tests := one two three
+tests := one two three four
 test_files := $(patsubst %,output/%.tab,$(tests))
 
 state.png: state.dot
@@ -26,6 +26,10 @@ state.png: state.dot
 
 .PHONY: test
 test: $(test_files)
+
+.PHONY: cppcheck
+cppcheck:
+	cppcheck --enable=all csv_to_tab.c
 
 clean:
 	rm -rf output
