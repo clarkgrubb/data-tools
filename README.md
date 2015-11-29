@@ -77,13 +77,13 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     yaml-to-json           convert YAML to JSON
 
-The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.
 
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
+The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.  The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  
+
+Only tools which read from standard input or write to standard output can participate in a pipeline.  Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
 <a name="setup"/>
 # SETUP
@@ -179,8 +179,15 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     yaml-to-json           [FILE]
 
+<a name="plaintext"/>
+# PLAIN TEXT
+
+*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  Control characters for representing line endings and possibly tabs are also allowed.  To facilitate display, long lines are discouraged.
+
 <a name="txt"/>
 # .TXT
+
+The fallback file suffix for plain text is `.txt`.  Source code and HTML are plain text, but these files use different suffixes.
 
 <a name="encodings"/>
 # ENCODINGS
@@ -192,7 +199,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
 The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is valid UTF-8.
 
-We can use `iconv` to convert a file in a different encoding:
+Use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
     
@@ -228,7 +235,7 @@ To find the first occurrence of bytes which are not valid UTF-8, use `iconv`:
     $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
     iconv: illegal input sequence at position 24
 
-The *data tool* `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be ---- for invalid characters.
+`utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be ---- for invalid characters.
 
     $ utf8-viewer /bin/ls
 
