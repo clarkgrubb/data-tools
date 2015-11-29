@@ -1,5 +1,7 @@
 [summary](#summary) | [setup](#setup) | [how to run](#how-to-run) | <img src="https://travis-ci.org/clarkgrubb/data-tools.svg?branch=master" alt="build status"/>
 
+[.txt](#txt) | [.tsv](#tsv) | [.tab](#tab) | [.csv](#csv) | [.xlsx](#xlsx) | [.json](#json) | [.yaml](#yaml) | [.html](#html) | [.xml](#xml)
+
 [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
@@ -77,17 +79,11 @@ Command line tools for data extraction, data manipulation, and file format conve
 
 The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
-The *data tools* are for working with data at the command line.  They provide an alternative to importing data into a relational database and manipulating it with SQL.  It is an interesting and sometimes useful fact that `awk`, `sort`, and `join` can be used to implement relational algebra, but building data workflows with command line tools can be frustrated by gaps in the traditional tool set.  The *data tools* repo fills some of those gaps.
+The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.
 
 Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  This accords with the *principle of least knowledge*.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
 
-Tools in a pipeline must agree on the *format* of the data in the byte stream.  To promote interoperability, the *data tools*  favor:
-
-* UTF-8 as character encoding (or 8-bit encoded ASCII)
-* LF as newline
-* TSV format for relational data
-
-The *data tools* include *format conversion tools* for when we encounter byte streams in other formats.
+Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
 <a name="setup"/>
 # SETUP
@@ -182,6 +178,9 @@ If you have special installation needs, maybe they are covered [here](https://gi
     xlsx-to-csv            --list XLSX_FILE
 
     yaml-to-json           [FILE]
+
+<a name="txt"/>
+# .TXT
 
 <a name="encodings"/>
 # ENCODINGS
@@ -465,7 +464,9 @@ This is faster than shuffling the file, but does not produce a precise sample si
 An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The *data tool* `reservoir-sample` implements it:
 
     $ reservoir-sample --size 3 < /etc/passwd
-    
+
+# TSV, TAB, CSV, and XLSX
+
 <a name="relational-fmt"/>
 # RELATIONAL FORMATS
 
@@ -758,6 +759,8 @@ The result is the table:
     > val grp = sc.textFile("/etc/group").filter(line => line(0) != '#').map(line => line.split(":"))
     > val j = pw_gid.join(grp_gid).map(tup => List(tup._1) ++ tup._2._1 ++ tup._2._1)
     > j.map(row => row.mkString("\t")).saveAsTextFile("/tmp/pw_grp")
+
+# JSON, YAML, HTML, and XML
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
