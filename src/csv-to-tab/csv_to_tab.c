@@ -300,7 +300,7 @@ main(int argc, char **argv) {
     }
   }
   else {
-    fprintf(stderr, "USAGE: csv-to-tab [-e|-x|-r] [PATH]]\n");
+    fprintf(stderr, "USAGE: csv-to-tab [--escape|--strip|--replace] [PATH]\n");
     exit(1);
   }
 
