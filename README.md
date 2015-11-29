@@ -182,7 +182,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 <a name="plaintext"/>
 # PLAIN TEXT
 
-*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  Control characters for representing line endings and possibly tabs are also allowed.  To facilitate display, long lines are discouraged.
+*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  Control characters for representing line endings are allowed, as are tabs.  To facilitate display, long lines are discouraged.
 
 <a name="txt"/>
 # .TXT
