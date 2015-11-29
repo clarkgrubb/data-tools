@@ -2,7 +2,7 @@
 
 [.txt](#txt) | [.tsv](#tsv) | [.tab](#tab) | [.csv](#csv) | [.xlsx](#xlsx) | [.json](#json) | [.yaml](#yaml) | [.html](#html) | [.xml](#xml)
 
-[encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
+[plain text](#plaintext) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
 # SUMMARY
