@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <getopt.h>
 #include <locale.h>
 #include <stdbool.h>
@@ -51,12 +52,12 @@ handle_invalid_char(wint_t replacement,
 }
 
 int
-csv_to_tab(enum invalid_char invalid_char_treatment) {
+csv_to_tab(FILE *input_stream, enum invalid_char invalid_char_treatment) {
   wint_t ch;
   enum parse_state state = outside_field;
   size_t lineno = 1, offsetno = 0;
 
-  while ((ch = getwchar()) != WEOF) {
+  while ((ch = fgetwc(input_stream)) != WEOF) {
     offsetno += 1;
 
     switch (ch) {
@@ -288,5 +289,20 @@ main(int argc, char **argv) {
     }
   }
 
-  return csv_to_tab(invalid_char_treatment);
+  FILE *f;
+  if (optind == argc)
+    f = stdin;
+  else if (optind == argc - 1) {
+    f = fopen(argv[optind], "r");
+    if (!f) {
+      fprintf(stderr, "error opening %s: %s\n", argv[optind], strerror(errno));
+      exit(1);
+    }
+  }
+  else {
+    fprintf(stderr, "USAGE: csv-to-tab [-e|-x|-r] [PATH]]\n");
+    exit(1);
+  }
+
+  return csv_to_tab(f, invalid_char_treatment);
 }

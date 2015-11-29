@@ -39,6 +39,5 @@ This describes the state transitions of the C code in the default mode; i.e. whe
 # TODO
 
 * Backslash escaping?
-* Take file as command line argument.
 * Enforce that each row has same number of fields. (optional flag?)
 * Restore -p N/--pad=N parameter.
