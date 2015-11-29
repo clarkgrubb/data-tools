@@ -1,8 +1,10 @@
+#include <errno.h>
 #include <getopt.h>
 #include <locale.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <wchar.h>
 
 #define BUFSIZE 4096
@@ -35,7 +37,7 @@ write_wchars(wchar_t buf[], size_t start, size_t end, bool escape,
   }
 }
 
-int tab_to_csv(bool unescape_char) {
+int tab_to_csv(FILE *input_stream, bool unescape_char) {
   wchar_t ch;
   wchar_t buf[BUFSIZE];
   size_t i = 0;
@@ -44,7 +46,7 @@ int tab_to_csv(bool unescape_char) {
   bool open_field = true;
   bool last_char_backslash = false;
 
- while ((ch = getwchar()) != WEOF) {
+ while ((ch = fgetwc(input_stream)) != WEOF) {
     switch(ch) {
 
     case L'\\':
@@ -240,5 +242,20 @@ main(int argc, char **argv) {
     }
   }
 
-  return tab_to_csv(unescape_char);
+  FILE *f;
+  if (optind == argc)
+    f = stdin;
+  else if (optind == argc - 1) {
+    f = fopen(argv[optind], "r");
+    if (!f) {
+      fprintf(stderr, "error opening %s: %s\n", argv[optind], strerror(errno));
+      exit(1);
+    }
+  }
+  else {
+    fprintf(stderr, "USAGE: tab-to-csv [--unescape] [PATH]\n");
+    exit(1);
+  }
+
+  return tab_to_csv(f, unescape_char);
 }
