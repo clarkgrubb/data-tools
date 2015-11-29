@@ -81,7 +81,7 @@ The *data tools* come with man pages which can be installed locally or browsed o
 
 The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.
 
-Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  This accords with the *principle of least knowledge*.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
+Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  Only tools which read from standard input or write to standard output can participate in a pipeline.  
 
 Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
