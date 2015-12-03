@@ -10,9 +10,9 @@ TSV format: [IANA](https://www.iana.org/assignments/media-types/text/tab-separat
 
 TAB format: same as the TSV format, except that the header is optional.
 
-The TSV format requires a header, but the CSV format does not.  It is difficult for a program to verify that a header is present, which is why this took is called `csv-to-tab` instead of `csv-to-tsv`.
+The TSV format requires a header, but the CSV format does not.  It is difficult for a program to verify that a header is present, hence the name `csv-to-tab` instead of `csv-to-tsv`.
 
-Another requirement of a TSV file is for each row to have the same number of fields.  This is also a requirement of a CSV.  The command does not check this, so this is another reason the output may be an invalid TSV.
+Another requirement of a TSV file is for each row to have the same number of fields.  This is also a requirement of a CSV.  The command does not check this.
 
 CSV files are supposed to use CRLF to terminate records.  As a convenience, the code will also accept a document which uses LF to terminate records, or even a mix of CRLF and LF.  The code does not accept CR as a record terminator, even though some CSV producers--e.g. Excel on Mac--produce this format.  Accepting a mix of CRLF, LF, and CR would make the number of line endings ambiguous.  Use `sed` to convert such a file.
 
