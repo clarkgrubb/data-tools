@@ -22,7 +22,7 @@ The TSV format cannot include tabs or EOL.  To be safe, we prohibit any characte
 
 # CHARACTER ENCODING
 
-The data standards we follow don't specify the character encoding.  We use UTF-8.  Use `iconv` or some other conversion tool to convert to this format.
+The data standards we follow don't specify the character encoding.  We use UTF-8.  Use `iconv` to convert from another encoding.
 
 # FLAGS
 
