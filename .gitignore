@@ -2,7 +2,7 @@ third-party/hexedit/hexedit
 output
 third-party/tawk/tawk
 third-party/tawk/mawk-1.3.4-20130803
-src/csv-to-tsv/csv-to-tsv
-src/tsv-to-csv/tsv-to-csv
+src/csv-to-tab/csv-to-tab
+src/tab-to-csv/tab-to-csv
 src/json-pluck/json-pluck
 TAGS

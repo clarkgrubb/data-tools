@@ -155,6 +155,12 @@ def date_fill(input_path,
         raise Exception('no recognized directives in format: {}'.format(
             output_fmt))
 
+    if header is not None:
+        output_stream.write(header)
+
+    if not start_dt or not end_dt:
+        return
+
     if not date_iter:
         start_s = start_dt.strftime(trunc_fmt)
         start_dt = datetime.datetime.strptime(start_s, trunc_fmt)
@@ -166,8 +172,6 @@ def date_fill(input_path,
 
     line_count = 0
     fill_count = 0
-    if header is not None:
-        output_stream.write(header)
     for dt in date_iter:
         date = dt.strftime(output_fmt)
         line = date_to_line.get(date, None)
