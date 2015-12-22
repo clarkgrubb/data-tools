@@ -33,7 +33,7 @@ ve := . ve/bin/activate
 
 ve:
 	virtualenv ve
-	$(ve) && install $(pip_pkgs)
+	$(ve) && pip install $(pip_pkgs)
 
 hexedit_dir := third-party/hexedit
 hexedit := $(hexedit_dir)/hexedit
