@@ -1,5 +1,4 @@
 language: python
   - "2.7"
-  - "3.3"
 install: make setup.ruby; sudo make setup.python
 script: make test.harness

@@ -24,6 +24,7 @@ setup.ruby:
 .PHONY: setup.python
 setup.python:
 	pip install $(pip_pkgs)
+	if [ -e "$$(which pip3)" ]; then pip3 install $(pip_pkgs); fi
 
 .PHONY: setup
 setup: setup.ruby setup.python
@@ -206,12 +207,9 @@ test.csv_to_tab: | csv-to-tab output/csv_to_tab
 
 .PHONY: test.sv_to_xlsx
 test.csv_to_xlsx: | output/csv_to_xlsx
-	#
-	# travis env not seeing openpyxl?
-	#
-	# ./src/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
-	# test/csv_files/no-header.csv \
-	# test/csv_files/unicode.csv
+	./src/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
+	test/csv_files/no-header.csv \
+	test/csv_files/unicode.csv
 
 .PHONY: test.date_fill
 test.date_fill: | output/date_fill
