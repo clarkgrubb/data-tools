@@ -179,15 +179,14 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     yaml-to-json           [FILE]
 
-<a name="plaintext"/>
-# PLAIN TEXT
+<a name="plaintext"/><a name="txt"/>
+# PLAIN TEXT: .TXT
 
-*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  Control characters for representing line endings are allowed, as are tabs.  To facilitate display, long lines are discouraged.
+*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  
 
-<a name="txt"/>
-# .TXT
+If no other suffix is appropriate, `.txt` is a reasonable suffix for a plain text file.
 
-The fallback file suffix for plain text is `.txt`.  Source code and HTML are plain text, but these files use different suffixes.
+In plain text, control characters other than for line endings and perhaps tabs are disallowed.  Long lines are discouraged.
 
 <a name="encodings"/>
 # ENCODINGS
