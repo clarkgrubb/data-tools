@@ -20,7 +20,7 @@ Inherited, or Unknown scripts.
 
 The Common characters include symbols which are shared by the scripts.
 This includes most punctuation.  The Inherited characters are
-combining marks  The Unknown characters are Unicode points to
+combining marks.  The Unknown characters are Unicode points to
 which the Unicode standard has left undefined.
 
 The mapping from Unicode point to script is described in
