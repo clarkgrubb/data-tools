@@ -60,9 +60,7 @@ Command line tools for data extraction, data manipulation, and file format conve
     tokenize               extract words from English language text
 
     trim-tsv               trim whitespace from fields of TSV file
-
-    trim-txt               trim whitespace from end of line
-
+    
     tsv-header             show TSV header with ordinal position of each column
     
     tsv-to-json            convert TSV to JSON
@@ -158,8 +156,6 @@ If you have special installation needs, maybe they are covered [here](https://gi
     tokenize               [-n]
 
     trim-tsv               [TSV_FILE]
-
-    trim-txt               < FILE
 
     tsv-header             [TSV_FILE]
 

@@ -114,7 +114,6 @@ install-script:
 	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
 	ln -sf $(src)/tokenize.sh $(LOCAL_INSTALL_DIR)/tokenize
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
-	ln -sf $(src)/trim_txt.py $(LOCAL_INSTALL_DIR)/trim-txt
 	ln -sf $(src)/tsv-header.sh $(LOCAL_INSTALL_DIR)/tsv-header
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
@@ -325,11 +324,6 @@ test.trim_tsv: | output/trim_tsv
 	$(ve) && ./src/trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
-.PHONY: test.trim_txt
-test.trim_txt: | output/trim_txt
-	$(ve) && ./src/trim_txt.py < test/trim_txt/input.txt > output/trim_txt/output.txt
-	diff test/trim_txt/expected.output.txt output/trim_txt/output.txt
-
 #.PHONY: test.tab_to_csv
 #test.tab_to_csv: tab_to_csv/escapes.tsv | tab-to-csv csv-to-tab output/tab_to_csv
 #	./src/tab-to-csv/tab-to-csv -u $< | ./src/csv-to-tab/csv-to-tab -e > output/tab_to_csv/escape.tsv
@@ -374,7 +368,7 @@ test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
 
 python_base := convert_date counting_sort csv_to_json csv_to_tab
 python_base += csv_to_xlsx date_fill highlight join_tsv
-python_base += normalize_utf8 reservoir_sample trim_tsv trim_txt tsv_to_json
+python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json
 python_harnesses := $(patsubst %,test.%,$(python_base))
 
