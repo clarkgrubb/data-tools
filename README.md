@@ -253,7 +253,7 @@ If some of the bytes in a file are ASCII, such as when the encoding is one of th
     
 `od -c` uses C backslash sequences or octal bytes for non-ASCII and non-printing ASCII characters.  
 
-`xxd` displays the data in rows of 16 bytes.  Each row is displayed in 3 columns.  The first column is the hex offset of the first byte in the row, the second column is the bytes in hex, and third column is the ASCII characters for the bytes, which a period `.` standing in for control characters and upper 8-bit bytes.  The `-c` flag changes the number of bytes per row:
+`xxd` displays the data in rows of 16 bytes.  Each row is displayed in 3 columns.  The first column is the hex offset of the first byte in the row, the second column is the bytes in hex, and third column is the ASCII characters for the bytes, with a period `.` standing in for control characters and upper 8-bit bytes.  The `-c` flag changes the number of bytes per row:
 
     $ xxd /bin/ls
     $ xxd -c 32 /bin/ls
