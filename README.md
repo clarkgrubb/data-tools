@@ -605,7 +605,7 @@ When relational data is in flat files, we don't have the benefit of uniqueness c
 
     $ wc -l /etc/passwd
     $ awk -F: '{print $1}' /etc/passwd | sort -u | wc -l
-    $ awk -F: 'Pprint $1, $2}' /etc/passwd | sort -u | wc -l
+    $ awk -F: '{print $1, $2}' /etc/passwd | sort -u | wc -l
 
 
 <a name="joins"/>
