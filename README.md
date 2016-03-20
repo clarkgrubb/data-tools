@@ -478,7 +478,7 @@ An efficient and unbiased way to select an exact number of lines from a file is 
 
 [tsv](#tsv) | [csv](#csv) | [xlsx](#xlsx)
 
-As mentioned previously, much that can be done with a SQL SELECT statement in a database can also be done with `awk`, `sort`, and `join`.  If you are not familiar with the commands, consider reading the man pages.
+Much that can be done with a SQL SELECT statement in a database can also be done with `awk`, `sort`, and `join`.  If you are not familiar with the commands, consider reading the man pages.
 
 Relational data can be stored in flat files in a variety of ways.  On Unix, the `/etc/passwd` file stores records one per line, with colons (:) separating the seven fields.  We can use `awk` to query the file.
 
