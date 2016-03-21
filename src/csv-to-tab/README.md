@@ -10,7 +10,7 @@ TSV format: [IANA](https://www.iana.org/assignments/media-types/text/tab-separat
 
 TAB format: same as the TSV format, except that the header is optional.
 
-The TSV format requires a header, but the CSV format does not.  It is difficult for a program to verify that a header is present, hence the name `csv-to-tab` instead of `csv-to-tsv`.
+The TSV format requires a header, but the CSV format does not.  It is difficult for a program to verify that a header is present, hence the name `csv-to-tab` instead of `csv-to-tab`.
 
 Another requirement of a TSV file is for each row to have the same number of fields.  This is also a requirement of a CSV.  The command does not check this.
 

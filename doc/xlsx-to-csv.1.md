@@ -40,7 +40,7 @@ Hence it is more efficient to extract all of the sheets from a large workbook ev
 
 # SEE ALSO
 
-`csv-to-tsv` (1), `strftime` (3)
+`csv-to-tab` (1), `strftime` (3)
 
 http://www.ecma-international.org/publications/standards/Ecma-376.htm
              

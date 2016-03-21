@@ -675,7 +675,7 @@ There is no way to escape the separator when importing files into SQLite.
 ## postgres
 
     $ tab-to-csv < /tmp/pw.tab > /tmp/pw.csv
-    $ tsv-to-csv < /tmp/grp.tab > /tmp/grp.csv
+    $ tab-to-csv < /tmp/grp.tab > /tmp/grp.csv
     
     $ psql
     > create table pw ( name text, pw text, uid int, gid int, gecos text, home text, shell text );
