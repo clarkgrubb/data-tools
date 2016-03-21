@@ -1,15 +1,15 @@
-% DOM-AWK(1)
-% Clark Grubb
+% DOM-RUBY(1)
+% CLARK Grubb
 % February 17, 2013
 
 
 # NAME
 
-dom-awk - read HTML or XML into a DOM object and process it with a Ruby script.
+dom-ruby - read HTML or XML into a DOM object and process it with a Ruby script.
 
 # SYNOPSIS
 
-dom-awk [-x|-h] (-f SCRIPT\_PATH) | RUBY\_SCRIPT) [XML\_OR\_HTML_FILE]
+dom-ruby [-x|-h] (-f SCRIPT\_PATH) | RUBY\_SCRIPT) [XML\_OR\_HTML_FILE]
 
 # DESCRIPTION
 
@@ -65,9 +65,9 @@ A summary of XPath and CSS selectior syntax:
 
 # EXAMPLES
 
-    curl www.google.com | dom-awk  '$_.xpath("//a").each {|o| puts o["href"] }'
+    curl www.google.com | dom-ruby  '$_.xpath("//a").each {|o| puts o["href"] }'
 
-    echo '<xml><foo>bar</foo></xml>' | dom-awk '$_.xpath("//foo").each { |o| puts o.content }'
+    echo '<xml><foo>bar</foo></xml>' | dom-ruby '$_.xpath("//foo").each { |o| puts o.content }'
 
 # OPTIONS
 

@@ -1,15 +1,15 @@
-% JSON-AWK(1)
-% Clark Grubb
+% JSON-RUBY(1)
+% CLARK Grubb
 % February 17, 2013
 
 
 # NAME
 
-json-awk - read JSON objects from a file or standard input and process them with Ruby 
+json-ruby - read JSON objects from a file or standard input and process them with Ruby 
 
 # SYNOPSIS
 
-json-awk [-j|-t] [-i] (-f RUBY\_PATH | RUBY\_SCRIPT) [JSON\_INPUT] ...
+json-ruby [-j|-t] [-i] (-f RUBY\_PATH | RUBY\_SCRIPT) [JSON\_INPUT] ...
 
 # DESCRIPTION
 

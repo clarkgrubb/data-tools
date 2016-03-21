@@ -7,18 +7,18 @@
 #
 # Here are a couple of examples:
 #
-#   curl www.google.com | dom-awk.rb \
+#   curl www.google.com | dom-ruby.rb \
 #     '$_.xpath("//a").each {|o| puts o["href"] }'
 #
 #
-#   echo '<xml><foo>bar</foo></xml>' | dom-awk.rb \
+#   echo '<xml><foo>bar</foo></xml>' | dom-ruby.rb \
 #     '$_.xpath("//foo").each { |o| puts o.content }'
 #
 
 require 'getoptlong'
 
 def usage
-  $stderr.puts 'USAGE: dom-awk [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_FILE]'
+  $stderr.puts 'USAGE: dom-ruby [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_FILE]'
   exit 1
 end
 

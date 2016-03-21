@@ -30,7 +30,7 @@ Each row of the JSON output contains a serialized JSON object.  The values of th
 
 # SEE ALSO
 
-`tsv-to-json` (1), `json-awk` (1)
+`tsv-to-json` (1), `json-ruby` (1)
 
 http://www.ietf.org/rfc/rfc4180.txt
 

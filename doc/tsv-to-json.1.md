@@ -23,7 +23,7 @@ None
 
 # SEE ALSO
 
-`csv-to-json` (1), `json-awk` (1)
+`csv-to-json` (1), `json-ruby` (1)
 
 http://www.iana.org/assignments/media-types/text/tab-separated-values
 

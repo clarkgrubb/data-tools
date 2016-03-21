@@ -101,11 +101,11 @@ install-script:
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_fill.py $(LOCAL_INSTALL_DIR)/date-fill
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
-	ln -sf $(src)/dom_awk.rb $(LOCAL_INSTALL_DIR)/dom-awk
+	ln -sf $(src)/dom_ruby.rb $(LOCAL_INSTALL_DIR)/dom-ruby
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
-	ln -sf $(src)/json_awk.rb $(LOCAL_INSTALL_DIR)/json-awk
+	ln -sf $(src)/json_ruby.rb $(LOCAL_INSTALL_DIR)/json-ruby
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/postgres-to-csv.sh $(LOCAL_INSTALL_DIR)/postgres-to-csv
@@ -223,11 +223,11 @@ test.date_fill: | output/date_fill
 	> output/date_fill/output.tsv
 	diff output/date_fill/output.tsv test/date_fill/expected.output.tsv
 
-.PHONY: test.dom_awk
-test.dom_awk: dom_awk/input.txt | output/dom_awk
-	./src/dom_awk.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
-	> output/dom_awk/output.txt
-	diff test/dom_awk/expected.output.txt output/dom_awk/output.txt
+.PHONY: test.dom_ruby
+test.dom_ruby: dom_ruby/input.txt | output/dom_ruby
+	./src/dom_ruby.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
+	> output/dom_ruby/output.txt
+	diff test/dom_ruby/expected.output.txt output/dom_ruby/output.txt
 
 .PHONY: test.highlight
 test.highlight: highlight/input.txt | output/highlight
@@ -284,12 +284,12 @@ test.join_tsv: | output/join_tsv
 	> output/join_tsv/output.diff.tsv
 	diff test/join_tsv/expected.output.diff.tsv output/join_tsv/output.diff.tsv
 
-.PHONY: test.json_awk
-test.json_awk: json_awk/input.json | output/json_awk
-	./src/json_awk.rb 'puts $$_["foo"]' $< > output/json_awk/output1.txt
-	diff test/json_awk/expected.output.txt output/json_awk/output1.txt
-	./src/json_awk.rb 'puts $$_["foo"]' < $< > output/json_awk/output2.txt
-	diff test/json_awk/expected.output.txt output/json_awk/output2.txt
+.PHONY: test.json_ruby
+test.json_ruby: json_ruby/input.json | output/json_ruby
+	./src/json_ruby.rb 'puts $$_["foo"]' $< > output/json_ruby/output1.txt
+	diff test/json_ruby/expected.output.txt output/json_ruby/output1.txt
+	./src/json_ruby.rb 'puts $$_["foo"]' < $< > output/json_ruby/output2.txt
+	diff test/json_ruby/expected.output.txt output/json_ruby/output2.txt
 
 .PHONY: test.json_diff
 test.json_diff: | output/json_diff
@@ -375,7 +375,7 @@ python_harnesses := $(patsubst %,test.%,$(python_base))
 .PHONY: python.harness
 python.harness: $(python_harnesses)
 
-ruby_base := dom_awk json_awk utf8_viewer
+ruby_base := dom_ruby json_ruby utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
 shell.harness: test.check_tsv test.json_diff test.tsv_header

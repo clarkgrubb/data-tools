@@ -27,7 +27,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     date-seq               create a sequence of dates
 
-    dom-awk                read HTML or XML into DOM object and process it with Ruby
+    dom-ruby               read HTML or XML into DOM object and process it with Ruby
 
     header-sort            sort file, keeping header in place
 
@@ -39,7 +39,7 @@ Command line tools for data extraction, data manipulation, and file format conve
     
     json-pluck             convert JSON array to JSON stream 
 
-    json-awk               read JSON objects from standard input and process them with Ruby
+    json-ruby              read JSON objects from standard input and process them with Ruby
 
     json-diff              show differences between two JSON documents
 
@@ -123,7 +123,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-awk                [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
+    dom-ruby               [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
 
     header-sort            [OPTIONS] FILE
 
@@ -137,7 +137,7 @@ If you have special installation needs, maybe they are covered [here](https://gi
     
     json-pluck             < FILE
 
-    json-awk               [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
+    json-ruby              [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
     json-diff              [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
@@ -821,13 +821,13 @@ Other tools for pretty printing JSON are `jq` and `json` which can be installed 
 
 The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
 
-The *data tools* utility `json-awk` can be used to convert JSON to TSV.
+The *data tools* utility `json-ruby` can be used to convert JSON to TSV.
 
-    $ json-awk 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
+    $ json-ruby 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
 
-The script passed to `json-awk` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-awk` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
+The script passed to `json-ruby` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-ruby` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
 
-An alternative to `python -mjson.tool` and `json-awk` is the `node` based `json` command line tool:
+An alternative to `python -mjson.tool` and `json-ruby` is the `node` based `json` command line tool:
 
     $ npm install json
 
@@ -837,17 +837,17 @@ There are some practices which producers of JSON should follow to reduce the com
 
 When processing JSON, a first task might be to determine what the top level keys in each object are: 
 
-    $ cat foo.json | json-awk 'puts $_.keys.join("\n")' | sort | uniq -c
+    $ cat foo.json | json-ruby 'puts $_.keys.join("\n")' | sort | uniq -c
 
 This code assumes that the top level keys don't contain newlines.  One could check whether this is true:
 
-    $ cat foo.json | json-awk 'puts $_.keys.select {|k| /\n/.match(k)}'
+    $ cat foo.json | json-ruby 'puts $_.keys.select {|k| /\n/.match(k)}'
 
 The value associated with each key can be null, boolean, numeric, string, array, or JSON object.  The value associated with a key should have a consistent type in all of the data.  As a point of style, rather than having a key with a null value, consider omitting the key entirely.
 
 This code lists the top level keys and their values:
 
-    $ cat foo.json | json-awk 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
+    $ cat foo.json | json-ruby 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
 
 If any key has a JSON object as a value, then the above analysis must be repeated.  Note that such data can be flattened:
 
@@ -882,7 +882,7 @@ This forces the client to determine the meaning of the positions and hard code t
 <a name="yaml"/>
 ## yaml
 
-To process YAML, convert it to JSON and use tools such as `json-awk`, `jq` and `json`:
+To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
 
     yaml-to-json .travis.yml | jq '.script' 
 
@@ -891,9 +891,9 @@ This can also be used to verify that YAML is valid.
 <a name="html"/>
 ## html
 
-The *data tools* include a tool called `dom-awk` for using XPATH or CSS selectors to extract data from an HTML file.  Here is an example of getting the links from a web page:
+The *data tools* include a tool called `dom-ruby` for using XPATH or CSS selectors to extract data from an HTML file.  Here is an example of getting the links from a web page:
 
-    $ curl www.google.com | dom-awk '$_.xpath("//a").each {|o| puts o["href"] }'
+    $ curl www.google.com | dom-ruby '$_.xpath("//a").each {|o| puts o["href"] }'
 
 <a name="xml"/>
 ## xml
@@ -906,7 +906,7 @@ To pretty-print XML:
 
     $ xmllint --format FILE.xml
 
-XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document. `dom-awk`, described above for HTML, can also be used on XML documents.
+XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document. `dom-ruby`, described above for HTML, can also be used on XML documents.
 
 Another advantage is schemas.  However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated.  Libraries such as `libxml2` don't implement namespaces completely.
 

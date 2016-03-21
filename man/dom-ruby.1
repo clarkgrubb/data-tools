@@ -1,18 +1,18 @@
-.TH DOM\-AWK 1 "February 17, 2013" 
+.TH DOM-RUBY 1 "February 17, 2013" 
 .SH NAME
 .PP
-dom\-awk \- read HTML or XML into a DOM object and process it with a
-Ruby script.
+dom-ruby - read HTML or XML into a DOM object and process it with a Ruby
+script.
 .SH SYNOPSIS
 .PP
-dom\-awk [\-x|\-h] (\-f SCRIPT_PATH) | RUBY_SCRIPT) [XML_OR_HTML_FILE]
+dom-ruby [-x|-h] (-f SCRIPT_PATH) | RUBY_SCRIPT) [XML_OR_HTML_FILE]
 .SH DESCRIPTION
 .PP
 Read an HTML or XML document from a command line path or standard input
 and process it with a Ruby script.
 The Ruby script can be specified on the command line like \f[C]awk\f[],
 or the Ruby code can be in a file whose path is provided with the
-\f[C]\-f\f[] option.
+\f[C]-f\f[] option.
 .PP
 The HTML/XML document is parsed using the Ruby Nokogiri library and made
 available to the Ruby script which is provided as a command line
@@ -68,7 +68,7 @@ A summary of XPath and CSS selectior syntax:
 .nf
 \f[C]
 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xpath\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ css\ \ \ \ \ \ \ \ \ \ \ \ \ dom
-\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\ \ \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -------------------\ \ --------------\ \ -----------------------------
 by\ id\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //*[\@id="foo"]\ \ \ \ \ \ \ #foo\ \ \ \ \ \ \ \ \ \ \ \ getElementById("foo")
 by\ class\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //*[\@class="foo"]\ \ \ \ .foo\ \ \ \ \ \ \ \ \ \ \ \ getElementsByClassName("foo")
 by\ tag\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //div\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ div\ \ \ \ \ \ \ \ \ \ \ \ \ getElementsByTagName("div")
@@ -84,23 +84,23 @@ search\ from\ current\ node\ \ \ \ .//div
 .IP
 .nf
 \f[C]
-curl\ www.google.com\ |\ dom\-awk\ \ \[aq]$_.xpath("//a").each\ {|o|\ puts\ o["href"]\ }\[aq]
+curl\ www.google.com\ |\ dom-ruby\ \ \[aq]$_.xpath("//a").each\ {|o|\ puts\ o["href"]\ }\[aq]
 
-echo\ \[aq]<xml><foo>bar</foo></xml>\[aq]\ |\ dom\-awk\ \[aq]$_.xpath("//foo").each\ {\ |o|\ puts\ o.content\ }\[aq]
+echo\ \[aq]<xml><foo>bar</foo></xml>\[aq]\ |\ dom-ruby\ \[aq]$_.xpath("//foo").each\ {\ |o|\ puts\ o.content\ }\[aq]
 \f[]
 .fi
 .SH OPTIONS
 .PP
-\-f SCRIPT_PATH, \-\-file=SCRIPT_PATH : Use Ruby code in SCRIPT_PATH to
+-f SCRIPT_PATH, --file=SCRIPT_PATH : Use Ruby code in SCRIPT_PATH to
 process input.
 .PP
-\-h, \-\-html : Used to indicate input is HTML.
+-h, --html : Used to indicate input is HTML.
 .PP
-\-x, \-\-xml : Used to indicate input is XML.
+-x, --xml : Used to indicate input is XML.
 .SH SEE ALSO
 .PP
 \f[C]curl\f[] (1), \f[C]w3m\f[] (1)
 .PP
 http://nokogiri.org/Nokogiri/XML/Node.html
 .SH AUTHORS
-Clark Grubb.
+CLARK Grubb.
