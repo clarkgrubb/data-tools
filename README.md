@@ -589,7 +589,7 @@ The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file 
 <a name="keys"/>
 # KEYS
 
-A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
+A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  Usually one joins on candidate keys; joining on a set of columns which is not a candidate key can be a source of error.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
 
 Candidate keys are a property of the data; they aren't necessarily declared in the schema.  To verify a candidate key, one checks whether the number of rows in table is the same as the number of distinct values of a column or a set of columns:
 
