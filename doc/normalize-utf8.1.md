@@ -34,7 +34,7 @@ consisting of a simple character representation followed by a combining mark.  C
 a string to NFD is faster because the algorithm for converting a string to NFC starts by
 converting it to NFD.
 
-NFKC and NFKD conflate compatibility composites.  These sequences which are
+NFKC and NFKD conflate compatibility composites.  These are sequences which are
 visually distinct but semantically the same.  Examples are the ff and ffi ligatures.
 
 

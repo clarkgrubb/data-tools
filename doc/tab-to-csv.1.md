@@ -17,8 +17,6 @@ Read a tab delimited file from file specified on the command line or standard in
 
 In the tab delimited format fields are delimited by tabs and records are terminated by an end-of-line marker.
 
-There is no mechanism for quoting tabs or newlines, and by default `csv-to-tab` will fail if they occur in the fields of the CSV file.  
-
 # OPTIONS
 
 -u, \--unescape

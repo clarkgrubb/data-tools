@@ -27,7 +27,7 @@ By default the script exits with an error if a line contains invalid JSON.  Use 
 : execute the Ruby script in the file at PATH.
 
 -i, \--ignore
-: ignore lines containing invalid JSON.  A notice is written to standard error.
+: ignore lines containing invalid JSON.  A notice is still written to standard error.
 
 -j, \--json
 : after the Ruby script is executed, write the contents of $_ to standard output as JSON.

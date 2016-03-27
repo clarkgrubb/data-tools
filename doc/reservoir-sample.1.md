@@ -21,8 +21,6 @@ To select a sample size which is proportional to the size of the input, use `awk
 
     awk 'rand() < 0.1'
 
-The script allocates memory for N lines of input.
-
 # OPTIONS
 
 -r SEED, \--random-seed=SEED
