@@ -15,7 +15,7 @@ join-tsv --column=NAME [--null=VALUE|--no-null] [--left|--right|--full] TSV\_FIL
 
 Perform a relation join on two TSV files.  The output is written to standard output in TSV format.
 
-`join-tsv` assumes that TSV\_FILE1 and TSV\_FILE2 in accordance with the IANA MIME type specificsation.
+`join-tsv` assumes that TSV\_FILE1 and TSV\_FILE2 are in accordance with the IANA MIME type specificsation.
 
 `join-tsv` is easier to use than `join` when working with TSV files because it preserves the headers.  It allows specifying the join column by name.  If the join column names differ, the column name if the left (i.e. first) file is used in the output.
 
