@@ -191,7 +191,7 @@ In plain text, control characters other than for line endings and perhaps tabs a
 <a name="encodings"/>
 # ENCODINGS
 
-[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [unicode](#unicode)
+[iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [utf-16](#utf-16) | [unicode](#unicode)
 
 <a name="iconv"/>
 ## iconv
@@ -327,6 +327,22 @@ The *data tools* provide `utf8-category` and `utf8-script`, which summarize the 
  
 Both tools have `-c` and `-s` flags for counting ASCII characters separately or omitting them from the tally entirely.
  
+<a name="utf-16"/>
+## utf-16
+
+Unicode points above `U+FFFF` are represented in UTF-16 by a pair of 16-bit characters call surrogates:
+
+    $ echo -n 𝒷 | iconv -f utf-8 -t utf-16 | xxd
+    0000000: feff d835 dcb7
+
+The first 16-bit character is the byte order mark (BOM).  The second 16-bit character is the high surrogate, and the third 16-bit character is the low surrogate.  A high surrogate is in the range  0xD800 to 0xDBFF, and a low surrogate is in the range 0xDC00 to 0xDFFF.
+
+In some programming languages, surrogates are necessary in string literals for points in the supplementary planes:
+
+    $ scala
+    scala> "\ud835\udcb7"
+    res0: String = 𝒷
+
 <a name="unicode"/>
 ## unicode
 
