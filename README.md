@@ -330,12 +330,12 @@ Both tools have `-c` and `-s` flags for counting ASCII characters separately or 
 <a name="utf-16"/>
 ## utf-16
 
-Unicode points above `U+FFFF` are represented in UTF-16 by a pair of 16-bit characters call surrogates:
+Unicode points above `U+FFFF` are represented in UTF-16 by a pair of 16-bit characters called _surrogates_:
 
     $ echo -n 𝒷 | iconv -f utf-8 -t utf-16 | xxd
     0000000: feff d835 dcb7
 
-The first 16-bit character is the byte order mark (BOM).  The second 16-bit character is the high surrogate, and the third 16-bit character is the low surrogate.  A high surrogate is in the range  0xD800 to 0xDBFF, and a low surrogate is in the range 0xDC00 to 0xDFFF.
+The first 16-bit character is the byte order mark (BOM).  The second 16-bit character is the _high surrogate_, and the third 16-bit character is the _low surrogate_.  A high surrogate is in the range  0xD800 to 0xDBFF, and a low surrogate is in the range 0xDC00 to 0xDFFF.
 
 In some programming languages, surrogates are necessary in string literals for points in the supplementary planes:
 
