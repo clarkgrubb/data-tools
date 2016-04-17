@@ -133,8 +133,9 @@ class UnicodeData
   end
 
   def unprintable?(code_point)
-    general_cat = @unicode_data[code_point][GENERAL_CATEGORY_IDX]
-
+    unicode_data = @unicode_data[code_point]
+    return true if unicode_data.nil?
+    general_cat = unicode_data[GENERAL_CATEGORY_IDX]
     !general_cat || general_cat[0] == 'C'
   end
 
