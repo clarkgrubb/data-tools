@@ -343,6 +343,20 @@ In some programming languages, one must use surrogates to insert a point from th
     scala> "\ud835\udcb7"
     res0: String = 𝒷
 
+Here is Python code describing the conversion from surrogates to code point and back:
+
+    def to_high_and_low_surrogate(n):
+        high = 0xD800 + ((n >> 10) & (2**10 - 1))
+        low = 0xDC00 + (n & (2**10 - 1))
+    
+        return high, low
+    
+    def to_code_point(high, low):
+        assert(0xD800 <= high < 0xDC00)
+        assert(0xDC00 <= low <= 0xDFFF)
+    
+        return (high - 0xD800) * 1024 + (low - 0xDC00)
+
 <a name="unicode"/>
 ## unicode
 
