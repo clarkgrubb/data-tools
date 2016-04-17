@@ -346,6 +346,7 @@ In some programming languages, one must use surrogates to insert a point from th
 Here is Python code describing the conversion from surrogates to code point and back:
 
     def to_high_and_low_surrogate(n):
+        assert(0xFFFF < n <= 0x10FFFF)
         high = 0xD800 + ((n >> 10) & (2**10 - 1))
         low = 0xDC00 + (n & (2**10 - 1))
     
