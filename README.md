@@ -792,8 +792,6 @@ Candidate keys are a property of the data; they aren't necessarily declared in t
 
 Strictly speaking, one should also verify that no proper subset of the columns is also a candidate key.
 
-# JSON, YAML, HTML, and XML
-
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
 
