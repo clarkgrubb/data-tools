@@ -2,7 +2,7 @@
 
 [.txt](#txt) | [.tsv](#tsv) | [.tab](#tab) | [.csv](#csv) | [.xlsx](#xlsx) | [.json](#json) | [.yaml](#yaml) | [.html](#html) | [.xml](#xml)
 
-[plain text](#plaintext) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [keys](#keys) | [joins](#joins) | [hierarchical formats](#hierarchical-fmt)
+[plain text](#plaintext) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [keys](#keys) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
 # SUMMARY
@@ -621,28 +621,6 @@ The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file 
 
 Importing UTF-8 encoded data into Excel is difficult. What I have found to work is to convert the data to a tab delimited `.tab` format, but change the suffix to `.txt` since otherwise Excel will not allow the path to be selected.  Then use `File | Import...` and select `Text file`.  After the file path is selected, Excel drops the user into a wizard which allows the format of the file to be specified. The default file origin on Macintosh is `Macintosh`, which is an 8-bit encoding.  Change it to `Unicode (UTF-8)`.  Select `Delimited`.  One the second screen, set `Delimiters` to `Tab`, and `Text qualifier`, which controls to quote character, to `{none}`.  The third screen allows the user to set the date formats of the columns.
 
-<a name="keys"/>
-# KEYS
-
-A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  Usually one joins on candidate keys; joining on a set of columns which is not a candidate key can be a source of error.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
-
-Candidate keys are a property of the data; they aren't necessarily declared in the schema.  To verify a candidate key, one checks whether the number of rows in table is the same as the number of distinct values of a column or a set of columns:
-
-    > SELECT COUNT(*) FROM customers;
-    > SELECT COUNT(DISTINCT name) FROM customers;
-    > SELECT COUNT(*) FROM (SELECT DISTNCT first_name, last_name FROM customers);
-
-Strictly speaking, one should also verify that no proper subset of the columns is also a candidate key.
-
-When we perform a `SELECT` on a single table, there is an implicit candidate key in the result set.  If the candidate key is a proper subset of a candidate key on the `FROM` table, there is a possibility of duplicate rows or rows with incomplete results in the result set.  This can be rectified with the `DISTINCT` operator or the `GROUP BY` clause, with aggregation functions on the non-candidate key columns, but in general failure to identify a candidate key correctly is a source errors.  Good database design mitigates this; ideally the candidate keys should be obvious from the name of the table.
-
-When relational data is in flat files, we don't have the benefit of uniqueness constraints, so extra care is in order:
-
-    $ wc -l /etc/passwd
-    $ awk -F: '{print $1}' /etc/passwd | sort -u | wc -l
-    $ awk -F: '{print $1, $2}' /etc/passwd | sort -u | wc -l
-
-
 <a name="joins"/>
 # JOINS
 
@@ -800,6 +778,19 @@ The result is the table:
     > val grp = sc.textFile("/etc/group").filter(line => line(0) != '#').map(line => line.split(":"))
     > val j = pw_gid.join(grp_gid).map(tup => List(tup._1) ++ tup._2._1 ++ tup._2._1)
     > j.map(row => row.mkString("\t")).saveAsTextFile("/tmp/pw_grp")
+    
+<a name="keys"/>
+# KEYS
+
+A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
+
+Candidate keys are a property of the data; they aren't necessarily declared in the schema.  To verify a candidate key, one checks whether the number of rows in table is the same as the number of distinct values of a column or a set of columns:
+
+    > SELECT COUNT(*) FROM customers;
+    > SELECT COUNT(DISTINCT name) FROM customers;
+    > SELECT COUNT(*) FROM (SELECT DISTNCT first_name, last_name FROM customers);
+
+Strictly speaking, one should also verify that no proper subset of the columns is also a candidate key.
 
 # JSON, YAML, HTML, and XML
 
