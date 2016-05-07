@@ -558,14 +558,28 @@ Python and similar languages have a `split` method which is ideal for parsing a 
 
 CSV libraries are sometimes used to read TSV files.  This works when the delimiter can be changed from a comma to a tab.  The practice is incorrect if the library does not also allow the quote character to be set to none.
 
-The `join` method in Python and similar languages can be used to generate a TSV file:
+The `join` method in Python and similar languages can be used to generate a TSV file.  It is easy to forget to check for prohibited characters in the data:
 
     def tsv_strip(field):
-        unicode(field).translate(None, u"\f\n\r\t\v\x85\u2028\u2029")
+        return unicode(field).translate(None, u"\f\n\r\t\v\x85\u2028\u2029")
 
     with open(path, 'w') as f:
         for row in rows:
             f.write(u'\t'.join([tsv_strip(field) for field in row]))
+            f.write(u'\n')
+
+Replacing prohibited characters with spaces:
+
+    import re
+    
+    RX_PROHIBITED = re.compile('[\f\n\r\t\v\x85\u2028\u2029]')
+    
+    def tsv_replace(field, replace_char=' '):
+        return RX_PROHIBITED.sub(replace_char, field)
+
+    with open(path, 'w') as f:
+        for row in rows:
+            f.write(u'\t'.join([tsv_replace(field) for field in row]))
             f.write(u'\n')
 
 <a name="csv"/>
