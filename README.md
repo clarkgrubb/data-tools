@@ -792,6 +792,16 @@ Candidate keys are a property of the data; they aren't necessarily declared in t
 
 Strictly speaking, one should also verify that no proper subset of the columns is also a candidate key.
 
+Usually a join condition is a test of equality between one or more columns from the left relation and the same number of columns from the right relation.
+
+    > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name;
+
+Usually, the columns should be a candidate key for either the left or the right relation.  Consider the following perverse query:
+    
+    > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.name = o.customer_name GROUP BY c.name;
+
+If there were two customers with the same name, then not only would their accounts be conflated, but the amount the associated with their common name would be twice the sum of their shared orders.  Note that keeping the name of the customer in the orders relation is a violation of second normal form if a unique identifier for the customer is already in the orders table.
+
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
 
