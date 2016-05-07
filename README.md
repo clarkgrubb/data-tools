@@ -800,7 +800,7 @@ Usually, the columns should be a candidate key for either the left or the right 
     
     > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.name = o.customer_name GROUP BY c.name;
 
-If there were two customers with the same name, then not only would their accounts be conflated, but the amount the associated with their common name would be twice the sum of their shared orders.  Note that keeping the name of the customer in the orders relation is a violation of second normal form if a unique identifier for the customer is already in the orders table.
+If there were _n_ customers with the same name, then the amount associated with their common name would be _n times_ the sum of their orders.  Note that keeping the name of the customer in the orders relation is a violation of second normal form if a unique identifier for the customer is already in the orders table.
 
 <a name="hierarchical-fmt"/>
 # HIERARCHICAL FORMATS
