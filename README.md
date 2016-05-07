@@ -646,7 +646,7 @@ When relational data is in flat files, we don't have the benefit of uniqueness c
 <a name="joins"/>
 # JOINS
 
-[tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres)| [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [spark](#spark)
+[tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres) | [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [spark](#spark)
 
 <a name="join-tab"/>
 ## tab
