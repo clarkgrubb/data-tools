@@ -15,13 +15,14 @@ OptionParser.new do |opts|
 end.parse!
 
 noko = if ARGV[0]
-         Nokigiri::HTML(File.open(ARGV[0]))
+         Nokogiri::HTML(File.open(ARGV[0]))
        else
          Nokogiri::HTML($stdin)
        end
 
 tables = noko.xpath('//table')
 table = tables[options[:table]]
+raise "Table count: #{tables.size}; no table at index #{options[:table]}" if table.nil?
 output = CSV.generate do |csv|
   trows = table.xpath('.//tr')
   trows.each do |trow|
