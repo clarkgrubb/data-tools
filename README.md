@@ -35,6 +35,8 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     highlight              highlight text matching REGEX
 
+    html-table-to-csv      extract table from HTML as CSV
+
     join-tsv               perform a relation join on two TSV files
     
     json-pluck             convert JSON array to JSON stream 
@@ -132,6 +134,8 @@ If you have special installation needs, maybe they are covered [here](https://gi
     highlight              REGEX [FILE]
     
     highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
+
+    html-table-to-csv      [-t NUM] [FILE]
 
     join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     

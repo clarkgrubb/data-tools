@@ -104,6 +104,7 @@ install-script:
 	ln -sf $(src)/dom_ruby.rb $(LOCAL_INSTALL_DIR)/dom-ruby
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
+	ln -sf $(src)/html-table-to-csv.rb $(LOCAL_INSTALL_DIR)/html-table-to-csv
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json_ruby.rb $(LOCAL_INSTALL_DIR)/json-ruby
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
