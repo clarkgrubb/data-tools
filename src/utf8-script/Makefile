@@ -30,15 +30,22 @@ utf8-category: utf8_category.c
 .PHONY: all
 all: utf8-script utf8-category
 
-output:
-	mkdir $@
+output/utf8-script output/utf8-category:
+	mkdir -p $@
 
-output/%: test/input/% | output
+output/utf8-script/%: test/utf8-script/input/% | output/utf8-script
 	./utf8-script < $< > $@
-	diff test/expected.output/$* $@
+	diff test/utf8-script/expected.output/$* $@
 
-tests := one two three
-test_files := $(patsubst %,output/%.txt,$(tests))
+output/utf8-category/%: test/utf8-category/input/% | output/utf8-category
+	./utf8-category < $< > $@
+	diff test/utf8-category/expected.output/$* $@
+
+utf8_script_tests := one two three
+utf8_category_tests := one two three four five
+utf8_script_test_files := $(patsubst %,output/utf8-script/%.txt,$(utf8_script_tests))
+utf8_category_test_files := $(patsubst %,output/utf8-category/%.txt,$(utf8_category_tests))
+test_files := $(utf8_script_test_files) $(utf8_category_test_files)
 
 .PHONY: test
 test: $(test_files)
@@ -47,7 +54,7 @@ rubocop:
 	find . -name '*.rb' | xargs rubocop -D
 
 clean:
-	rm -rf utf8_script.c
+	rm -rf output
 
 clobber: clean
-	rm utf8-script
+	rm utf8-script utf8-category utf8_script.c utf8_category.c

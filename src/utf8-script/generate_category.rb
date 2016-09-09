@@ -109,20 +109,23 @@ class Categories
   def initialize(path)
     @data = Hash.new { |h, k| h[k] = [] }
     File.open(path) do |f|
-      start = nil
+      start_point = nil
+      start_category = nil
       point = nil
       category = nil
       f.each do |line|
         a = line.split(';')
         point, category = a[0].to_i(16), a[2]
-        if start.nil?
-          start = point
-        elsif start != point
-          @data[category] << [start, point - 1]
-          start = point
+        if start_point.nil?
+          start_point = point
+          start_category = category
+        elsif start_category != category
+          @data[start_category] << [start_point, point - 1]
+          start_point = point
+          start_category = category
         end
       end
-      @data[category] << [start, point]
+      @data[start_category] << [start_point, point]
     end
     collapse_ranges
     add_unknown_ranges

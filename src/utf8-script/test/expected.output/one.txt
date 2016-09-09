@@ -1,3 +1,0 @@
-4	Common
-8	Greek
-6	Latin
