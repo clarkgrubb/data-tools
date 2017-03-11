@@ -1,6 +1,6 @@
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
+.SHELLFLAGS := -e -o pipefail -c
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 .SUFFIXES:
@@ -19,11 +19,11 @@ VPATH = test
 
 .PHONY: setup.ruby
 setup.ruby:
-	gem install $(gem_pkgs)
+	gem2.2 install $(gem_pkgs)
 
 .PHONY: setup.python
 setup.python:
-	pip install $(pip_pkgs)
+	pip3 install $(pip_pkgs)
 	if [ -e "$$(which pip3)" ]; then pip3 install $(pip_pkgs); fi
 
 .PHONY: setup
@@ -32,7 +32,7 @@ setup: setup.ruby setup.python
 ve := . ve/bin/activate
 
 ve:
-	virtualenv ve
+	python3 -m venv ve
 	$(ve) && pip install $(pip_pkgs)
 
 hexedit_dir := third-party/hexedit

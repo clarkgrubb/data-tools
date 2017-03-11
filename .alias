@@ -1,0 +1,4 @@
+alias dbuild='docker build -t data-tools .'
+alias dmake='docker run --rm data-tools make'
+alias dbash='docker run -it --rm data-tools /bin/bash'
+alias drun='docker run --rm data-tools'
