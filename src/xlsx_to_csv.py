@@ -3,7 +3,7 @@
 import argparse
 import codecs
 import datetime
-import StringIO
+import io
 import csv
 import os
 import pprint
@@ -22,7 +22,7 @@ class UnicodeWriter(object):
     """
 
     def __init__(self, f, dialect=csv.excel, encoding=ENCODING, **kwds):
-        self.queue = StringIO.StringIO()
+        self.queue = io.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
@@ -57,11 +57,11 @@ def cell_to_str(cell, date_fmt, datemode):
         return dt.strftime(date_fmt)
     elif cell.ctype == xlrd.XL_CELL_NUMBER:
         if cell.value == int(cell.value):
-            return unicode(int(cell.value))
+            return str(int(cell.value))
         else:
-            return unicode(cell.value)
+            return str(cell.value)
     else:
-        return unicode(cell.value)
+        return str(cell.value)
 
 
 def xlsx_book_to_csv(book, sheet_path, sheet_name, date_fmt):

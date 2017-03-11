@@ -84,15 +84,11 @@ def join_tsv(left_join_column,
     if join_type == JOIN_FULL:
         outer_join_big, outer_join_small = True, True
     elif join_type == JOIN_LEFT:
-        if file_order == BIG_FIRST:
-            outer_join_big = True
-        else:
-            outer_join_small = True
+        outer_join_big = file_order == BIG_FIRST
+        outer_join_small = file_order != BIG_FIRST
     elif join_type == JOIN_RIGHT:
-        if file_order == BIG_FIRST:
-            outer_join_small = True
-        else:
-            outer_join_big = True
+        outer_join_small = file_order == BIG_FIRST
+        outer_join_big = file_order != BIG_FIRST
 
     with codecs.open(big, encoding=ENCODING) as f:
         big_header = f.readline().rstrip('\r\n').split('\t')
@@ -142,7 +138,7 @@ def join_tsv(left_join_column,
 
         if outer_join_small:
             big_fields = EMPTY_BIG_HEADER
-            for join_value, small_rows in column_to_rows.iteritems():
+            for join_value, small_rows in column_to_rows.items():
                 if join_value not in join_values:
                     for small_fields in small_rows:
                         print_row(

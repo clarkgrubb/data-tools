@@ -1,0 +1,6 @@
+# Keep warnings which flag usages which are wrong or useless.
+#
+# Keep style warnings if we agree with them and they can always be fixed.
+#
+[MESSAGES CONTROL]
+disable=invalid-name,redefined-outer-name,superfluous-parens,too-many-arguments,too-many-branches,too-many-locals,duplicate-code,too-few-public-methods,too-many-public-methods,no-self-use,too-many-return-statements,too-many-statements,too-many-instance-attributes,too-many-lines,too-many-boolean-expressions

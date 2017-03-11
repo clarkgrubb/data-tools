@@ -13,8 +13,8 @@ man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
 src := $(pwd)/src
-gem_pkgs := json nokogiri
-pip_pkgs := openpyxl xlrd PyYAML
+gem_pkgs := json nokogiri rubocop
+pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
 
 .PHONY: setup.ruby
@@ -408,11 +408,14 @@ pep8:
 
 .PHONY: pylint
 pylint:
-	find . -name '*.py' | xargs pylint --disable=missing-docstring
+	find . -name '*.py' | xargs pylint --rcfile .pylintrc --disable=missing-docstring
 
 .PHONY: shellcheck
 shellcheck:
 	find src -name '*.sh' | xargs shellcheck
+
+.PHONY: check
+check: pylint rubocop pep8 shellcheck test test.harness
 
 .PHONY: clean
 clean:

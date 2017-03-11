@@ -30,7 +30,7 @@ def convert_date(fin, fout, input_fmt, output_fmt, column):
         except ValueError as e:
             sys.stderr.write(
                 "On line number {}: {}\n".format(
-                    lineno, e.message))
+                    lineno, str(e)))
             sys.exit(1)
         fout.write('\t'.join(row))
         fout.write('\n')

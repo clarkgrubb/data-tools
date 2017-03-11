@@ -8,6 +8,7 @@ RUN apk update && apk add \
     ruby2.2 \
     ruby2.2-dev \
     ruby2.2-irb \
+    ruby2.2-rake \
     ruby2.2-rdoc \
     zlib-dev
 
@@ -19,5 +20,6 @@ RUN make setup.ruby
 RUN make setup.python
 
 COPY . /app
+RUN make check
 
-CMD echo 'IMPLEMENT ME: HELP!'
+ENTRYPOINT ./src/dt.sh

@@ -112,7 +112,7 @@ def date_fill(input_path,
 
     start_dt = None
     end_dt = None
-    for date in date_to_line.keys():
+    for date, _ in date_to_line:
         dt = datetime.datetime.strptime(date, output_fmt)
         if not start_dt or dt < start_dt:
             start_dt = dt

@@ -14,7 +14,7 @@ def counting_sort(input_stream, output_stream):
     for key in input_stream:
         buckets[key] += 1
     for key in sorted(buckets.keys()):
-        for _ in xrange(0, buckets[key]):
+        for _ in range(0, buckets[key]):
             output_stream.write(key)
 
 if __name__ == '__main__':
