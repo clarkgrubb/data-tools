@@ -3,7 +3,7 @@
 require 'erb'
 require 'pp'
 
-INDENT = '  '
+INDENT = '  '.freeze
 
 class DecisionNode
   attr_reader :left_node, :right_node, :left, :right, :x, :n, :script
@@ -14,7 +14,7 @@ class DecisionNode
     @right = right
     @n = @scripts.ranges_intersecting_interval(left, right)
     if @n > 1
-      fail 'software error' if right - left <= 1
+      raise 'software error' if right - left <= 1
       @x = x.nil? ? best_x : x
       @left_node = DecisionNode.new(scripts, @left, @x)
       @right_node = DecisionNode.new(scripts, @x, @right)
@@ -40,7 +40,7 @@ class DecisionNode
         best_x = x
       end
     end
-    fail "software error: #{@left} #{@right} #{@n}" if best_x.nil?
+    raise "software error: #{@left} #{@right} #{@n}" if best_x.nil?
     best_x
   end
 
@@ -74,7 +74,9 @@ class Scripts
       f.each do |line|
         md = REGEX.match(line)
         next unless md
-        raw_start, raw_ending, script = md['start'], md['ending'], md['script']
+        raw_start = md['start']
+        raw_ending = md['ending']
+        script = md['script']
         start = raw_start.to_i(16)
         ending = (raw_ending ? raw_ending : raw_start).to_i(16)
         @data[script] << [start, ending]
@@ -136,7 +138,7 @@ class Scripts
         return script unless left >= ending || right < start
       end
     end
-    fail 'software error'
+    raise 'software error'
   end
 
   def probability(start, ending)
@@ -153,11 +155,8 @@ class Scripts
     @data.each do |_, a|
       a.each do |start, ending|
         (start..ending).each do |i|
-          if unknown[i]
-            unknown[i] = false
-          else
-            fail "point #{'%x' % i} used multiple times"
-          end
+          raise "point #{'%x' % i} used multiple times" unless unknown[i]
+          unknown[i] = false
         end
       end
     end
@@ -184,16 +183,17 @@ class Scripts
     new_data = {}
     @data.each do |script, a|
       new_a = []
-      last_start, last_ending = nil, nil
+      last_start = nil
+      last_ending = nil
       a.each do |start, ending|
         if last_ending && start == last_ending + 1
-          last_ending = ending
         elsif last_ending
           new_a << [last_start, last_ending]
-          last_start, last_ending = start, ending
+          last_start = start
         else
-          last_start, last_ending = start, ending
+          last_start = start
         end
+        last_ending = ending
       end
       new_a << [last_start, last_ending] if last_ending
       new_data[script] = new_a

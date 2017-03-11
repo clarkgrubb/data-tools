@@ -400,7 +400,7 @@ test: test.python test.ruby
 
 .PHONY: rubocop
 rubocop:
-	find . -name '*.rb' | xargs rubocop
+	find . -name '*.rb' | xargs rubocop -c .rubocop.yml
 
 .PHONY: pep8
 pep8:

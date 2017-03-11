@@ -57,7 +57,7 @@ opts.each do |opt, arg|
 end
 
 unless script
-  if ARGV.size > 0
+  if !ARGV.empty?
     script = ARGV.shift
   else
     $stderr.puts 'ERROR: no SCRIPT or SCRIPT_FILE specified'
@@ -71,11 +71,11 @@ cmd << 'require "rubygems"'
 cmd << '-e'
 cmd << 'require "nokogiri"'
 cmd << '-e'
-if ARGV[0]
-  cmd << '$_ = ' + constructor + "(File.open('#{ARGV[0]}'))"
-else
-  cmd << '$_ = ' + constructor + '($stdin)'
-end
+cmd << if ARGV[0]
+         '$_ = ' + constructor + "(File.open('#{ARGV[0]}'))"
+       else
+         '$_ = ' + constructor + '($stdin)'
+       end
 cmd << '-e'
 cmd << script
 
