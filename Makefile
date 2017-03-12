@@ -16,15 +16,15 @@ src := $(pwd)/src
 gem_pkgs := json nokogiri rubocop
 pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
+GEM := gem
 
 .PHONY: setup.ruby
 setup.ruby:
-	gem2.2 install $(gem_pkgs)
+	$(GEM) install $(gem_pkgs)
 
 .PHONY: setup.python
 setup.python:
 	pip3 install $(pip_pkgs)
-	if [ -e "$$(which pip3)" ]; then pip3 install $(pip_pkgs); fi
 
 .PHONY: setup
 setup: setup.ruby setup.python

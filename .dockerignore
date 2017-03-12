@@ -6,3 +6,5 @@ src/utf8-script/utf8-category
 src/utf8-script/utf8-script
 src/utf8-script/utf8_category.c
 src/utf8-script/utf8_script.c
+src/utf8-script/Scripts.txt
+src/utf8-script/UnicodeData.txt
