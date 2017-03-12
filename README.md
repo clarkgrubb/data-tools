@@ -94,7 +94,7 @@ To install the necessary Ruby gems and Python packages:
 
     $ sudo make setup
 
-The setup task assumes that `pip` is installed on your system.
+The setup task assumes that `python3` and `pip3` is installed on your system.
 
 To put the *data tools* and man pages in your path:
 
