@@ -5,6 +5,7 @@ then
     echo 'IMPLEMENT ME: list of commands' >&2
     exit 0
 else
-    cmd=shift
-    exec $cmd "$@"
+    cmd=$1
+    shift
+    exec ./bin/$cmd "$@"
 fi
