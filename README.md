@@ -88,11 +88,11 @@ Only tools which read from standard input or write to standard output can partic
 
 # SETUP: UNCLEAN
 
-To install the necessary Ruby gems and Python packages:
+To install the necessary Ruby gems and Python packages globally:
 
     $ sudo make setup
 
-The setup task assumes that `python3` and `pip3` is installed on your system.
+The setup task assumes that `python3` and `pip3` are installed on your system.
 
 To put the *data tools* and man pages in your path:
 
