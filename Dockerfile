@@ -15,11 +15,13 @@ RUN apk update && apk add \
 RUN mkdir /app
 WORKDIR /app
 
-COPY Makefile /app/Makefile
-RUN make setup.ruby
-RUN make setup.python
+RUN gem2.2 install json nokogiri rubocop
+
+COPY requirements.txt /app/requirements.txt
+RUN pip3 install -r requirements.txt
 
 COPY . /app
 RUN make check
 
-ENTRYPOINT ./src/dt.sh
+# ENTRYPOINT ./src/dt.sh
+CMD make

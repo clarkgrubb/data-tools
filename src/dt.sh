@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [ $# -lt 1 ]
 then
     echo 'IMPLEMENT ME: list of commands' >&2
@@ -5,4 +7,4 @@ then
 else
     cmd=shift
     exec $cmd "$@"
-    
+fi
