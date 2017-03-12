@@ -35,18 +35,6 @@ ve:
 	python3 -m venv ve
 	$(ve) && pip install $(pip_pkgs)
 
-hexedit_dir := third-party/hexedit
-hexedit := $(hexedit_dir)/hexedit
-
-$(hexedit):
-	(cd $(hexedit_dir); make)
-
-tawk_dir := third-party/tawk
-tawk := $(tawk_dir)/tawk
-
-$(tawk):
-	(cd $(tawk_dir); make tawk)
-
 .PHONY: utf8-script
 utf8-script:
 	(cd src/$@; make)
@@ -63,22 +51,8 @@ json-pluck:
 tab-to-csv:
 	(cd src/$@; make)
 
-.PHONY: build-hexedit
-build-hexedit: $(hexedit)
-
-.PHONY: build-tawk
-build-tawk: $(tawk)
-
 .PHONY: build
-build: install-hexedit install-tawk install-c
-
-.PHONY: install-hexedit
-install-hexedit: $(hexedit)
-	ln -sf $(pwd)/third-party/hexedit/hexedit/hexedit $(LOCAL_INSTALL_DIR)/hexedit
-
-.PHONY: install-tawk
-install-tawk: $(tawk)
-	ln -sf $(pwd)/third-party/tawk/tawk $(LOCAL_INSTALL_DIR)/tawk
+build: install-c
 
 .PHONY: install-c
 install-c: utf8-script csv-to-tab tab-to-csv json-pluck
@@ -89,7 +63,7 @@ install-c: utf8-script csv-to-tab tab-to-csv json-pluck
 	ln -sf $(pwd)/src/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
 
 .PHONY: install-build
-install-build: install-hexedit install-tawk install-c
+install-build: install-c
 
 .PHONY: install-script
 install-script:
@@ -424,5 +398,3 @@ clean:
 	-find doc -name '*.[0-9]' | xargs rm
 	-find . -name '*.html' | xargs rm
 	-rm -rf output
-	$(MAKE) -C $(tawk_dir) $@
-	$(MAKE) -C $(hexedit_dir) $@

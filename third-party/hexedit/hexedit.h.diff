@@ -1,4 +1,0 @@
-16c16
-< #include <curses.h>
----
-> #include <ncurses/curses.h>
