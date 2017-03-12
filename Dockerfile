@@ -18,7 +18,7 @@ RUN apk update \
 
 WORKDIR /app
 
-RUN gem2.2 install json nokogiri rubocop
+RUN gem2.2 install rubocop
 
 COPY requirements.txt /app/requirements.txt
 RUN pip3 install -r requirements.txt
@@ -28,5 +28,5 @@ RUN make check \
     && mkdir /app/bin \
     && LOCAL_INSTALL_DIR=/app/bin make install
 
-ENTRYPOINT ["./src/dt.sh"]
+ENTRYPOINT ["./src/dt-docker.sh"]
 # CMD make

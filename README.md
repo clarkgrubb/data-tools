@@ -86,19 +86,15 @@ Only tools which read from standard input or write to standard output can partic
     $ alias dt='docker run -i --rm clarkgrubb/data-tools'
     $ dt utf8-viewer < /etc/passwd
 
-# SETUP: UNCLEAN
+# SETUP: UNCONTAINED
 
-To install the necessary Ruby gems and Python packages globally:
+If `python3`, `pip3`, and a recent version of `ruby` are installed on
+your system, then this might work:
 
-    $ sudo make setup
-
-The setup task assumes that `python3` and `pip3` are installed on your system.
-
-To put the *data tools* and man pages in your path:
-
-    $ make install
-
-It must be run with permission to create files in the install directory as it creates symlinks to the *data tools* repository.
+    $ git clone https://github.com/clarkgrubb/data-tools.git
+    $ cd data-tools
+    $ make setup
+    $ ./src/install-dt.sh /usr/local/bin
 
 <a name="how-to-run"/>
 # HOW TO RUN

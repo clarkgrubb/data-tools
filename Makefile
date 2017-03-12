@@ -13,27 +13,30 @@ man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
 src := $(pwd)/src
-gem_pkgs := json rubocop
 pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
-GEM := gem
 
 .PHONY: setup.ruby
 setup.ruby:
-	$(GEM) install $(gem_pkgs)
+	gem install bundler
+	bundle binstub rubocop
 
 .PHONY: setup.python
 setup.python:
-	pip3 install $(pip_pkgs)
+	pip3 install -r requirements.txt
+
+bin:
+	mkdir $@
+	LOCAL_INSTALL_DIR=$(shell pwd)/bin make install-script install-c
 
 .PHONY: setup
-setup: setup.ruby setup.python
+setup: bin setup.ruby setup.python
 
 ve := . ve/bin/activate
 
 ve:
 	python3 -m venv ve
-	$(ve) && pip install $(pip_pkgs)
+	. ve/bin/activate && pip install -r requirements.txt
 
 .PHONY: utf8-script
 utf8-script:
@@ -353,28 +356,17 @@ ruby.harness: $(ruby_harnesses)
 .PHONY: test.harness
 test.harness: python.harness ruby.harness shell.harness
 
-.PHONY: test.python
-test.python:
-	find . -name 'test*.py' | xargs python3
-
-.PHONY: test.ruby
-test.ruby:
-	find . -name 'test*.rb' | xargs ruby2.2
-
-.PHONY: test
-test: test.python test.ruby
-
 .PHONY: rubocop
 rubocop:
-	find . -name '*.rb' | xargs rubocop -c .rubocop.yml
+	find src -name '*.rb' | xargs rubocop -c .rubocop.yml
 
 .PHONY: pep8
 pep8:
-	find . -name '*.py' | xargs pep8 --max-line-length=100
+	find src -name '*.py' | xargs pep8 --max-line-length=100
 
 .PHONY: pylint
 pylint:
-	find . -name '*.py' | xargs pylint --rcfile .pylintrc --disable=missing-docstring
+	find src -name '*.py' | xargs pylint --rcfile .pylintrc --disable=missing-docstring
 
 .PHONY: shellcheck
 shellcheck:
@@ -382,7 +374,7 @@ shellcheck:
 
 # TODO: no shellcheck
 .PHONY: check
-check: pylint rubocop pep8 test test.harness
+check: pylint rubocop pep8 test.harness
 
 .PHONY: clean
 clean:

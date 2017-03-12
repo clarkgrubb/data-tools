@@ -10,5 +10,5 @@ then
 else
     cmd=$1
     shift
-    exec ./bin/$cmd "$@"
+    exec "./bin/$cmd" "$@"
 fi
