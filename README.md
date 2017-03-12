@@ -29,8 +29,6 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     header-sort            sort file, keeping header in place
 
-    hexedit                edit a binary file
-
     highlight              highlight text matching REGEX
 
     join-tsv               perform a relation join on two TSV files
@@ -53,8 +51,6 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     tab-to-csv             convert tab delimited file to CSV
 
-    tawk                   awk, but uses tabs for FS and OFS by default
- 
     tokenize               extract words from English language text
 
     trim-tsv               trim whitespace from fields of TSV file
@@ -120,8 +116,6 @@ It must be run with permission to create files in the install directory as it cr
     date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
     header-sort            [OPTIONS] FILE
-
-    hexedit                [-m|-s] FILE
 
     highlight              REGEX [FILE]
     
@@ -238,8 +232,6 @@ When a file is in an unknown encoding, one can inspect it byte-by-byte.
     $ od -b /bin/ls
 
 `od -b` is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding assumed by the display.  On the other hand it is difficult to make sense of octal bytes.
-
-The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied: `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
 If some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal yet easier-to-interpret way:
     
@@ -532,10 +524,6 @@ The default field separator for `awk` is whitespace.  The correct way to use `aw
 
     $ awk 'BEGIN {FS="\t"; OFS="\t"} ...'
 
-This is an error-prone situation, because sometimes the default behavior works correctly on a TSV file.  Because specifying the field separators is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
-
-    $ tawk '...'
-
 The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient—when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
@@ -577,7 +565,7 @@ RFC 4180 defines the EOL marker as CRLF.  The *data tools* use LF as the EOL mar
 
 CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are used, and double quotes themselves are escaped by doubling them. 
 
-The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
+The *data tools* repo provides utilities for converting between TSV and CSV:
 
     csv-to-tab
     tab-to-csv
