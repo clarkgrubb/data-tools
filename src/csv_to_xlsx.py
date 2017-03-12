@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import codecs
 import csv
 import re
 import sys
@@ -25,25 +24,13 @@ def path_to_sheetname(path):
     return sheetname[0:MAX_SHEETNAME_LENGTH].strip()
 
 
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
-
-
-def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
-    csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
-                            dialect=dialect, **kwargs)
-    for row in csv_reader:
-        yield [str(cell, 'utf-8') for cell in row]
-
-
 def csv_to_xlsx(input_files, output_file):
     wb = openpyxl.Workbook()
     sheetnames = {}
 
     for filenum, input_file in enumerate(input_files):
-        with codecs.open(input_file, encoding=ENCODING) as f:
-            rows = unicode_csv_reader(f)
+        with open(input_file, encoding=ENCODING) as f:
+            rows = csv.reader(f, dialect=csv.excel)
             if filenum == 0:
                 ws = wb.get_active_sheet()
             else:

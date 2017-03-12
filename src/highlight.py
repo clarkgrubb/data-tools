@@ -32,7 +32,7 @@ INVERT = '\033[01;7m'
 def highlight(input_stream, output_stream, esc_seq_to_pattern):
     for line in input_stream:
         output_line = line
-        for esc_seq, pattern in esc_seq_to_pattern.iteritems():
+        for esc_seq, pattern in esc_seq_to_pattern.items():
             rx = re.compile("({})".format(pattern))
             output_line = rx.sub('{}\\1{}'.format(esc_seq, NORMAL),
                                  output_line)
