@@ -4,3 +4,5 @@ src/json-pluck/json-pluck
 src/tab-to-csv/tab-to-csv
 src/utf8-script/utf8-category
 src/utf8-script/utf8-script
+src/utf8-script/utf8_category.c
+src/utf8-script/utf8_script.c
