@@ -27,15 +27,11 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     date-seq               create a sequence of dates
 
-    dom-ruby               read HTML or XML into DOM object and process it with Ruby
-
     header-sort            sort file, keeping header in place
 
     hexedit                edit a binary file
 
     highlight              highlight text matching REGEX
-
-    html-table-to-csv      extract table from HTML as CSV
 
     join-tsv               perform a relation join on two TSV files
     
@@ -123,8 +119,6 @@ It must be run with permission to create files in the install directory as it cr
 
     date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-ruby               [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
-
     header-sort            [OPTIONS] FILE
 
     hexedit                [-m|-s] FILE
@@ -132,8 +126,6 @@ It must be run with permission to create files in the install directory as it cr
     highlight              REGEX [FILE]
     
     highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
-
-    html-table-to-csv      [-t NUM] [FILE]
 
     join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     
@@ -927,9 +919,9 @@ This can also be used to verify that YAML is valid.
 <a name="html"/>
 ## html
 
-The *data tools* include a tool called `dom-ruby` for using XPATH or CSS selectors to extract data from an HTML file.  Here is an example of getting the links from a web page:
+TODO: a replacement for `dom-ruby`.
 
-    $ curl www.google.com | dom-ruby '$_.xpath("//a").each {|o| puts o["href"] }'
+TODO: a replacement for `html-table-to-csv`
 
 <a name="xml"/>
 ## xml
@@ -942,7 +934,7 @@ To pretty-print XML:
 
     $ xmllint --format FILE.xml
 
-XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document. `dom-ruby`, described above for HTML, can also be used on XML documents.
+XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document.
 
 Another advantage is schemas.  However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated.  Libraries such as `libxml2` don't implement namespaces completely.
 
