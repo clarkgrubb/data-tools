@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import codecs
 import collections
 import os
 import sys
@@ -16,12 +15,9 @@ JOIN_FULL = 4
 DEFAULT_OUTER_NULL = ''
 outer_null = None
 
-sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
-sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
-
 
 def header_and_column_to_rows(path, column):
-    with codecs.open(path, encoding=ENCODING) as f:
+    with open(path, encoding=ENCODING) as f:
         column_to_rows = collections.defaultdict(list)
 
         header = f.readline().rstrip('\r\n').split('\t')
@@ -90,7 +86,7 @@ def join_tsv(left_join_column,
         outer_join_small = file_order == BIG_FIRST
         outer_join_big = file_order != BIG_FIRST
 
-    with codecs.open(big, encoding=ENCODING) as f:
+    with open(big, encoding=ENCODING) as f:
         big_header = f.readline().rstrip('\r\n').split('\t')
         row_len = len(big_header)
         column_index = None

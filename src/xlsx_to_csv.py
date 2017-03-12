@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-
 import argparse
-import codecs
 import datetime
-import io
 import csv
 import os
 import pprint
@@ -14,30 +11,6 @@ DATE_FMT = '%Y-%m-%dT%H:%M:%S'
 ENCODING = 'utf-8'
 CSV_SUFFIX = '.csv'
 PP = pprint.PrettyPrinter()
-
-
-class UnicodeWriter(object):
-    """
-    This class is lifted from http://docs.python.org/2/library/csv.html
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding=ENCODING, **kwds):
-        self.queue = io.StringIO()
-        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
-        self.stream = f
-        self.encoder = codecs.getincrementalencoder(encoding)()
-
-    def writerow(self, row):
-        self.writer.writerow([s.encode(ENCODING) for s in row])
-        data = self.queue.getvalue()
-        data = data.decode(ENCODING)
-        data = self.encoder.encode(data)
-        self.stream.write(data)
-        self.queue.truncate(0)
-
-    def writerows(self, rows):
-        for row in rows:
-            self.writerow(row)
 
 
 def list_xlsx_sheets(xlsx_path, output_stream):
@@ -69,8 +42,8 @@ def xlsx_book_to_csv(book, sheet_path, sheet_name, date_fmt):
     if sheet_path == '-':
         f = sys.stdout
     else:
-        f = open(sheet_path, 'wb')
-    csvw = UnicodeWriter(f)
+        f = open(sheet_path, 'w')
+    csvw = csv.writer(f, dialect=csv.excel)
     for rownum in range(0, sheet.nrows):
         row = [cell_to_str(cell, date_fmt, book.datemode)
                for cell
