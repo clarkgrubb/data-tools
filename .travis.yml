@@ -1,8 +1,0 @@
-language: python
-  - "3.5"
-before_install:
-  - sudo apt-get update -qq
-  - sudo ln -s $(which python) /usr/local/bin/python3
-  - sudo ln -s $(which pip) /usr/local/bin/pip3
-install: make setup.ruby; sudo make setup.python
-script: make test.harness
