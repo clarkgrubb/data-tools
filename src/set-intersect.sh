@@ -6,8 +6,8 @@ then
     exit 1
 fi
 
-sorted1=$(mktemp /tmp/set-diff-XXXXX)
-sorted2=$(mktemp /tmp/set-diff-XXXXX)
+sorted1=$(mktemp)
+sorted2=$(mktemp)
 
 sort -u "$1" > "$sorted1"
 sort -u "$2" > "$sorted2"
