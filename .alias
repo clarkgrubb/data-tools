@@ -1,0 +1,4 @@
+alias dbuild='docker build -t clarkgrubb/data-tools .'
+alias dmake='docker run --rm clarkgrubb/data-tools make'
+alias dbash='docker run -it --rm clarkgrubb/data-tools /bin/bash'
+alias dt='docker run -i --rm clarkgrubb/data-tools'

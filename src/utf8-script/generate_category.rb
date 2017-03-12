@@ -3,7 +3,7 @@
 require 'erb'
 require 'pp'
 
-INDENT = '  '
+INDENT = '  '.freeze
 
 LONG_CATEGORIES = {
   'Lu' => 'Uppercase_Letter',
@@ -44,7 +44,7 @@ LONG_CATEGORIES = {
   'Co' => 'Private_Use',
   'Cn' => 'Unassigned',
   'C' => 'Other'
-}
+}.freeze
 
 class DecisionNode
   attr_reader :left_node, :right_node, :left, :right, :x, :n, :category
@@ -55,7 +55,7 @@ class DecisionNode
     @right = right
     @n = @categories.ranges_intersecting_interval(left, right)
     if @n > 1
-      fail 'software error' if right - left <= 1
+      raise 'software error' if right - left <= 1
       @x = x.nil? ? best_x : x
       @left_node = DecisionNode.new(categories, @left, @x)
       @right_node = DecisionNode.new(categories, @x, @right)
@@ -81,7 +81,7 @@ class DecisionNode
         best_x = x
       end
     end
-    fail "software error: #{@left} #{@right} #{@n}" if best_x.nil?
+    raise "software error: #{@left} #{@right} #{@n}" if best_x.nil?
     best_x
   end
 
@@ -115,7 +115,8 @@ class Categories
       category = nil
       f.each do |line|
         a = line.split(';')
-        point, category = a[0].to_i(16), a[2]
+        point = a[0].to_i(16)
+        category = a[2]
         if start_point.nil?
           start_point = point
           start_category = category
@@ -197,7 +198,7 @@ class Categories
         return category unless left >= ending || right < start
       end
     end
-    fail 'software error'
+    raise 'software error'
   end
 
   def probability(start, ending)
@@ -214,11 +215,8 @@ class Categories
     @data.each do |_, a|
       a.each do |start, ending|
         (start..ending).each do |i|
-          if unknown[i]
-            unknown[i] = false
-          else
-            fail "point #{'%x' % i} used multiple times"
-          end
+          raise "point #{'%x' % i} used multiple times" unless unknown[i]
+          unknown[i] = false
         end
       end
     end
@@ -245,16 +243,17 @@ class Categories
     new_data = {}
     @data.each do |category, a|
       new_a = []
-      last_start, last_ending = nil, nil
+      last_start = nil
+      last_ending = nil
       a.each do |start, ending|
         if last_ending && start == last_ending + 1
-          last_ending = ending
         elsif last_ending
           new_a << [last_start, last_ending]
-          last_start, last_ending = start, ending
+          last_start = start
         else
-          last_start, last_ending = start, ending
+          last_start = start
         end
+        last_ending = ending
       end
       new_a << [last_start, last_ending] if last_ending
       new_data[category] = new_a

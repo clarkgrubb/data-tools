@@ -1,8 +1,0 @@
-language: python
-  - "2.7"
-  - "3.4"
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y python-virtualenv
-install: make setup.ruby; sudo make setup.python
-script: make test.harness

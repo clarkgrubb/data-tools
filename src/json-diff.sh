@@ -14,8 +14,8 @@ file1=${args[$(( $# - 2 ))]}
 file2=${args[$(( $# - 1 ))]}
 unset args[$(( $# - 1 ))]
 unset args[$(( $# - 2 ))]
-normalized1=$(mktemp /tmp/json-diff-XXXXX)
-normalized2=$(mktemp /tmp/json-diff-XXXXX)
+normalized1=$(mktemp)
+normalized2=$(mktemp)
 
 function cleanup {
     rm -f "$normalized1" "$normalized2"
@@ -28,11 +28,11 @@ function cleanup_and_exit {
     exit "$1"
 }
 
-if ! python -mjson.tool < "$file1" > "$normalized1"
+if ! python3 -mjson.tool --sort-keys < "$file1" > "$normalized1"
 then
     cleanup_and_exit 2
 fi
-if ! python -mjson.tool < "$file2" > "$normalized2"
+if ! python3 -mjson.tool --sort-keys < "$file2" > "$normalized2"
 then
     cleanup_and_exit 2
 fi

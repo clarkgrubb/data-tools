@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 import argparse
-import codecs
 import sys
 import unicodedata
 
@@ -10,10 +8,6 @@ NFC = 'NFC'
 NFD = 'NFD'
 NFKC = 'NFKC'
 NFKD = 'NFKD'
-
-sys.stdin = codecs.getreader(ENCODING)(sys.stdin)
-sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
-sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
 
 
 def normalize_utf8(input_stream, output_stream, normalization_form):
@@ -71,7 +65,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if args.positional_args:
-        fin = codecs.open(args.positional_args, encoding='utf-8')
+        fin = open(args.positional_args, encoding='utf-8')
     else:
         fin = sys.stdin
 

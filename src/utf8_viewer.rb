@@ -2,12 +2,12 @@
 
 require 'optparse'
 
-UNICODE_DATA_CACHE = '/tmp/UnicodeData.txt'
-NOT_FOUND = '<NOT FOUND>'
+UNICODE_DATA_CACHE = '/tmp/UnicodeData.txt'.freeze
+NOT_FOUND = '<NOT FOUND>'.freeze
 
-COLUMN_SEP = ' '
-SECTION_SEP = '   '
-OFFSET_SEP = ':'
+COLUMN_SEP = ' '.freeze
+SECTION_SEP = '   '.freeze
+OFFSET_SEP = ':'.freeze
 
 ZEROS_BYTE = 0
 ONES_BYTE = 2**8 - 1
@@ -17,7 +17,7 @@ DEFAULT_WIDTH = 8
 # black square
 INVALID_BYTES = '25A0'.to_i(16)
 INVALID_CODE_POINT = -1
-INVALID_CODE_POINT_HEX = '----'
+INVALID_CODE_POINT_HEX = '----'.freeze
 
 # white square
 UNPRINTABLE_CODE_POINT = '25A1'.to_i(16)
@@ -35,7 +35,7 @@ PREFIX_MASK = {
   2 => [MASK3, MASK2],
   3 => [MASK4, MASK2, MASK2],
   4 => [MASK5, MASK2, MASK2, MASK2]
-}
+}.freeze
 
 PREFIX = {
   1 => [0b00000000],
@@ -51,17 +51,17 @@ PREFIX = {
         0b10000000,
         0b10000000,
         0b10000000]
-}
+}.freeze
 
 SHIFTS = {
   1 => [0],
   2 => [6, 0],
   3 => [12, 6, 0],
   4 => [18, 12, 6, 0]
-}
+}.freeze
 
 class UnicodeData
-  UNICODE_DATA_URL = 'ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt'
+  UNICODE_DATA_URL = 'ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt'.freeze
   POINT_IDX = 0
   NAME_IDX = 1
   GENERAL_CATEGORY_IDX = 2
@@ -107,7 +107,7 @@ class UnicodeData
     'Sc' => 'Symbol, Currency',
     'Sk' => 'Symbol, Modifier',
     'So' => 'Symbol, Other'
-  }
+  }.freeze
 
   def initialize(path)
     @unicode_data = {}
@@ -145,7 +145,7 @@ class UnicodeData
 
   def download(path)
     return if system("curl #{UNICODE_DATA_URL} 2> /dev/null > #{path}")
-    fail "failed to download #{UNICODE_DATA_URL}"
+    raise "failed to download #{UNICODE_DATA_URL}"
   end
 end
 
@@ -160,11 +160,7 @@ class ByteStream
   def next
     s = _next
     @offset += 1
-    if RUBY_VERSION.match(/^1\.8/)
-      s ? s[0] : nil
-    else
-      s ? s.ord : nil
-    end
+    s ? s.ord : nil
   end
 end
 
@@ -176,7 +172,7 @@ end
 
 class ArrayByteStream < ByteStream
   def check_byte(byte)
-    fail "not a byte: #{byte}" if byte < ZEROS_BYTE || byte > ONES_BYTE
+    raise "not a byte: #{byte}" if byte < ZEROS_BYTE || byte > ONES_BYTE
   end
 
   def arg_to_byte(arg)
@@ -190,7 +186,7 @@ class ArrayByteStream < ByteStream
     when /^[1-9][0-9]*$/
       arg.to_i
     else
-      fail "invalid arg: #{arg}: must be binary, octal, decimal, or hex"
+      raise "invalid arg: #{arg}: must be binary, octal, decimal, or hex"
     end
   end
 
@@ -253,20 +249,20 @@ class CharFormatter
 
   def print_rendered_code_points(width)
     augmented = @code_points.dup
-    fail 'code points exceed width' if @code_points.size > width
+    raise 'code points exceed width' if @code_points.size > width
     augmented.concat([32] * (width - @code_points.size))
     print augmented.map { |cp| render_code_point(cp) }.join(COLUMN_SEP)
     print '  '
   end
 
   def print_line(width)
-    return unless @code_points.size > 0
+    return if @code_points.empty?
 
-    print "#{to_hex(@byte_offsets.first)}" if @options[:byte_offset]
+    print to_hex(@byte_offsets.first).to_s if @options[:byte_offset]
 
     if @options[:char_offset]
       print COLUMN_SEP if @options[:byte_offset]
-      print "#{to_hex(@char_offsets.first)}"
+      print to_hex(@char_offsets.first).to_s
     end
 
     if @options[:byte_offset] || @options[:char_offset]
@@ -314,17 +310,17 @@ end
 
 def classify_byte(byte)
   if byte & MASK1 == PREFIX[1][0]
-    return :first_of_one
+    :first_of_one
   elsif byte & MASK3 == PREFIX[2][0]
-    return :first_of_two
+    :first_of_two
   elsif byte & MASK4 == PREFIX[3][0]
-    return :first_of_three
+    :first_of_three
   elsif byte & MASK5 == PREFIX[4][0]
-    return :first_of_four
+    :first_of_four
   elsif byte & MASK2 == PREFIX[2][1]
-    return :not_first
+    :not_first
   else
-    return :invalid
+    :invalid
   end
 end
 
@@ -357,7 +353,7 @@ def utf8_stream_to_unicode(byte_stream, output_stream, options)
     byte = byte_stream.next
     break if byte.nil?
 
-    case (classify_byte(byte))
+    case classify_byte(byte)
     when :first_of_one
       bytes = [byte]
     when :first_of_two
@@ -413,7 +409,7 @@ def parse_options
 
     opts.on('-w', '--width NUM') do |arg|
       options[:width] = arg.to_i
-      fail "invalid width: #{options[:width]}" if options[:width] < 1
+      raise "invalid width: #{options[:width]}" if options[:width] < 1
     end
 
     opts.on('-b', '--byte-offset') do
@@ -450,14 +446,14 @@ if $PROGRAM_NAME == __FILE__
   end
 
   if options[:arg]
-    byte_stream = ArrayByteStream.new(ARGV, options) if ARGV.size > 0
+    byte_stream = ArrayByteStream.new(ARGV, options) unless ARGV.empty?
 
   else
-    if ARGV[0]
-      input_stream = File.open(ARGV[0])
-    else
-      input_stream = $stdin
-    end
+    input_stream = if ARGV[0]
+                     File.open(ARGV[0])
+                   else
+                     $stdin
+                   end
     byte_stream = IOByteStream.new(input_stream, options)
   end
 

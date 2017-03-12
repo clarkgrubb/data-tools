@@ -1,39 +1,19 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 import argparse
-import codecs
 import csv
 import json
 import sys
 
 ENCODING = 'utf-8'
 
-sys.stdin = codecs.getreader(ENCODING)(sys.stdin)
-sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
-sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
-
-
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
-
-
-def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
-    csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
-                            dialect=dialect, **kwargs)
-    for row in csv_reader:
-        yield [unicode(cell, 'utf-8') for cell in row]
-
 
 def csv_to_json(input_stream, output_stream, header_str, delimiter, quotechar):
-    reader = unicode_csv_reader(input_stream,
-                                delimiter=delimiter,
-                                quotechar=quotechar)
+    reader = csv.reader(input_stream, delimiter=delimiter, quotechar=quotechar)
 
     if header_str:
         header = header_str.split(',')
     else:
-        header = reader.next()
+        header = reader.__next__()
 
     for row in reader:
         output_stream.write(json.dumps(dict(zip(header, row))))
@@ -57,7 +37,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.input:
-        f = codecs.open(args.input, encoding=ENCODING)
+        f = open(args.input, encoding=ENCODING)
     else:
         f = sys.stdin
 

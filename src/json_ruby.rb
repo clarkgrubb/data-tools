@@ -60,7 +60,7 @@ opts.each do |opt, arg|
 end
 
 unless script
-  if ARGV.size > 0
+  if !ARGV.empty?
     script = ARGV.shift
   else
     $stderr.puts 'ERROR: no SCRIPT or SCRIPT_FILE specified'
@@ -72,11 +72,11 @@ cmd = ['ruby', '-n']
 cmd << '-e'
 cmd << 'BEGIN {require "rubygems"; require "json"; $nr = 0}'
 cmd << '-e'
-if ignore
-  cmd << 'begin; $_ = JSON.parse($_); rescue; $stderr.write("ERROR: invalid json: #{$_}"); $_ = nil; end; $nr += 1'
-else
-  cmd << '$_ = JSON.parse($_); $nr += 1'
-end
+cmd << if ignore
+         'begin; $_ = JSON.parse($_); rescue; $stderr.write("ERROR: invalid json: #{$_}"); $_ = nil; end; $nr += 1'
+       else
+         '$_ = JSON.parse($_); $nr += 1'
+       end
 cmd << '-e'
 cmd << script
 

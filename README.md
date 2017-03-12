@@ -1,4 +1,4 @@
-[summary](#summary) | [setup](#setup) | [how to run](#how-to-run) | <img src="https://travis-ci.org/clarkgrubb/data-tools.svg?branch=master" alt="build status"/>
+[summary](#summary) | [setup](#setup) | [how to run](#how-to-run)
 
 [.txt](#txt) | [.tsv](#tsv) | [.tab](#tab) | [.csv](#csv) | [.xlsx](#xlsx) | [.json](#json) | [.yaml](#yaml) | [.html](#html) | [.xml](#xml)
 
@@ -27,15 +27,9 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     date-seq               create a sequence of dates
 
-    dom-ruby               read HTML or XML into DOM object and process it with Ruby
-
     header-sort            sort file, keeping header in place
 
-    hexedit                edit a binary file
-
     highlight              highlight text matching REGEX
-
-    html-table-to-csv      extract table from HTML as CSV
 
     join-tsv               perform a relation join on two TSV files
     
@@ -57,8 +51,6 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     tab-to-csv             convert tab delimited file to CSV
 
-    tawk                   awk, but uses tabs for FS and OFS by default
- 
     tokenize               extract words from English language text
 
     trim-tsv               trim whitespace from fields of TSV file
@@ -88,21 +80,25 @@ Command line tools are composable when the output of one command can be the inpu
 Only tools which read from standard input or write to standard output can participate in a pipeline.  Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
 <a name="setup"/>
-# SETUP
+# SETUP: DOCKER
 
-To install the necessary Ruby gems and Python packages:
+    $ docker pull clarkgrubb/data-tools
+    $ alias dt='docker run -i --rm clarkgrubb/data-tools'
+    $ dt utf8-viewer < /etc/passwd
+
+# SETUP: UNCLEAN
+
+To install the necessary Ruby gems and Python packages globally:
 
     $ sudo make setup
 
-The setup task assumes that `pip` is installed on your system.
+The setup task assumes that `python3` and `pip3` are installed on your system.
 
 To put the *data tools* and man pages in your path:
 
     $ make install
 
 It must be run with permission to create files in the install directory as it creates symlinks to the *data tools* repository.
-
-If you have special installation needs, maybe they are covered [here](https://github.com/clarkgrubb/data-tools/blob/master/doc/INSTALL.md).
 
 <a name="how-to-run"/>
 # HOW TO RUN
@@ -125,17 +121,11 @@ If you have special installation needs, maybe they are covered [here](https://gi
 
     date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    dom-ruby               [-x|-h] (-f SCRIPT_FILE | SCRIPT) [HTML_OR_XML_FILE]
-
     header-sort            [OPTIONS] FILE
-
-    hexedit                [-m|-s] FILE
 
     highlight              REGEX [FILE]
     
     highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
-
-    html-table-to-csv      [-t NUM] [FILE]
 
     join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     
@@ -248,8 +238,6 @@ When a file is in an unknown encoding, one can inspect it byte-by-byte.
     $ od -b /bin/ls
 
 `od -b` is an unequivocal way to look at the data.  It removes the confusion caused by the character encoding assumed by the display.  On the other hand it is difficult to make sense of octal bytes.
-
-The *data tools* install a version of the editor [hexedit](http://rigaux.org/hexedit.html) to which a [patch](http://www.volkerschatz.com/unix/hexeditpatch.html) supporting aligned search has been applied: `F1` for help, `^S` to search, `^X` to exit.  Emacs key bindings can often be used for movement.  `hexedit` displays the bytes in hexadecimal.
 
 If some of the bytes in a file are ASCII, such as when the encoding is one of the many 8-bit extensions of ASCII, then `od -c` will display the file in an unequivocal yet easier-to-interpret way:
     
@@ -542,10 +530,6 @@ The default field separator for `awk` is whitespace.  The correct way to use `aw
 
     $ awk 'BEGIN {FS="\t"; OFS="\t"} ...'
 
-This is an error-prone situation, because sometimes the default behavior works correctly on a TSV file.  Because specifying the field separators is a bit tedious, the repo contains a `tawk` command which uses tabs by default:
-
-    $ tawk '...'
-
 The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient—when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
@@ -587,7 +571,7 @@ RFC 4180 defines the EOL marker as CRLF.  The *data tools* use LF as the EOL mar
 
 CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are used, and double quotes themselves are escaped by doubling them. 
 
-The *data tools* repo provides utilities for converting between TSV (which can be manipulated by `tawk`) and CSV:
+The *data tools* repo provides utilities for converting between TSV and CSV:
 
     csv-to-tab
     tab-to-csv
@@ -929,9 +913,9 @@ This can also be used to verify that YAML is valid.
 <a name="html"/>
 ## html
 
-The *data tools* include a tool called `dom-ruby` for using XPATH or CSS selectors to extract data from an HTML file.  Here is an example of getting the links from a web page:
+TODO: a replacement for `dom-ruby`.
 
-    $ curl www.google.com | dom-ruby '$_.xpath("//a").each {|o| puts o["href"] }'
+TODO: a replacement for `html-table-to-csv`
 
 <a name="xml"/>
 ## xml
@@ -944,7 +928,7 @@ To pretty-print XML:
 
     $ xmllint --format FILE.xml
 
-XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document. `dom-ruby`, described above for HTML, can also be used on XML documents.
+XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document.
 
 Another advantage is schemas.  However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated.  Libraries such as `libxml2` don't implement namespaces completely.
 

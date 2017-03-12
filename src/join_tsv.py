@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
-import codecs
 import collections
 import os
 import sys
@@ -16,12 +15,9 @@ JOIN_FULL = 4
 DEFAULT_OUTER_NULL = ''
 outer_null = None
 
-sys.stdout = codecs.getwriter(ENCODING)(sys.stdout)
-sys.stderr = codecs.getwriter(ENCODING)(sys.stderr)
-
 
 def header_and_column_to_rows(path, column):
-    with codecs.open(path, encoding=ENCODING) as f:
+    with open(path, encoding=ENCODING) as f:
         column_to_rows = collections.defaultdict(list)
 
         header = f.readline().rstrip('\r\n').split('\t')
@@ -84,17 +80,13 @@ def join_tsv(left_join_column,
     if join_type == JOIN_FULL:
         outer_join_big, outer_join_small = True, True
     elif join_type == JOIN_LEFT:
-        if file_order == BIG_FIRST:
-            outer_join_big = True
-        else:
-            outer_join_small = True
+        outer_join_big = file_order == BIG_FIRST
+        outer_join_small = file_order != BIG_FIRST
     elif join_type == JOIN_RIGHT:
-        if file_order == BIG_FIRST:
-            outer_join_small = True
-        else:
-            outer_join_big = True
+        outer_join_small = file_order == BIG_FIRST
+        outer_join_big = file_order != BIG_FIRST
 
-    with codecs.open(big, encoding=ENCODING) as f:
+    with open(big, encoding=ENCODING) as f:
         big_header = f.readline().rstrip('\r\n').split('\t')
         row_len = len(big_header)
         column_index = None
@@ -142,7 +134,7 @@ def join_tsv(left_join_column,
 
         if outer_join_small:
             big_fields = EMPTY_BIG_HEADER
-            for join_value, small_rows in column_to_rows.iteritems():
+            for join_value, small_rows in column_to_rows.items():
                 if join_value not in join_values:
                     for small_fields in small_rows:
                         print_row(
