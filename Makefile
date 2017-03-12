@@ -13,7 +13,7 @@ man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
 src := $(pwd)/src
-gem_pkgs := json nokogiri rubocop
+gem_pkgs := json rubocop
 pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
 GEM := gem
@@ -75,7 +75,6 @@ install-script:
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_fill.py $(LOCAL_INSTALL_DIR)/date-fill
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
-	ln -sf $(src)/dom_ruby.rb $(LOCAL_INSTALL_DIR)/dom-ruby
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/html-table-to-csv.rb $(LOCAL_INSTALL_DIR)/html-table-to-csv
@@ -197,12 +196,6 @@ test.date_fill: | output/date_fill
 	./src/date_fill.py --date-column=0 --format=%Y-%m-%dT%H -i test/date_fill/input.tsv \
 	> output/date_fill/output.tsv
 	diff output/date_fill/output.tsv test/date_fill/expected.output.tsv
-
-.PHONY: test.dom_ruby
-test.dom_ruby: dom_ruby/input.txt | output/dom_ruby
-	./src/dom_ruby.rb '$$_.xpath("//a").each { |o| puts o["href"] }' $< \
-	> output/dom_ruby/output.txt
-	diff test/dom_ruby/expected.output.txt output/dom_ruby/output.txt
 
 .PHONY: test.highlight
 test.highlight: highlight/input.txt | output/highlight
@@ -350,7 +343,7 @@ python_harnesses := $(patsubst %,test.%,$(python_base))
 .PHONY: python.harness
 python.harness: $(python_harnesses)
 
-ruby_base := dom_ruby json_ruby utf8_viewer
+ruby_base := json_ruby utf8_viewer
 ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
 
 shell.harness: test.check_tsv test.json_diff test.tsv_header

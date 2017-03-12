@@ -88,7 +88,7 @@ Command line tools are composable when the output of one command can be the inpu
 Only tools which read from standard input or write to standard output can participate in a pipeline.  Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
 <a name="setup"/>
-# SETUP
+# SETUP: UNCLEAN
 
 To install the necessary Ruby gems and Python packages:
 
