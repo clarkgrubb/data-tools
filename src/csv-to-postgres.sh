@@ -21,7 +21,7 @@ do
     esac
 done
 
-if [ \( -z "$table" \) -o \( -z "$path" \) ]
+if [ -z "$table" ] || [ -z "$path" ]
 then
     echo "USAGE: csv-to-postgres -f CSV_PATH -t TABLE" >&2
     echo >&2

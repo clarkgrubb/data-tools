@@ -8,3 +8,8 @@ src/utf8-script/utf8_category.c
 src/utf8-script/utf8_script.c
 src/utf8-script/Scripts.txt
 src/utf8-script/UnicodeData.txt
+output
+.gems
+.bundle
+bin
+dt

@@ -5,6 +5,7 @@ RUN apk update \
     diffutils \
     gcc \
     make \
+    man \
     musl-dev \
     python3 \
     ruby2.2 \
@@ -18,15 +19,18 @@ RUN apk update \
 
 WORKDIR /app
 
-RUN gem2.2 install json nokogiri rubocop
+RUN GEM_HOME=.gems gem2.2 install rubocop
 
 COPY requirements.txt /app/requirements.txt
-RUN pip3 install -r requirements.txt
+RUN python3 -m venv ve \
+    && . ve/bin/activate \
+    && pip install -r requirements.txt
 
 COPY . /app
 RUN make check \
     && mkdir /app/bin \
-    && LOCAL_INSTALL_DIR=/app/bin make install
+    && LOCAL_INSTALL_DIR=/app/bin make install \
+    && make dt.sh
 
-ENTRYPOINT ["./src/dt.sh"]
+ENTRYPOINT ["./dt"]
 # CMD make
