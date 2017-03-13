@@ -20,6 +20,7 @@ GEM_HOME = .gems
 .PHONY: setup.ruby
 setup.ruby:
 	GEM_HOME=$(GEM_HOME) gem install bundler
+	GEM_HOME=$(GEM_HOME) gem install rake
 	GEM_HOME=$(GEM_HOME) gem install rubocop
 
 .PHONY: setup.python
@@ -174,9 +175,9 @@ test.counting_sort: counting_sort/input.txt | output/counting_sort
 .PHONY: test.csv_to_json
 test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 	$(ve) && ./src/csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
-	echo $$'λ,two\nthree,four' | ./src/csv_to_json.py > output/csv_to_json/unicode.json
-	echo $$'λ,two\nthree,four' | \
-	$(ve) && ./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
+	$(ve) && echo $$'λ,two\nthree,four' | ./src/csv_to_json.py > output/csv_to_json/unicode.json
+	$(ve) && echo $$'λ,two\nthree,four' \
+	  | ./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
 
 .PHONY: test.csv_to_tab
 test.csv_to_tab: | csv-to-tab output/csv_to_tab
