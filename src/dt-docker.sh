@@ -10,5 +10,5 @@ then
 else
     cmd=$1
     shift
-    exec "./bin/$cmd" "$@"
+    . ./ve/bin/activate && GEM_HOME=.gems exec "./bin/$cmd" "$@"
 fi

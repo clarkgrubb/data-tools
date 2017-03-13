@@ -18,10 +18,12 @@ RUN apk update \
 
 WORKDIR /app
 
-RUN gem2.2 install rubocop
+RUN GEM_HOME=.gems gem2.2 install rubocop
 
 COPY requirements.txt /app/requirements.txt
-RUN pip3 install -r requirements.txt
+RUN python3 -m venv ve \
+    && . ve/bin/activate \
+    && pip install -r requirements.txt
 
 COPY . /app
 RUN make check \

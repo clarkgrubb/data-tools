@@ -15,11 +15,12 @@ pwd := $(shell pwd)
 src := $(pwd)/src
 pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
+GEM_HOME = .gems
 
 .PHONY: setup.ruby
 setup.ruby:
-	gem install bundler
-	bundle binstub rubocop
+	GEM_HOME=$(GEM_HOME) gem install bundler
+	GEM_HOME=$(GEM_HOME) gem install rubocop
 
 .PHONY: setup.python
 setup.python:
@@ -30,7 +31,7 @@ bin:
 	LOCAL_INSTALL_DIR=$(shell pwd)/bin make install-script install-c
 
 .PHONY: setup
-setup: bin setup.ruby setup.python
+setup: ve bin setup.ruby setup.python
 
 ve := . ve/bin/activate
 
@@ -157,25 +158,25 @@ test.check_tsv:
 
 .PHONY: test.convert_date
 test.convert_date:
-	cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
+	$(ve) && cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
 	| ./src/convert_date.py -i %Y-%m-%dT%H:%M:%S -o %s \
 	| diff - test/convert_date/input.txt
-	cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
+	$(ve) && cat test/convert_date/input.txt | ./src/convert_date.py -i %s \
 	| ./src/convert_date.py -o %s \
 	| diff - test/convert_date/input.txt
 
 .PHONY: test.counting_sort
 test.counting_sort: counting_sort/input.txt | output/counting_sort
-	./src/counting_sort.py $< > output/counting_sort/output.txt
+	$(ve) && ./src/counting_sort.py $< > output/counting_sort/output.txt
 	sort $< > output/counting_sort/expected.output.txt
 	diff output/counting_sort/output.txt output/counting_sort/expected.output.txt
 
 .PHONY: test.csv_to_json
 test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
-	./src/csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
+	$(ve) && ./src/csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
 	echo $$'λ,two\nthree,four' | ./src/csv_to_json.py > output/csv_to_json/unicode.json
 	echo $$'λ,two\nthree,four' | \
-	./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
+	$(ve) && ./src/csv_to_json.py --header=first,second > output/csv_to_json/unicode2.json
 
 .PHONY: test.csv_to_tab
 test.csv_to_tab: | csv-to-tab output/csv_to_tab
@@ -189,66 +190,66 @@ test.csv_to_tab: | csv-to-tab output/csv_to_tab
 
 .PHONY: test.sv_to_xlsx
 test.csv_to_xlsx: | output/csv_to_xlsx
-	./src/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
+	$(ve) && ./src/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
 	test/csv_files/no-header.csv \
 	test/csv_files/unicode.csv
 
 .PHONY: test.date_fill
 test.date_fill: | output/date_fill
-	./src/date_fill.py --date-column=0 --format=%Y-%m-%dT%H -i test/date_fill/input.tsv \
+	$(ve) && ./src/date_fill.py --date-column=0 --format=%Y-%m-%dT%H -i test/date_fill/input.tsv \
 	> output/date_fill/output.tsv
 	diff output/date_fill/output.tsv test/date_fill/expected.output.tsv
 
 .PHONY: test.highlight
 test.highlight: highlight/input.txt | output/highlight
-	./src/highlight.py control < $< > output/highlight/output1.txt
+	$(ve) && ./src/highlight.py control < $< > output/highlight/output1.txt
 	diff test/highlight/expected.output.txt output/highlight/output1.txt
-	./src/highlight.py control $< > output/highlight/output2.txt
+	$(ve) && ./src/highlight.py control $< > output/highlight/output2.txt
 	diff test/highlight/expected.output.txt output/highlight/output2.txt
-	./src/highlight.py -r control < $< > output/highlight/output3.txt
+	$(ve) && ./src/highlight.py -r control < $< > output/highlight/output3.txt
 	diff test/highlight/expected.output.txt output/highlight/output3.txt
-	./src/highlight.py -r control $< > output/highlight/output4.txt
+	$(ve) && ./src/highlight.py -r control $< > output/highlight/output4.txt
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
 
 .PHONY: test.join_tsv
 test.join_tsv: | output/join_tsv
-	./src/join_tsv.py --column=url \
+	$(ve) && ./src/join_tsv.py --column=url \
 	test/join_tsv/input1.tsv \
 	test/join_tsv/input2.tsv \
 	> output/join_tsv/output.tsv
 	diff test/join_tsv/expected.output.tsv output/join_tsv/output.tsv
 	#
-	./src/join_tsv.py --column=url \
+	$(ve) && ./src/join_tsv.py --column=url \
 	test/join_tsv/input1.null.tsv \
 	test/join_tsv/input2.null.tsv \
 	> output/join_tsv/output.null.tsv
 	diff test/join_tsv/expected.output.tsv output/join_tsv/output.null.tsv
 	#
-	./src/join_tsv.py --column=url --left \
+	$(ve) && ./src/join_tsv.py --column=url --left \
 	test/join_tsv/input1.left.tsv \
 	test/join_tsv/input2.left.tsv \
 	> output/join_tsv/output.left.tsv
 	diff test/join_tsv/expected.output.left.tsv output/join_tsv/output.left.tsv
 	#
-	./src/join_tsv.py --column=url --left \
+	$(ve) && ./src/join_tsv.py --column=url --left \
 	test/join_tsv/input2.left.tsv \
 	test/join_tsv/input1.left.tsv \
 	> output/join_tsv/output.left.tsv
 	diff test/join_tsv/expected.output.left2.tsv output/join_tsv/output.left.tsv
 	#
-	./src/join_tsv.py --column=url --right \
+	$(ve) && ./src/join_tsv.py --column=url --right \
 	test/join_tsv/input2.left.tsv \
 	test/join_tsv/input1.left.tsv \
 	> output/join_tsv/output.right.tsv
 	diff test/join_tsv/expected.output.right.tsv output/join_tsv/output.right.tsv
 	#
-	./src/join_tsv.py --column=url --null=NULL \
+	$(ve) && ./src/join_tsv.py --column=url --null=NULL \
 	test/join_tsv/input1.NULL_VALUE.tsv \
 	test/join_tsv/input2.NULL_VALUE.tsv \
 	> output/join_tsv/output.NULL_VALUE.tsv
 	diff test/join_tsv/expected.output.NULL_VALUE.tsv output/join_tsv/output.NULL_VALUE.tsv
 	#
-	./src/join_tsv.py --left-column=url1 --right-column=url2 \
+	$(ve) && ./src/join_tsv.py --left-column=url1 --right-column=url2 \
 	test/join_tsv/input1.diff.tsv \
 	test/join_tsv/input2.diff.tsv \
 	> output/join_tsv/output.diff.tsv
@@ -270,16 +271,16 @@ test.json_diff: | output/json_diff
 
 .PHONY: test.normalize_utf8
 test.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
-	./src/normalize_utf8.py < $< > output/normalize_utf8/output.nfc.txt
+	$(ve) && ./src/normalize_utf8.py < $< > output/normalize_utf8/output.nfc.txt
 	diff test/normalize_utf8/expected.output.nfc.txt output/normalize_utf8/output.nfc.txt
-	./src/normalize_utf8.py $< > output/normalize_utf8/output.nfc.2.txt
+	$(ve) && ./src/normalize_utf8.py $< > output/normalize_utf8/output.nfc.2.txt
 	diff test/normalize_utf8/expected.output.nfc.txt output/normalize_utf8/output.nfc.2.txt
-	./src/normalize_utf8.py --nfd < $< > output/normalize_utf8/output.nfd.txt
+	$(ve) && ./src/normalize_utf8.py --nfd < $< > output/normalize_utf8/output.nfd.txt
 	diff test/normalize_utf8/expected.output.nfd.txt output/normalize_utf8/output.nfd.txt
 
 .PHONY: test.reservoir_sample
 test.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
-	./src/reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
+	$(ve) && ./src/reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
 	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
 
 .PHONY: test.tsv_header
@@ -289,9 +290,10 @@ test.tsv_header: | output/tsv_header
 
 .PHONY: test.trim_tsv
 test.trim_tsv: | output/trim_tsv
-	echo -n $$' one \t two \n three \t four' | ./src/trim_tsv.py > output/trim_tsv/trim_tsv.tsv
+	$(ve) && echo -n $$' one \t two \n three \t four' \
+	  | ./src/trim_tsv.py > output/trim_tsv/trim_tsv.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/trim_tsv.tsv
-	./src/trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
+	$(ve) && ./src/trim_tsv.py test/trim_tsv/input.tsv > output/trim_tsv/output2.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/output2.tsv
 
 #.PHONY: test.tab_to_csv
@@ -301,7 +303,7 @@ test.trim_tsv: | output/trim_tsv
 
 .PHONY: test.tsv_to_json
 test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
-	./src/tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
+	$(ve) && ./src/tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
 
 # doesn't pass with Ruby 1.8:
 #
@@ -320,11 +322,11 @@ test.utf8_viewer: | output/utf8_viewer
 
 .PHONY: test.xlsx_to_csv
 test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
-	./src/xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
-	./src/xlsx_to_csv.py --sheet=three_rows_three_cols $< output/xlsx_to_csv/3r3c.csv
-	./src/xlsx_to_csv.py --sheet=unicode $< output/xlsx_to_csv/unicode.csv
-	./src/xlsx_to_csv.py --sheet=spaces $< output/xlsx_to_csv/spaces.csv
-	./src/xlsx_to_csv.py --sheet=dates $< output/xlsx_to_csv/dates.csv
+	$(ve) && ./src/xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
+	$(ve) && ./src/xlsx_to_csv.py --sheet=three_rows_three_cols $< output/xlsx_to_csv/3r3c.csv
+	$(ve) && ./src/xlsx_to_csv.py --sheet=unicode $< output/xlsx_to_csv/unicode.csv
+	$(ve) && ./src/xlsx_to_csv.py --sheet=spaces $< output/xlsx_to_csv/spaces.csv
+	$(ve) && ./src/xlsx_to_csv.py --sheet=dates $< output/xlsx_to_csv/dates.csv
 	diff output/xlsx_to_csv/list.out test/xlsx_to_csv/expected.list.out
 	diff output/xlsx_to_csv/3r3c.csv test/xlsx_to_csv/expected.3r3c.csv
 	diff output/xlsx_to_csv/unicode.csv test/xlsx_to_csv/expected.unicode.csv
@@ -333,8 +335,8 @@ test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 
 .PHONY: test.yaml_to_json
 test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
-	./src/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
-	./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
+	$(ve) && ./src/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
+	$(ve) && ./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
 python_base := convert_date counting_sort csv_to_json csv_to_tab
 python_base += csv_to_xlsx date_fill highlight join_tsv
@@ -358,15 +360,18 @@ test.harness: python.harness ruby.harness shell.harness
 
 .PHONY: rubocop
 rubocop:
-	find src -name '*.rb' | xargs rubocop -c .rubocop.yml
+	find src -name '*.rb' \
+	  | GEM_HOME=$(GEM_HOME) xargs $(GEM_HOME)/bin/rubocop -c .rubocop.yml
 
 .PHONY: pep8
-pep8:
-	find src -name '*.py' | xargs pep8 --max-line-length=100
+pep8: ve
+	. ./ve/bin/activate && find src -name '*.py' \
+	  | xargs pep8 --max-line-length=100
 
 .PHONY: pylint
-pylint:
-	find src -name '*.py' | xargs pylint --rcfile .pylintrc --disable=missing-docstring
+pylint: ve
+	. ./ve/bin/activate && find src -name '*.py' \
+	  | xargs pylint --rcfile .pylintrc --disable=missing-docstring
 
 .PHONY: shellcheck
 shellcheck:
