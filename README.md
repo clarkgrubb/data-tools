@@ -9,67 +9,67 @@
 
 Command line tools for data extraction, data manipulation, and file format conversion.
 
-    check-tsv              verify rows in TSV file are same length
+    dt check-tsv              verify rows in TSV file are same length
 
-    convert-date           convert dates in tabular data using strftime-style formats
+    dt convert-date           convert dates in tabular data using strftime-style formats
 
-    counting-sort          sort a file using counting sort
+    dt counting-sort          sort a file using counting sort
 
-    csv-to-json            convert CSV to JSON
+    dt csv-to-json            convert CSV to JSON
 
-    csv-to-postgres        import a CSV file into a PostgreSQL table
+    dt csv-to-postgres        import a CSV file into a PostgreSQL table
 
-    csv-to-tab             convert CSV to tab delimited
+    dt csv-to-tab             convert CSV to tab delimited
 
-    csv-to-xlsx            convert CSV files to XLSX worksheets
+    dt csv-to-xlsx            convert CSV files to XLSX worksheets
 
-    date-fill              fill in missing rows in a TSV file with a time series column
+    dt date-fill              fill in missing rows in a TSV file with a time series column
 
-    date-seq               create a sequence of dates
+    dt date-seq               create a sequence of dates
 
-    header-sort            sort file, keeping header in place
+    dt header-sort            sort file, keeping header in place
 
-    highlight              highlight text matching REGEX
+    dt highlight              highlight text matching REGEX
 
-    join-tsv               perform a relation join on two TSV files
+    dt join-tsv               perform a relation join on two TSV files
     
-    json-pluck             convert JSON array to JSON stream 
+    dt json-pluck             convert JSON array to JSON stream 
 
-    json-ruby              read JSON objects from standard input and process them with Ruby
+    dt json-ruby              read JSON objects from standard input and process them with Ruby
 
-    json-diff              show differences between two JSON documents
+    dt json-diff              show differences between two JSON documents
 
-    normalize-utf8         write UTF-8 encoded input to standard out in normalized form
+    dt normalize-utf8         write UTF-8 encoded input to standard out in normalized form
 
-    postgres-to-csv        write a PostgreSQL table to stdout in CSV format
+    dt postgres-to-csv        write a PostgreSQL table to stdout in CSV format
 
-    reservoir-sample       select N lines from standard input randomly
+    dt reservoir-sample       select N lines from standard input randomly
 
-    set-diff               find lines in first file which are not in the second
+    dt set-diff               find lines in first file which are not in the second
 
-    set-intersect          find lines common to two files
+    dt set-intersect          find lines common to two files
 
-    tab-to-csv             convert tab delimited file to CSV
+    dt tab-to-csv             convert tab delimited file to CSV
 
-    tokenize               extract words from English language text
+    dt tokenize               extract words from English language text
 
-    trim-tsv               trim whitespace from fields of TSV file
+    dt trim-tsv               trim whitespace from fields of TSV file
     
-    tsv-header             show TSV header with ordinal position of each column
+    dt tsv-header             show TSV header with ordinal position of each column
     
-    tsv-to-json            convert TSV to JSON
+    dt tsv-to-json            convert TSV to JSON
 
-    utf8-category          tally UTF-8 encoded characters by general category
+    dt utf8-category          tally UTF-8 encoded characters by general category
     
-    utf8-script            tally UTF-8 encoded characters by script
+    dt utf8-script            tally UTF-8 encoded characters by script
 
-    utf8-viewer            display Unicode points and optionally names of UTF-8 encoded file
+    dt utf8-viewer            display Unicode points and optionally names of UTF-8 encoded file
     
-    xls-to-csv             convert XLS to CSV
+    dt xls-to-csv             convert XLS to CSV
     
-    xlsx-to-csv            convert XLSX to CSV
+    dt xlsx-to-csv            convert XLSX to CSV
 
-    yaml-to-json           convert YAML to JSON
+    dt yaml-to-json           convert YAML to JSON
 
 
 
@@ -99,75 +99,75 @@ your system, then this might work:
 <a name="how-to-run"/>
 # HOW TO RUN
 
-    check-tsv              [TSV_FILE]
+    dt check-tsv              [TSV_FILE]
 
-    convert-date           [-i FMT] [-o FMT] [-c COLUMN] [-H]
+    dt convert-date           [-i FMT] [-o FMT] [-c COLUMN] [-H]
 
-    counting-sort          [FILE]
+    dt counting-sort          [FILE]
 
-    csv-to-json            [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
+    dt csv-to-json            [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
     
-    csv-to-postgres        -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    dt csv-to-postgres        -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
     
-    csv-to-tab             [-e|-x|-r] [CSV_FILE]
+    dt csv-to-tab             [-e|-x|-r] [CSV_FILE]
 
-    csv-to-xlsx            -o XLSX_FILE CSV_FILE ...
+    dt csv-to-xlsx            -o XLSX_FILE CSV_FILE ...
 
-    date-fill              --date-column NUM --format FORMAT
+    dt date-fill              --date-column NUM --format FORMAT
 
-    date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
+    dt date-seq               [--format=FMT] [--weekdays=DAY[,DAY]...] YYYY[MM[DD[HH]]] YYYY[MM[DD[HH]]]
 
-    header-sort            [OPTIONS] FILE
+    dt header-sort            [OPTIONS] FILE
 
-    highlight              REGEX [FILE]
+    dt highlight              REGEX [FILE]
     
-    highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
+    dt highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
-    join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
+    dt join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
     
-    json-pluck             < FILE
+    dt json-pluck             < FILE
 
-    json-ruby              [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
+    dt json-ruby              [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
-    json-diff              [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
+    dt json-diff              [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
-    normalize-utf8         [--nfc|--nfd|--nfkc|--nfkd] [FILE]
+    dt normalize-utf8         [--nfc|--nfd|--nfkc|--nfkd] [FILE]
 
-    postgres-to-csv        -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
+    dt postgres-to-csv        -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
 
-    reservoir-sample       [-r SEED] -s NUM [FILE]
+    dt reservoir-sample       [-r SEED] -s NUM [FILE]
 
-    set-diff               FILE1 FILE2
+    dt set-diff               FILE1 FILE2
 
-    set-intersect          FILE1 FILE2
+    dt set-intersect          FILE1 FILE2
     
-    tab-to-csv             [-u] [TAB_DELIMITED_FILE]
+    dt tab-to-csv             [-u] [TAB_DELIMITED_FILE]
 
-    tokenize               [-n]
+    dt tokenize               [-n]
 
-    trim-tsv               [TSV_FILE]
+    dt trim-tsv               [TSV_FILE]
 
-    tsv-header             [TSV_FILE]
+    dt tsv-header             [TSV_FILE]
 
-    tsv-to-json            [TSV_FILE]
+    dt tsv-to-json            [TSV_FILE]
 
-    utf8-category          [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]
+    dt utf8-category          [-l|--long-names] [-c|--count-ascii|-s|--skip-ascii]
 
-    utf8-script            [-c|--count-ascii|-s|--skip-ascii]
+    dt utf8-script            [-c|--count-ascii|-s|--skip-ascii]
 
-    utf8-viewer            [-b|-c|-n] [-w NUM] [FILE]
+    dt utf8-viewer            [-b|-c|-n] [-w NUM] [FILE]
 
-    utf8-viewer            [-b|-c|-n] -a BYTE ...
+    dt utf8-viewer            [-b|-c|-n] -a BYTE ...
 
-    xls-to-csv             <same as xlsx-to-csv>
+    dt xls-to-csv             <same as xlsx-to-csv>
 
-    xlsx-to-csv            [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
+    dt xlsx-to-csv            [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
 
-    xlsx-to-csv            [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
+    dt xlsx-to-csv            [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
     
-    xlsx-to-csv            --list XLSX_FILE
+    dt xlsx-to-csv            --list XLSX_FILE
 
-    yaml-to-json           [FILE]
+    dt yaml-to-json           [FILE]
 
 <a name="plaintext"/><a name="txt"/>
 # PLAIN TEXT: .TXT
@@ -217,7 +217,7 @@ Here is a way to find non-ASCII bytes:
 
 The `-P` option is not provided by the version of `grep` distributed with Mac OS X.  One can use the `highlight` command in this repo:
 
-    $ highlight '[\x80-\xFF]+'
+    $ dt highlight '[\x80-\xFF]+'
 
 To find the first occurrence of bytes which are not valid UTF-8, use `iconv`:
 
@@ -226,7 +226,7 @@ To find the first occurrence of bytes which are not valid UTF-8, use `iconv`:
 
 `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be ---- for invalid characters.
 
-    $ utf8-viewer /bin/ls
+    $ dt utf8-viewer /bin/ls
 
 When a file is in an unknown encoding, one can inspect it byte-by-byte.
 `od -b` displays the bytes in octal:
@@ -281,9 +281,9 @@ The `bc` calculator can also be used:
 <a name="utf-8"/>
 ## utf-8
 
-The `utf8-viewer` *data tool* provides an easy way to determine the Unicode points of a sequence of UTF-8 bytes.
+The `dt utf8-viewer` *data tool* provides an easy way to determine the Unicode points of a sequence of UTF-8 bytes.
 
-    $ utf8-viewer foo.txt
+    $ dt utf8-viewer foo.txt
    
 If you want to see the character for a Unicode point, use `printf`:
 
@@ -299,16 +299,16 @@ If you have access to `python` or `ruby`:
      
     $ ruby -e 'puts "\u03bb"'
  
-The *data tools* provide `utf8-category` and `utf8-script`, which summarize the characters by general category and script:
+The *data tools* provide `dt utf8-category` and `dt utf8-script`, which summarize the characters by general category and script:
  
-    echo 'It is greater than ∞!' | utf8-category -l
+    echo 'It is greater than ∞!' | dt utf8-category -l
     1	Control
     14	Lowercase_Letter
     1	Uppercase_Letter
     5	Other_Punctuation
     1	Math_Symbol
  
-    $ echo 'αλφα βητα foo bar' | utf8-script
+    $ echo 'αλφα βητα foo bar' | dt utf8-script
     4	Common
     8	Greek
     6	Latin
@@ -373,7 +373,7 @@ followed by COMBINING CEDILLA: U+0063 U+0327.
 When performing a string comparison, the two sequences should often
 be regarded as identifical.  The easiest way to accomplish this is to put
 the strings to be compared into a normalized form.  The Unicode standard defines
-[four normal forms](http://unicode.org/reports/tr15/).  The *data tool* `normalize-utf8` can be used to put a UTF-8 encoded file or stream into any of them.
+[four normal forms](http://unicode.org/reports/tr15/).  The *data tool* `dt normalize-utf8` can be used to put a UTF-8 encoded file or stream into any of them.
 
 <a name="newlines"/>
 # NEWLINES
@@ -412,8 +412,8 @@ The terminal wraps long lines without any indication that it has done so.  The `
 
 *Data tools* are provided for finding the lines which two files share in common, or which are exclusive to the first file:
 
-    $ set-intersect FILE1 FILE2
-    $ set-diff FILE1 FILE2
+    $ dt set-intersect FILE1 FILE2
+    $ dt set-diff FILE1 FILE2
     
 The `cat` command can be used to find the union of two files, with an optional `sort -u` to remove duplicate lines:
     
@@ -426,10 +426,10 @@ When inspecting files at the command line, `grep` and `less` are invaluable.  `g
 
     $ grep --color=always root /etc/passwd
     
-The `highlight` command does the same thing, except that it also prints lines which don't match
+The `dt highlight` command does the same thing, except that it also prints lines which don't match
 the pattern.  Also it supports multiple patterns, each with its own color:
     
-    $ highlight --red root --green daemon --blue /bin/bash /etc/passwd
+    $ dt highlight --red root --green daemon --blue /bin/bash /etc/passwd
 
 Both `grep` and `highlight` use [ANSI Escapes](http://www.ecma-international.org/publications/standards/Ecma-048.htm).  If you are paging through the output, use `less -R` to render the escape sequences correctly.
 
@@ -464,12 +464,12 @@ The `seq` is useful in conjunction with a shell `for` loop.  This will create a 
 
 It is also useful at times to be able to iterate through a sequence of dates.  The *data tools* provide `date-seq` for this.  For example, suppose that you wanted to fetch a set of URLs which contained a date:
 
-    $ for date in $(date-seq --format='%Y/%m/%d' 20130101 20130131)
+    $ for date in $(dt date-seq --format='%Y/%m/%d' 20130101 20130131)
     > do mkdir -p $date
     > curl "http://blog.foo.com/${date}" > ${date}/index.html
     > done
 
-`date-seq` can iterate though years, months, days, hours, minutes, or seconds.  When iterating through days, the `--weekdays` flag can be used to specify days of the week.  See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/date-seq.1.md) for details.
+`dt date-seq` can iterate though years, months, days, hours, minutes, or seconds.  When iterating through days, the `--weekdays` flag can be used to specify days of the week.  See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/date-seq.1.md) for details.
 
 <a name="sampling"/>
 ## sampling
@@ -486,7 +486,7 @@ This is faster than shuffling the file, but does not produce a precise sample si
     
 An efficient and unbiased way to select an exact number of lines from a file is to use reservoir sampling.  The *data tool* `reservoir-sample` implements it:
 
-    $ reservoir-sample --size 3 < /etc/passwd
+    $ dt reservoir-sample --size 3 < /etc/passwd
 
 # TSV, TAB, CSV, and XLSX
 
@@ -526,7 +526,7 @@ The default field separator for `awk` is whitespace.  The correct way to use `aw
 
     $ awk 'BEGIN {FS="\t"; OFS="\t"} ...'
 
-The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient—when sorting the file, for example.  The repo provides the `header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
+The IANA spec says that a TSV file must have a header.  Self-describing data is a good practice.  On the other hand the header is at times inconvenient—when sorting the file, for example.  The repo provides the `dt header-sort` command to sort a file while keeping the header in place.  When we must remove the header, we label the file with a `.tab` suffix instead of a `.tsv` suffix.
 
 Even if a file has a header, `awk` scripts must refer to columns by number instead of name.  The following code displays the header names with their numbers:
 
@@ -569,8 +569,8 @@ CSV provides a mechanism for quoting commas and EOL markers.  Double quotes are 
 
 The *data tools* repo provides utilities for converting between TSV and CSV:
 
-    csv-to-tab
-    tab-to-csv
+    dt csv-to-tab
+    dt tab-to-csv
 
 Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tab` will fail if it encounters any.  There are flags to tell `csv-to-tab` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tab.1.md). 
 
@@ -587,15 +587,15 @@ Excel provides the ability to export data in a CSV or TSV format.  One exports b
 
 Using Excel to export the data requires having Excel, which is not free.  Also Excel must be run in a desktop environment and is difficult to automate.  The *data tools* include the script `xslx-to-csv` so the operation can be performed at the command line.  To extract the sheets from a workbook as CSV files, run this:
 
-    $ xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
+    $ dt xlsx-to-csv WORKBOOK.xlsx OUTPUT_DIR
     
 The directory OUTPUT_DIR will be created and must not already exist.
 
 One can list the sheet names and extract a single sheet to a CSV file:
 
-    $ xlsx-to-csv --list WORKBOOK.xlsx
+    $ dt xlsx-to-csv --list WORKBOOK.xlsx
     
-    $ xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
+    $ dt xlsx-to-csv --sheet=SHEET WORKBOOK.xlsx SHEET.csv
 
 By default dates are written in `%Y-%m-%dT%H:%M:%S` format.  This can be change using the `--date-format` flag.  See `man strftime` for instructions on how to specify a date format.
 
@@ -632,9 +632,9 @@ This is tedious because (1) each file must be sorted by the join column, (2) the
 <a name="join-tsv"/>
 ## tsv
 
-`sort` and `join` don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `join-tsv` command.
+`sort` and `join` don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `dt join-tsv` command.
 
-To illustrate using `join-tsv` let's create some TSV files:
+To illustrate using `dt join-tsv` let's create some TSV files:
 
     $ ( echo $'name\tpw\tuid\tgid\tgecos\thome\tshell';  grep -v '^#' /etc/passwd | tr ':' '\t' ) > /tmp/pw.tsv
     
@@ -642,13 +642,13 @@ To illustrate using `join-tsv` let's create some TSV files:
 
 If the join column has the same name in both files, it can be specified with the `-c` or `--column` flag:
 
-    $ join-tsv --column=gid /tmp/pw.tsv /tmp/grp.tsv
+    $ dt join-tsv --column=gid /tmp/pw.tsv /tmp/grp.tsv
 
 The output is in TSV format, and in particular it has a header.  The order of columns is (1) join column, (2) left file columns other than the join column, (3) right file columns other than the join column.  If the join column has different names in the two files, the left name is used in the output.
 
-`join-tsv` reads the smaller of the two files into memory.
+`dt join-tsv` reads the smaller of the two files into memory.
 
-`join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
+`dt join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
  
 <a name="sqlite"/>
 ## sqlite
@@ -671,8 +671,8 @@ There is no way to escape the separator when importing files into SQLite.
 <a name="postgres"/>
 ## postgres
 
-    $ tab-to-csv < /tmp/pw.tab > /tmp/pw.csv
-    $ tab-to-csv < /tmp/grp.tab > /tmp/grp.csv
+    $ dt tab-to-csv < /tmp/pw.tab > /tmp/pw.csv
+    $ dt tab-to-csv < /tmp/grp.tab > /tmp/grp.csv
     
     $ psql
     > create table pw ( name text, pw text, uid int, gid int, gecos text, home text, shell text );
@@ -815,8 +815,8 @@ This is because the latter format forces most clients to read the entire data se
 
 The following *data tools* are provided to convert CSV or TSV files to the MongoDB export format.  In the case of `csv-to-json`, the CSV file must have a header:
 
-    csv-to-json
-    tsv-to-json
+    dt csv-to-json
+    dt tsv-to-json
 
 `python -mjson.tool` can be used to pretty print JSON and test whether the JSON is well formed.
 
@@ -841,7 +841,7 @@ The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON 
 
 The *data tools* utility `json-ruby` can be used to convert JSON to TSV.
 
-    $ json-ruby 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
+    $ dt json-ruby 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
 
 The script passed to `json-ruby` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-ruby` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
 
@@ -855,7 +855,7 @@ There are some practices which producers of JSON should follow to reduce the com
 
 When processing JSON, a first task might be to determine what the top level keys in each object are: 
 
-    $ cat foo.json | json-ruby 'puts $_.keys.join("\n")' | sort | uniq -c
+    $ cat foo.json | dt json-ruby 'puts $_.keys.join("\n")' | sort | uniq -c
 
 This code assumes that the top level keys don't contain newlines.  One could check whether this is true:
 
@@ -865,7 +865,7 @@ The value associated with each key can be null, boolean, numeric, string, array,
 
 This code lists the top level keys and their values:
 
-    $ cat foo.json | json-ruby 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
+    $ cat foo.json | dt json-ruby 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
 
 If any key has a JSON object as a value, then the above analysis must be repeated.  Note that such data can be flattened:
 
@@ -902,7 +902,7 @@ This forces the client to determine the meaning of the positions and hard code t
 
 To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
 
-    yaml-to-json .travis.yml | jq '.script' 
+    dt yaml-to-json .travis.yml | jq '.script' 
 
 This can also be used to verify that YAML is valid.
 
