@@ -3,9 +3,10 @@
 root_dir=ROOT_DIR
 
 usage() {
+    echo '' >&2
     echo 'USAGE: dt SUBCOMMAND [ARGS] ...' >&2
     echo '' >&2
-    echo 'subcommands:' >&2
+    echo 'SUBCOMMANDS:' >&2
     ( cd ${root_dir}/bin && ls ) >&2
 }
 
@@ -30,7 +31,7 @@ then
         fi
         exit 0
     else
-        echo "ERROR: unknown subcommand: $2"
+        echo "ERROR: unknown subcommand: $2" >&2
         usage
         exit 1
     fi
@@ -41,7 +42,7 @@ else
     then
         . ./ve/bin/activate && GEM_HOME=.gems exec ${root_dir}/bin/$cmd "$@"
     else
-        echo "ERORR: unknown subcommand: $1"
+        echo "ERROR: unknown subcommand: $cmd" >&2
         usage
         exit 1
     fi
