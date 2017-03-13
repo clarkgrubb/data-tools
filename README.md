@@ -84,7 +84,6 @@ Only tools which read from standard input or write to standard output can partic
 
     $ docker pull clarkgrubb/data-tools
     $ alias dt='docker run -i --rm clarkgrubb/data-tools'
-    $ dt utf8-viewer < /etc/passwd
 
 # SETUP: UNCONTAINED
 

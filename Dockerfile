@@ -5,6 +5,7 @@ RUN apk update \
     diffutils \
     gcc \
     make \
+    man \
     musl-dev \
     python3 \
     ruby2.2 \
@@ -28,7 +29,8 @@ RUN python3 -m venv ve \
 COPY . /app
 RUN make check \
     && mkdir /app/bin \
-    && LOCAL_INSTALL_DIR=/app/bin make install
+    && LOCAL_INSTALL_DIR=/app/bin make install \
+    && make dt.sh
 
-ENTRYPOINT ["./src/dt-docker.sh"]
+ENTRYPOINT ["./dt"]
 # CMD make

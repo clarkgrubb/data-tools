@@ -31,6 +31,9 @@ bin:
 	mkdir $@
 	LOCAL_INSTALL_DIR=$(shell pwd)/bin make install-script install-c
 
+dt.sh:
+	./src/install-dt.sh .
+
 .PHONY: setup
 setup: ve bin setup.ruby setup.python
 

@@ -15,5 +15,5 @@ then
 fi
 
 rm -f "$install_dir"/dt
-awk '{sub(/ROOT_DIR/, "'"$(pwd)"'", $0); print $0}' < src/dt-uncontained.sh.template > "$install_dir"/dt
+awk '{sub(/ROOT_DIR/, "'"$(pwd)"'", $0); print $0}' < src/dt.sh.template > "$install_dir"/dt
 chmod +x "$install_dir"/dt
