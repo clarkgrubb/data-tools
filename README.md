@@ -73,7 +73,7 @@ Command line tools for data extraction, data manipulation, and file format conve
 
 
 
-The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.  The *data tools* come with man pages which can be installed locally or browsed on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
+The *data tools* are for working with data at the command line.  They are meant to complement the tools you already have.  Use `dt help SUBCOMMAND` to see the help page for a *data tool* or browse the help pages on [GitHub](https://github.com/clarkgrubb/data-tools/tree/master/doc).
 
 Command line tools are composable when the output of one command can be the input of another.  The output can be redirected to a file whose path is passed as an argument, or the commands can be connected by a shell pipe.  Use of a pipe is *tacit programming*: it relieves the programmer of the need to name a file.  Furthermore the byte stream is private to the commands on either side of the pipe.  
 
