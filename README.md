@@ -5,6 +5,7 @@
 [plain text](#plaintext) | [encodings](#encodings) | [newlines](#newlines) | [relational formats](#relational-fmt) | [joins](#joins) | [keys](#keys) | [hierarchical formats](#hierarchical-fmt)
 
 <a name="summary"/>
+
 # SUMMARY
 
 Command line tools for data extraction, data manipulation, and file format conversion.
@@ -80,6 +81,7 @@ Command line tools are composable when the output of one command can be the inpu
 Only tools which read from standard input or write to standard output can participate in a pipeline.  Tools in a pipeline must agree on the *format* of the data in the byte stream.  The *data tools* support these formats: `.txt`, `.tsv`, `.tab`, `.csv`, `.xls`, `.xlsx`, `.json`, `.yaml`, `.html`, and `.xml`.  Some of the *data tools* are *format conversion tools* to be used to convert from one format to another.
 
 <a name="setup"/>
+
 # SETUP: DOCKER
 
     $ docker pull clarkgrubb/data-tools
@@ -96,6 +98,7 @@ your system, then this might work:
     $ ./src/install-dt.sh /usr/local/bin
 
 <a name="how-to-run"/>
+
 # HOW TO RUN
 
     dt check-tsv              [TSV_FILE]
@@ -169,6 +172,7 @@ your system, then this might work:
     dt yaml-to-json           [FILE]
 
 <a name="plaintext"/><a name="txt"/>
+
 # PLAIN TEXT: .TXT
 
 *Plain text* is a sequence of bytes which use an encoding to represent printable characters.  
@@ -178,11 +182,13 @@ If no other suffix is appropriate, `.txt` is a reasonable suffix for a plain tex
 In plain text, control characters other than for line endings and perhaps tabs are disallowed.  Long lines are discouraged.
 
 <a name="encodings"/>
+
 # ENCODINGS
 
 [iconv](#iconv) | [bad bytes](#bad-bytes) | [utf-8](#utf-8) | [utf-16](#utf-16) | [unicode](#unicode)
 
 <a name="iconv"/>
+
 ## iconv
 
 The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is valid UTF-8.
@@ -196,6 +202,7 @@ To get a list of supported encodings:
     $ iconv -l
 
 <a name="bad-bytes"/>
+
 ## bad bytes
 
 Not all sequences of bytes are valid UTF-8; the *data tools* throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
@@ -278,6 +285,7 @@ The `bc` calculator can also be used:
     CE
 
 <a name="utf-8"/>
+
 ## utf-8
 
 The `dt utf8-viewer` *data tool* provides an easy way to determine the Unicode points of a sequence of UTF-8 bytes.
@@ -315,6 +323,7 @@ The *data tools* provide `dt utf8-category` and `dt utf8-script`, which summariz
 Both tools have `-c` and `-s` flags for counting ASCII characters separately or omitting them from the tally entirely.
  
 <a name="utf-16"/>
+
 ## utf-16
 
 Unicode points above `U+FFFF` are represented in UTF-16 by a pair of 16-bit characters called _surrogates_:
@@ -344,6 +353,7 @@ Here is Python code describing the conversion from surrogates to code point and 
         return (high - 0xD800) * 0x400 + (low - 0xDC00) + 0x10000
 
 <a name="unicode"/>
+
 ## unicode
 
 How to look up a Unicode point:
@@ -375,11 +385,13 @@ the strings to be compared into a normalized form.  The Unicode standard defines
 [four normal forms](http://unicode.org/reports/tr15/).  The *data tool* `dt normalize-utf8` can be used to put a UTF-8 encoded file or stream into any of them.
 
 <a name="newlines"/>
+
 # NEWLINES
 
 [eol markers](#eol-markers) | [set operations](#set-op) | [highlighting](#highlighting) | [sequences](#seq) | [sampling](#sampling)
 
 <a name="eol-markers"/>
+
 ## eol markers
 
 The *data tools* interpret LF, CRLF, or CR as end-of-line markers in input.  The *data tools* use LF as the end-of-line marker in output.  To convert LF line endings to CRLF or CR line endings:
@@ -407,6 +419,7 @@ The terminal wraps long lines without any indication that it has done so.  The `
     $ cut -c $(( $COLUMNS + 1 ))-$(( 2 * $COLUMNS )) FILE
 
 <a name="set-op"/>
+
 ## set operations
 
 *Data tools* are provided for finding the lines which two files share in common, or which are exclusive to the first file:
@@ -419,6 +432,7 @@ The `cat` command can be used to find the union of two files, with an optional `
     $ cat FILE1 FILE2 | sort -u
 
 <a name="highlighting"/>
+
 ## highlighting
 
 When inspecting files at the command line, `grep` and `less` are invaluable.  `grep` can highlight the search pattern in red:
@@ -433,6 +447,7 @@ the pattern.  Also it supports multiple patterns, each with its own color:
 Both `grep` and `highlight` use [ANSI Escapes](http://www.ecma-international.org/publications/standards/Ecma-048.htm).  If you are paging through the output, use `less -R` to render the escape sequences correctly.
 
 <a name="seq"/>
+
 ## sequences
 
 The `seq` command can generate a newline delimited arithmetic sequence:
@@ -471,6 +486,7 @@ It is also useful at times to be able to iterate through a sequence of dates.  T
 `dt date-seq` can iterate though years, months, days, hours, minutes, or seconds.  When iterating through days, the `--weekdays` flag can be used to specify days of the week.  See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/date-seq.1.md) for details.
 
 <a name="sampling"/>
+
 ## sampling
 
 It is desirable at times to take a random sample of lines from a file.  Simply taking the first *N* lines often does not yield a representative sample.  Instead one should shuffle the file first:
@@ -490,6 +506,7 @@ An efficient and unbiased way to select an exact number of lines from a file is 
 # TSV, TAB, CSV, and XLSX
 
 <a name="relational-fmt"/>
+
 # RELATIONAL FORMATS
 
 [tsv](#tsv) | [csv](#csv) | [xlsx](#xlsx)
@@ -509,6 +526,7 @@ Count the number of users by their login shell:
 The `/etc/passwd` file format, though venerable, has an ad hoc flavor.  In the following sections we consider three formats which are widely used for relational data.
 
 <a name="tsv"/>
+
 ## tsv
 
 The IANA, which is responsible for registering MIME types, has a [specification for TSV](http://www.iana.org/assignments/media-types/text/tab-separated-values).  Records are newline delimited and fields are tab-delimited.  There is no mechanism for escaping or quoting tabs and newlines.  Despite this limitation, we prefer to convert the other formats to TSV because `awk`, `sort`, and `join` cannot easily manipulate the other formats.  By default Hadoop uses tabs as a field separator.
@@ -556,6 +574,7 @@ The `join` method in Python and similar languages can be used to generate a TSV 
             f.write(u'\n')
 
 <a name="csv"/>
+
 ## csv
 
 The CSV format is described in [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt).  
@@ -574,6 +593,7 @@ The *data tools* repo provides utilities for converting between TSV and CSV:
 Converting from CSV to TSV is problematic if the fields contain tabs or newlines.  By default `csv-to-tab` will fail if it encounters any.  There are flags to tell `csv-to-tab` to strip, backslash escape, replace with space, or replace with space and squeeze.   See the [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/csv-to-tab.1.md). 
 
 <a name="xlsx"/>
+
 ## xlsx
 
 XLSX is the default format used by Excel since 2007.  Other spreadsheet applications can read it.
@@ -605,11 +625,13 @@ The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file 
 Importing UTF-8 encoded data into Excel is not effortless. What I have found to work is to convert the data to a tab delimited `.tab` format, but change the suffix to `.txt` since otherwise Excel will not allow the path to be selected.  Then use `File | Import...` and select `Text file`.  After the file path is selected, Excel drops the user into a wizard which allows the format of the file to be specified. The default file origin on Macintosh is `Macintosh`, which is an 8-bit encoding.  Change it to `Unicode (UTF-8)`.  Select `Delimited`.  One the second screen, set `Delimiters` to `Tab`, and `Text qualifier`, which controls to quote character, to `{none}`.  The optional third screen allows the user to set the date formats of the columns.
 
 <a name="joins"/>
+
 # JOINS
 
 [tab](#join-tab) | [tsv](#join-tsv) | [sqlite](#sqlite) | [postgres](#postgres) | [r](#join-r) | [pandas](#join-pandas) | [hive](#hive) | [spark](#spark)
 
 <a name="join-tab"/>
+
 ## tab
 
 To illustrate joining at the command line we create some tab delimited files:
@@ -629,6 +651,7 @@ Here is an example of using `sort` and `join` to join by group id:
 This is tedious because (1) each file must be sorted by the join column, (2) the field delimiter must be specified for each invocation of `sort` and `join`, and (3) the join column index must be determined and specified.
 
 <a name="join-tsv"/>
+
 ## tsv
 
 `sort` and `join` don't handle files with headers correctly.  Since TSV files have headers, the *data tools* include a `dt join-tsv` command.
@@ -650,6 +673,7 @@ The output is in TSV format, and in particular it has a header.  The order of co
 `dt join-tsv` treats an empty string as the null value by default.  It can perform left, right, or full outer joins.  See the  [man page](https://github.com/clarkgrubb/data-tools/blob/master/doc/join-tsv.1.md) for details.
  
 <a name="sqlite"/>
+
 ## sqlite
 
 Using SQLite to perform a join:
@@ -668,6 +692,7 @@ Using SQLite to perform a join:
 There is no way to escape the separator when importing files into SQLite.
 
 <a name="postgres"/>
+
 ## postgres
 
     $ dt tab-to-csv < /tmp/pw.tab > /tmp/pw.csv
@@ -686,6 +711,7 @@ There is no way to escape the separator when importing files into SQLite.
     $ echo 'copy pw_grp to stdout with (format csv);' | psql > /tmp/pw_grp.csv
 
 <a name="join-r"/>
+
 ## r
 
 Using R to perform a join:
@@ -701,6 +727,7 @@ Using R to perform a join:
     > write.table(j, '/tmp/pw_grp.tsv', row.names=F, sep='\t', quote=F)
 
 <a name="join-pandas"/>
+
 ## pandas
 
 Using the Python library *pandas* to perform a join:
@@ -718,6 +745,7 @@ Using the Python library *pandas* to perform a join:
     > j.to_csv('/tmp/pw_grp.tsv', sep='\t', index=False)
 
 <a name="hive"/>
+
 ## hive
 
 [Hive functions](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-explode)
@@ -754,6 +782,7 @@ The result is the table:
     Cleaver	Ward	June	Beaver
 
 <a name="spark"/>
+
 ## spark
 
     $ spark-shell
@@ -763,6 +792,7 @@ The result is the table:
     > j.map(row => row.mkString("\t")).saveAsTextFile("/tmp/pw_grp")
     
 <a name="keys"/>
+
 # KEYS
 
 A *candidate key* is a minimal set of columns which can be used to uniquely identify rows.  A primary key is a candidate key, and other candidate keys can be declared using a uniqueness constraint.  When a candidate key is declared the database rejects inserts and updates that would violate the uniqueness constraint.
@@ -786,11 +816,13 @@ Usually, the columns should be a candidate key for either the left or the right 
 If there were _n_ customers with the same name, then the amount associated with their common name would be _n times_ the sum of their orders.  Incidentally, keeping the name of the customer in the orders relation is a violation of second normal form if a unique identifier for the customer is already in the orders table.
 
 <a name="hierarchical-fmt"/>
+
 # HIERARCHICAL FORMATS
 
 [json](#json) | [yaml](#yaml) | [html](#html) | [xml](#xml)
 
 <a name="json"/>
+
 ## json
 
 [json.org](http://json.org/)
@@ -897,6 +929,7 @@ for
 This forces the client to determine the meaning of the positions and hard code those positions in code.
 
 <a name="yaml"/>
+
 ## yaml
 
 To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
@@ -906,6 +939,7 @@ To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and 
 This can also be used to verify that YAML is valid.
 
 <a name="html"/>
+
 ## html
 
 TODO: a replacement for `dom-ruby`.
@@ -913,6 +947,7 @@ TODO: a replacement for `dom-ruby`.
 TODO: a replacement for `html-table-to-csv`
 
 <a name="xml"/>
+
 ## xml
 
 To check whether an XML file is well-formed, use:
