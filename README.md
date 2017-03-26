@@ -32,9 +32,11 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     dt highlight              highlight text matching REGEX
 
+    dt html-table-to-csv      extract table content from HTML file as CSV
+
     dt join-tsv               perform a relation join on two TSV files
-    
-    dt json-pluck             convert JSON array to JSON stream 
+
+    dt json-pluck             convert JSON array to JSON stream
 
     dt json-ruby              read JSON objects from standard input and process them with Ruby
 
@@ -55,19 +57,19 @@ Command line tools for data extraction, data manipulation, and file format conve
     dt tokenize               extract words from English language text
 
     dt trim-tsv               trim whitespace from fields of TSV file
-    
+
     dt tsv-header             show TSV header with ordinal position of each column
-    
+
     dt tsv-to-json            convert TSV to JSON
 
     dt utf8-category          tally UTF-8 encoded characters by general category
-    
+
     dt utf8-script            tally UTF-8 encoded characters by script
 
     dt utf8-viewer            display Unicode points and optionally names of UTF-8 encoded file
-    
+
     dt xls-to-csv             convert XLS to CSV
-    
+
     dt xlsx-to-csv            convert XLSX to CSV
 
     dt yaml-to-json           convert YAML to JSON
@@ -108,9 +110,9 @@ your system, then this might work:
     dt counting-sort          [FILE]
 
     dt csv-to-json            [-d DELIMITER] [-q QUOTECHAR] [CSV_FILE]
-    
+
     dt csv-to-postgres        -f CSV_PATH -t TABLE [-d DB] [-h HOST] [-p PORT] [-U USER] [-w|-W]
-    
+
     dt csv-to-tab             [-e|-x|-r] [CSV_FILE]
 
     dt csv-to-xlsx            -o XLSX_FILE CSV_FILE ...
@@ -122,11 +124,13 @@ your system, then this might work:
     dt header-sort            [OPTIONS] FILE
 
     dt highlight              REGEX [FILE]
-    
+
     dt highlight              (--red|--green|--yellow|--blue|--magenta|--cyan)=REGEX ... [FILE]
 
+    dt html-table-to-csv      [-t TABLE_NUM] [FILE]
+
     dt join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
-    
+
     dt json-pluck             < FILE
 
     dt json-ruby              [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
@@ -142,7 +146,7 @@ your system, then this might work:
     dt set-diff               FILE1 FILE2
 
     dt set-intersect          FILE1 FILE2
-    
+
     dt tab-to-csv             [-u] [TAB_DELIMITED_FILE]
 
     dt tokenize               [-n]
@@ -166,7 +170,7 @@ your system, then this might work:
     dt xlsx-to-csv            [--date-format=DATE_FMT] XLSX_FILE DIRECTORY
 
     dt xlsx-to-csv            [--date-format=DATE_FMT] --sheet=SHEET XLSX_FILE [OUTPUT_FILE]
-    
+
     dt xlsx-to-csv            --list XLSX_FILE
 
     dt yaml-to-json           [FILE]
@@ -175,7 +179,7 @@ your system, then this might work:
 
 # PLAIN TEXT: .TXT
 
-*Plain text* is a sequence of bytes which use an encoding to represent printable characters.  
+*Plain text* is a sequence of bytes which use an encoding to represent printable characters.
 
 If no other suffix is appropriate, `.txt` is a reasonable suffix for a plain text file.
 
@@ -196,9 +200,9 @@ The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is 
 Use `iconv` to convert a file in a different encoding:
 
     $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
-    
+
 To get a list of supported encodings:
-    
+
     $ iconv -l
 
 <a name="bad-bytes"/>
@@ -934,7 +938,7 @@ This forces the client to determine the meaning of the positions and hard code t
 
 To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
 
-    dt yaml-to-json .travis.yml | jq '.script' 
+    $ dt yaml-to-json .travis.yml | jq '.script'
 
 This can also be used to verify that YAML is valid.
 
@@ -944,7 +948,11 @@ This can also be used to verify that YAML is valid.
 
 TODO: a replacement for `dom-ruby`.
 
-TODO: a replacement for `html-table-to-csv`
+To extract the content of an HTML table from an HTML document:
+
+    $ curl 'http://hyperpolyglot.org/scripting' | dt -t 0 html-table-to-csv
+
+The `-t` flag specifies which table to extract. By default the first table, numbered 0, is extracted.
 
 <a name="xml"/>
 

@@ -87,6 +87,7 @@ install-script:
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
 	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
+	ln -sf $(src)/html_table_to_csv.py $(LOCAL_INSTALL_DIR)/html-table-to-csv
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
 	ln -sf $(src)/json_ruby.rb $(LOCAL_INSTALL_DIR)/json-ruby
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
@@ -217,6 +218,13 @@ test.highlight: highlight/input.txt | output/highlight
 	$(ve) && ./src/highlight.py -r control $< > output/highlight/output4.txt
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
 
+.PHONY: test.html_table_to_csv
+test.html_table_to_csv: | output/html_table_to_csv
+	$(ve) && ./src/html_table_to_csv.py \
+	  < test/html_table_to_csv/test.html \
+	  > output/html_table_to_csv/output.test.csv
+	diff output/html_table_to_csv/output.test.csv test/html_table_to_csv/expected.test.csv
+
 .PHONY: test.join_tsv
 test.join_tsv: | output/join_tsv
 	$(ve) && ./src/join_tsv.py --column=url \
@@ -345,7 +353,7 @@ test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
 	$(ve) && ./src/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
 python_base := convert_date counting_sort csv_to_json csv_to_tab
-python_base += csv_to_xlsx date_fill highlight join_tsv
+python_base += csv_to_xlsx date_fill highlight html_table_to_csv join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json
 python_harnesses := $(patsubst %,test.%,$(python_base))
