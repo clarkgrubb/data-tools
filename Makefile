@@ -18,7 +18,9 @@ VPATH = test
 GEM_HOME = .gems
 
 .PHONY: setup.ruby
-setup.ruby:
+setup.ruby: $(GEM_HOME)
+
+$(GEM_HOME):
 	GEM_HOME=$(GEM_HOME) gem install bundler
 	GEM_HOME=$(GEM_HOME) gem install rake
 	GEM_HOME=$(GEM_HOME) gem install rubocop
@@ -363,7 +365,7 @@ ruby.harness: $(ruby_harnesses)
 test.harness: python.harness ruby.harness shell.harness
 
 .PHONY: rubocop
-rubocop:
+rubocop: $(GEM_HOME)
 	find src -name '*.rb' \
 	  | GEM_HOME=$(GEM_HOME) xargs $(GEM_HOME)/bin/rubocop -c .rubocop.yml
 
