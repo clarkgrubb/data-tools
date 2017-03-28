@@ -2,6 +2,7 @@ FROM alpine:3.5
 RUN apk update \
     && apk add \
     bash \
+    curl \
     diffutils \
     gcc \
     make \
@@ -25,6 +26,8 @@ COPY requirements.txt /app/requirements.txt
 RUN python3 -m venv ve \
     && . ve/bin/activate \
     && pip install -r requirements.txt
+
+RUN curl ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt > /tmp/UnicodeData.txt
 
 COPY . /app
 RUN make check \
