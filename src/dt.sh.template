@@ -40,7 +40,7 @@ else
     shift
     if [ -e "$root_dir/bin/$cmd" ]
     then
-        . ./ve/bin/activate && GEM_HOME=.gems exec ${root_dir}/bin/$cmd "$@"
+        . ${root_dir}/ve/bin/activate && GEM_HOME=.gems exec ${root_dir}/bin/$cmd "$@"
     else
         echo "ERROR: unknown subcommand: $cmd" >&2
         usage
