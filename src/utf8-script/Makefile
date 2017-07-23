@@ -9,10 +9,10 @@ scripts_url := http://unicode.org/Public/UNIDATA/Scripts.txt
 unicode_data_url := ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 Scripts.txt:
-	wget $(scripts_url)
+	curl $(scripts_url) > Scripts.txt
 
 UnicodeData.txt:
-	wget $(unicode_data_url)
+	curl $(unicode_data_url) > UnicodeData.txt
 
 utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate_script.rb $^ > $@
