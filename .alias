@@ -1,2 +1,0 @@
-alias dbuild='docker build -t clarkgrubb/data-tools .'
-alias dt='docker run -i --rm clarkgrubb/data-tools'

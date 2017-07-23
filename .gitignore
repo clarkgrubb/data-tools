@@ -3,10 +3,6 @@ data_tools/csv-to-tab/csv-to-tab
 data_tools/tab-to-csv/tab-to-csv
 data_tools/json-pluck/json-pluck
 ve
-.gems
-.bundle
-bin
-dt
 build
 data_tools.egg-info
 dist

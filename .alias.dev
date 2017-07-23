@@ -1,2 +1,0 @@
-alias dmake='docker run --rm clarkgrubb/data-tools make'
-alias dbash='docker run -it --rm clarkgrubb/data-tools /bin/bash'
