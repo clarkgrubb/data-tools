@@ -6,3 +6,7 @@ ve
 build
 data_tools.egg-info
 dist
+src/utf8-script/Scripts.txt
+src/utf8-script/UnicodeData.txt
+src/utf8-script/utf8-script
+src/utf8-script/utf8-category

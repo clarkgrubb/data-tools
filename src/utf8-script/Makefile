@@ -41,8 +41,8 @@ output/utf8-category/%: test/utf8-category/input/% | output/utf8-category
 	./utf8-category < $< > $@
 	diff test/utf8-category/expected.output/$* $@
 
-utf8_script_tests := one two three
-utf8_category_tests := one two three four five
+utf8_script_tests := one
+utf8_category_tests := one
 utf8_script_test_files := $(patsubst %,output/utf8-script/%.txt,$(utf8_script_tests))
 utf8_category_test_files := $(patsubst %,output/utf8-category/%.txt,$(utf8_category_tests))
 test_files := $(utf8_script_test_files) $(utf8_category_test_files)
