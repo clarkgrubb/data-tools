@@ -20,6 +20,16 @@ setup(
     packages=[
         'data_tools'
     ],
+    scripts=[
+        'data_tools/check-tsv',
+	'data_tools/csv-to-postgres',
+	'data_tools/header-sort',
+	'data_tools/json-diff',
+	'data_tools/postgres-to-csv',
+	'data_tools/set-intersect',
+	'data_tools/tokenize',
+	'data_tools/tsv-header'
+    ],
     entry_points={
         'console_scripts': [
             'csv-to-json = data_tools.csv_to_json:main',

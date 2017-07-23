@@ -62,27 +62,27 @@ install-c: build
 
 .PHONY: install-script
 install-script:
-	ln -sf $(src)/check-tsv.sh $(LOCAL_INSTALL_DIR)/check-tsv
+	ln -sf $(src)/check-tsv $(LOCAL_INSTALL_DIR)/check-tsv
 	ln -sf $(src)/convert_date.py $(LOCAL_INSTALL_DIR)/convert-date
 	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
 	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
-	ln -sf $(src)/csv-to-postgres.sh $(LOCAL_INSTALL_DIR)/csv-to-postgres
+	ln -sf $(src)/csv-to-postgres $(LOCAL_INSTALL_DIR)/csv-to-postgres
 	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
 	ln -sf $(src)/date_fill.py $(LOCAL_INSTALL_DIR)/date-fill
 	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
-	ln -sf $(src)/header-sort.sh $(LOCAL_INSTALL_DIR)/header-sort
+	ln -sf $(src)/header-sort $(LOCAL_INSTALL_DIR)/header-sort
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/html_table_to_csv.py $(LOCAL_INSTALL_DIR)/html-table-to-csv
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
-	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
+	ln -sf $(src)/json-diff $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
-	ln -sf $(src)/postgres-to-csv.sh $(LOCAL_INSTALL_DIR)/postgres-to-csv
+	ln -sf $(src)/postgres-to-csv $(LOCAL_INSTALL_DIR)/postgres-to-csv
 	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
-	ln -sf $(src)/set-diff.sh $(LOCAL_INSTALL_DIR)/set-diff
-	ln -sf $(src)/set-intersect.sh $(LOCAL_INSTALL_DIR)/set-intersect
-	ln -sf $(src)/tokenize.sh $(LOCAL_INSTALL_DIR)/tokenize
+	ln -sf $(src)/set-diff $(LOCAL_INSTALL_DIR)/set-diff
+	ln -sf $(src)/set-intersect $(LOCAL_INSTALL_DIR)/set-intersect
+	ln -sf $(src)/tokenize $(LOCAL_INSTALL_DIR)/tokenize
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
-	ln -sf $(src)/tsv-header.sh $(LOCAL_INSTALL_DIR)/tsv-header
+	ln -sf $(src)/tsv-header $(LOCAL_INSTALL_DIR)/tsv-header
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
@@ -143,8 +143,8 @@ output/%:
 
 .PHONY: test.check_tsv
 test.check_tsv:
-	./data_tools/check-tsv.sh test/check_tsv/input.good.tsv
-	! ./data_tools/check-tsv.sh test/check_tsv/input.bad.tsv
+	./data_tools/check-tsv test/check_tsv/input.good.tsv
+	! ./data_tools/check-tsv test/check_tsv/input.bad.tsv
 
 .PHONY: test.convert_date
 test.convert_date:
@@ -254,9 +254,9 @@ test.join_tsv: | output/join_tsv
 
 .PHONY: test.json_diff
 test.json_diff: | output/json_diff
-	-./data_tools/json-diff.sh test/json_diff/1a.json test/json_diff/1b.json > output/json_diff/output1.txt
+	-./data_tools/json-diff test/json_diff/1a.json test/json_diff/1b.json > output/json_diff/output1.txt
 	diff -w test/json_diff/expected.output1.txt output/json_diff/output1.txt
-	-./data_tools/json-diff.sh test/json_diff/2a.json test/json_diff/2b.json > output/json_diff/output2.txt
+	-./data_tools/json-diff test/json_diff/2a.json test/json_diff/2b.json > output/json_diff/output2.txt
 	diff -w test/json_diff/expected.output2.txt output/json_diff/output2.txt
 
 .PHONY: test.normalize_utf8
@@ -275,7 +275,7 @@ test.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
 
 .PHONY: test.tsv_header
 test.tsv_header: | output/tsv_header
-	./data_tools/tsv-header.sh test/tsv_header/input.tsv > output/tsv_header/output.txt
+	./data_tools/tsv-header test/tsv_header/input.tsv > output/tsv_header/output.txt
 	diff test/tsv_header/expected.output.txt output/tsv_header/output.txt
 
 .PHONY: test.trim_tsv
@@ -337,9 +337,11 @@ pylint: ve
 	. ./ve/bin/activate && find data_tools -name '*.py' \
 	  | xargs pylint --rcfile .pylintrc --disable=missing-docstring
 
+shell_scripts := $(shell grep -l '/usr/bin/env bash' data_tools/* 2> /dev/null)
+
 .PHONY: shellcheck
 shellcheck:
-	find data_tools -name '*.sh' | xargs shellcheck
+	echo $(shell_scripts) | xargs shellcheck
 
 # TODO: no shellcheck
 .PHONY: check
