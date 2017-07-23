@@ -24,9 +24,6 @@ bin:
 	mkdir $@
 	LOCAL_INSTALL_DIR=$(shell pwd)/bin make install-script install-c
 
-dt.sh:
-	./data_tools/install-dt.sh .
-
 .PHONY: setup
 setup: ve bin setup.python
 
@@ -53,18 +50,15 @@ tab-to-csv:
 	(cd data_tools/$@; make)
 
 .PHONY: build
-build: install-c
+build: utf8-script csv-to-tab tab-to-csv json-pluck
 
 .PHONY: install-c
-install-c: utf8-script csv-to-tab tab-to-csv json-pluck
+install-c: build
 	ln -sf $(pwd)/data_tools/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
 	ln -sf $(pwd)/data_tools/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
 	ln -sf $(pwd)/data_tools/csv-to-tab/csv-to-tab $(LOCAL_INSTALL_DIR)/csv-to-tab
 	ln -sf $(pwd)/data_tools/tab-to-csv/tab-to-csv $(LOCAL_INSTALL_DIR)/tab-to-csv
 	ln -sf $(pwd)/data_tools/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
-
-.PHONY: install-build
-install-build: install-c
 
 .PHONY: install-script
 install-script:
@@ -80,7 +74,6 @@ install-script:
 	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
 	ln -sf $(src)/html_table_to_csv.py $(LOCAL_INSTALL_DIR)/html-table-to-csv
 	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
-	ln -sf $(src)/json_ruby.rb $(LOCAL_INSTALL_DIR)/json-ruby
 	ln -sf $(src)/json-diff.sh $(LOCAL_INSTALL_DIR)/json-diff
 	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
 	ln -sf $(src)/postgres-to-csv.sh $(LOCAL_INSTALL_DIR)/postgres-to-csv
@@ -128,7 +121,7 @@ install-man: $(local_man1_dir)
 	done
 
 .PHONY: install
-install: install-build install-script install-man
+install: install-c install-script install-man
 
 .PHONY: all
 all: build
