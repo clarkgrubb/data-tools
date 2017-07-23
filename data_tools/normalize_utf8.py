@@ -23,8 +23,7 @@ def normalize_utf8(input_stream, output_stream, normalization_form):
         output_stream.write(unicodedata.normalize(normalization_form, line))
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('positional_args',
                         nargs='?')
@@ -70,3 +69,7 @@ if __name__ == '__main__':
         fin = sys.stdin
 
     normalize_utf8(fin, sys.stdout, normalization_form)
+
+
+if __name__ == '__main__':
+    main()

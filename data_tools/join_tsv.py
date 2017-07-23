@@ -13,7 +13,6 @@ JOIN_LEFT = 2
 JOIN_RIGHT = 3
 JOIN_FULL = 4
 DEFAULT_OUTER_NULL = ''
-outer_null = None
 
 
 def header_and_column_to_rows(path, column):
@@ -59,7 +58,8 @@ def join_tsv(left_join_column,
              join_type,
              path1,
              path2,
-             output_stream):
+             output_stream,
+             outer_null):
 
     if os.path.getsize(path1) > os.path.getsize(path2):
         big, small, file_order = path1, path2, BIG_FIRST
@@ -146,8 +146,7 @@ def join_tsv(left_join_column,
                             output_stream)
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('files',
                         nargs='+',
@@ -226,12 +225,15 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
-    outer_null = args.outer_null
-
     join_tsv(left_join_column,
              right_join_column,
              None if args.no_null else args.null,
              join_type,
              args.files[0],
              args.files[1],
-             sys.stdout)
+             sys.stdout,
+             args.outer_null)
+
+
+if __name__ == '__main__':
+    main()

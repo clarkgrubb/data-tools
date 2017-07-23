@@ -13,8 +13,7 @@ def trim_tsv(input_stream, output_stream):
         output_stream.write('\n')
 
 
-if __name__ == '__main__':
-
+def main():
     if len(sys.argv) == 1:
         trim_tsv(sys.stdin, sys.stdout)
     elif len(sys.argv) == 2:
@@ -23,3 +22,7 @@ if __name__ == '__main__':
     else:
         sys.stderr.write("USAGE: trim-tsv [FILE]\n")
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

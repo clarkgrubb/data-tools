@@ -194,40 +194,44 @@ def date_fill(input_path,
                 len(date_to_line.keys()) - (line_count - fill_count)))
 
 
-parser = argparse.ArgumentParser()
+def main():
+    parser = argparse.ArgumentParser()
 
-parser.add_argument('--start', '-s', help='YYYY[MM[DD[HH[MI[SS]]]]]',
-                    dest='start',
-                    default=None)
-parser.add_argument('--end', '-e', help='YYYY[MM[DD[HH[MI[SS]]]]]',
-                    dest='end',
-                    default=None)
-parser.add_argument('--date-column', '-d',
-                    help='column containing date: first column is 0',
-                    type=int,
-                    dest='date_column')
-parser.add_argument('--format', '-f',
-                    dest='format', help='strftime style format for output',
-                    default=None)
-parser.add_argument('--no-header', '-H', help='if file has no header',
-                    dest='no_header',
-                    action='store_true')
-parser.add_argument('--input-path', '-i',
-                    dest='input_path', help='input path for TSV',
-                    required=True)
-parser.add_argument('--fill-values', '-v',
-                    help='comma-separated list of fill values',
-                    dest='fill_values',
-                    default='')
+    parser.add_argument('--start', '-s', help='YYYY[MM[DD[HH[MI[SS]]]]]',
+                        dest='start',
+                        default=None)
+    parser.add_argument('--end', '-e', help='YYYY[MM[DD[HH[MI[SS]]]]]',
+                        dest='end',
+                        default=None)
+    parser.add_argument('--date-column', '-d',
+                        help='column containing date: first column is 0',
+                        type=int,
+                        dest='date_column')
+    parser.add_argument('--format', '-f',
+                        dest='format', help='strftime style format for output',
+                        default=None)
+    parser.add_argument('--no-header', '-H', help='if file has no header',
+                        dest='no_header',
+                        action='store_true')
+    parser.add_argument('--input-path', '-i',
+                        dest='input_path', help='input path for TSV',
+                        required=True)
+    parser.add_argument('--fill-values', '-v',
+                        help='comma-separated list of fill values',
+                        dest='fill_values',
+                        default='')
 
-args = parser.parse_args()
+    args = parser.parse_args()
+
+    date_fill(args.input_path,
+              args.date_column,
+              args.no_header,
+              args.fill_values,
+              args.start,
+              args.end,
+              args.format,
+              sys.stdout)
 
 
-date_fill(args.input_path,
-          args.date_column,
-          args.no_header,
-          args.fill_values,
-          args.start,
-          args.end,
-          args.format,
-          sys.stdout)
+if __name__ == '__main__':
+    main()

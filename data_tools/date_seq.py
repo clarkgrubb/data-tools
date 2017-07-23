@@ -163,29 +163,33 @@ def date_seq(start,
         output_stream.write(dt.strftime(output_fmt) + '\n')
 
 
-parser = argparse.ArgumentParser()
+def main():
+    parser = argparse.ArgumentParser()
 
-parser.add_argument('start', help='YYYY[MM[DD[HH[MI[SS]]]]]')
-parser.add_argument('end', help='YYYY[MM[DD[HH[MI[SS]]]]]')
+    parser.add_argument('start', help='YYYY[MM[DD[HH[MI[SS]]]]]')
+    parser.add_argument('end', help='YYYY[MM[DD[HH[MI[SS]]]]]')
 
-parser.add_argument('--format', '-f',
-                    dest='format', help='strftime style format for output',
-                    default=None)
+    parser.add_argument('--format', '-f',
+                        dest='format', help='strftime style format for output',
+                        default=None)
 
-parser.add_argument('--regex', '-r',
-                    dest='date_filter', help='date filter regex.',
-                    default=None)
+    parser.add_argument('--regex', '-r',
+                        dest='date_filter', help='date filter regex.',
+                        default=None)
 
-parser.add_argument('--weekdays', '-w',
-                    dest='weekdays', help='comma separated: Sun,Mon,...',
-                    default=None)
+    parser.add_argument('--weekdays', '-w',
+                        dest='weekdays', help='comma separated: Sun,Mon,...',
+                        default=None)
 
-args = parser.parse_args()
+    args = parser.parse_args()
+
+    date_seq(args.start,
+             args.end,
+             args.weekdays,
+             args.date_filter,
+             args.format,
+             sys.stdout)
 
 
-date_seq(args.start,
-         args.end,
-         args.weekdays,
-         args.date_filter,
-         args.format,
-         sys.stdout)
+if __name__ == '__main__':
+    main()

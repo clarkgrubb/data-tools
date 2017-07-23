@@ -66,8 +66,7 @@ def xlsx_path_to_csvs(xlsx_path, dir_path, date_fmt):
         xlsx_book_to_csv(book, sheet_path, sheet_name, date_fmt)
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('paths',
                         nargs='*',
@@ -107,3 +106,7 @@ if __name__ == '__main__':
             sys.exit(1)
         os.makedirs(args.paths[1])
         xlsx_path_to_csvs(args.paths[0], args.paths[1], args.date_fmt)
+
+
+if __name__ == '__main__':
+    main()

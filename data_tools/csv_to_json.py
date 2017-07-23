@@ -20,7 +20,7 @@ def csv_to_json(input_stream, output_stream, header_str, delimiter, quotechar):
         output_stream.write('\n')
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('input', nargs='?')
@@ -42,3 +42,6 @@ if __name__ == '__main__':
         f = sys.stdin
 
     csv_to_json(f, sys.stdout, args.header, args.delimiter, args.quotechar)
+
+if __name__ == '__main__':
+    main()

@@ -39,8 +39,7 @@ def highlight(input_stream, output_stream, esc_seq_to_pattern):
         output_stream.write(output_line)
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('positional', nargs='*')
     parser.add_argument('--black',
@@ -191,3 +190,7 @@ if __name__ == '__main__':
             highlight(f, sys.stdout, esc_seq_to_pattern)
     else:
         highlight(sys.stdin, sys.stdout, esc_seq_to_pattern)
+
+
+if __name__ == '__main__':
+    main()

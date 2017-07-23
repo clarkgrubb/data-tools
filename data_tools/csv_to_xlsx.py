@@ -51,7 +51,7 @@ def csv_to_xlsx(input_files, output_file):
     wb.save(output_file)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('input_files',
                         nargs='+',
@@ -68,3 +68,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     csv_to_xlsx(args.input_files, args.output_file)
+
+
+if __name__ == '__main__':
+    main()

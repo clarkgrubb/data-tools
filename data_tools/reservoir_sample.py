@@ -28,8 +28,7 @@ def reservoir_sample(count, input_stream, output_stream):
         output_stream.write(line)
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('positional',
                         nargs='?',
@@ -52,3 +51,7 @@ if __name__ == '__main__':
             reservoir_sample(args.size, f, sys.stdout)
     else:
         reservoir_sample(args.size, sys.stdin, sys.stdout)
+
+
+if __name__ == '__main__':
+    main()

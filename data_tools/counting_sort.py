@@ -17,7 +17,8 @@ def counting_sort(input_stream, output_stream):
         for _ in range(0, buckets[key]):
             output_stream.write(key)
 
-if __name__ == '__main__':
+
+def main():
     if len(sys.argv) == 1:
         counting_sort(sys.stdin, sys.stdout)
     elif len(sys.argv) == 2:
@@ -28,3 +29,7 @@ if __name__ == '__main__':
                 counting_sort(input_stream, sys.stdout)
     else:
         usage()
+
+
+if __name__ == '__main__':
+    main()

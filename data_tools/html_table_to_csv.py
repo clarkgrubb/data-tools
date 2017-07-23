@@ -25,7 +25,7 @@ def html_table_to_csv(input_f: IO, output_f: IO, table_num: int) -> None:
         sys.exit(1)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--table', '-t',
                         dest='table',
@@ -39,3 +39,7 @@ if __name__ == '__main__':
             html_table_to_csv(f, sys.stdout, args.table)
     else:
         html_table_to_csv(sys.stdin, sys.stdout, args.table)
+
+
+if __name__ == '__main__':
+    main()
