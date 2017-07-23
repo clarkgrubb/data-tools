@@ -24,5 +24,16 @@ test_files := $(patsubst %,output/%.json,$(tests))
 .PHONY: test
 test: $(test_files)
 
-clean:
+.PHONY: check
+check: test
+
+.PHONY: clean.test
+clean.test:
 	rm -rf output
+
+.PHONY: clean.build
+clean.build:
+	rm json-pluck
+
+.PHONY: clean
+clean: clean.test

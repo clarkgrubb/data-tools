@@ -1,6 +1,33 @@
 #!/usr/bin/env python3
-
+import sys
 from setuptools import setup
+
+SHELL_TOOLS = [
+    'data_tools/check-tsv',
+    'data_tools/csv-to-postgres',
+    'data_tools/header-sort',
+    'data_tools/json-diff',
+    'data_tools/postgres-to-csv',
+    'data_tools/set-intersect',
+    'data_tools/tokenize',
+    'data_tools/tsv-header'
+]
+
+C_TOOLS = [
+    'src/csv-to-tab/csv-to-tab',
+    'src/json-pluck/json-pluck',
+    'src/tab-to-csv/tab-to-csv',
+    'src/utf8-script/utf8-category',
+    'src/utf8-script/utf8-script'
+]
+
+def build():
+    pass
+
+scripts = []
+if sys.platform != 'win32':
+    build()
+    scripts = SHELL_TOOLS + C_TOOLS
 
 setup(
     name='data-tools',
@@ -20,16 +47,7 @@ setup(
     packages=[
         'data_tools'
     ],
-    scripts=[
-        'data_tools/check-tsv',
-	'data_tools/csv-to-postgres',
-	'data_tools/header-sort',
-	'data_tools/json-diff',
-	'data_tools/postgres-to-csv',
-	'data_tools/set-intersect',
-	'data_tools/tokenize',
-	'data_tools/tsv-header'
-    ],
+    scripts=scripts,
     entry_points={
         'console_scripts': [
             'csv-to-json = data_tools.csv_to_json:main',

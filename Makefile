@@ -13,7 +13,6 @@ man1_source := $(wildcard doc/*.1.md)
 man1_targets := $(patsubst doc/%.md,man/%,$(man1_source))
 pwd := $(shell pwd)
 src := $(pwd)/src
-pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
 
 .PHONY: setup.python
@@ -46,7 +45,7 @@ tab-to-csv:
 	(cd src/$@; make)
 
 .PHONY: build
-build: utf8-script csv-to-tab tab-to-csv json-pluck
+build: ve utf8-script csv-to-tab tab-to-csv json-pluck
 
 # To generate the man pages `pandoc` must be installed.  On Mac go to
 #
@@ -74,7 +73,7 @@ install-script:
 	./setup.py install
 
 .PHONY: install-c
-istall-c: build
+install-c: build
 	echo 'NOT IMPLEMENTED: install-c'
 
 .PHONY: install-man
@@ -115,7 +114,7 @@ test.check_tsv:
 	! ./data_tools/check-tsv test/check_tsv/input.bad.tsv
 
 .PHONY: test.convert_date
-test.convert_date:
+test.convert_date: ve
 	$(ve) && cat test/convert_date/input.txt | ./data_tools/convert_date.py -i %s \
 	| ./data_tools/convert_date.py -i %Y-%m-%dT%H:%M:%S -o %s \
 	| diff - test/convert_date/input.txt
@@ -124,13 +123,13 @@ test.convert_date:
 	| diff - test/convert_date/input.txt
 
 .PHONY: test.counting_sort
-test.counting_sort: counting_sort/input.txt | output/counting_sort
+test.counting_sort: counting_sort/input.txt ve | output/counting_sort
 	$(ve) && ./data_tools/counting_sort.py $< > output/counting_sort/output.txt
 	sort $< > output/counting_sort/expected.output.txt
 	diff output/counting_sort/output.txt output/counting_sort/expected.output.txt
 
 .PHONY: test.csv_to_json
-test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
+test.csv_to_json: csv_to_json/test.csv ve | output/csv_to_json
 	$(ve) && ./data_tools/csv_to_json.py $< > output/csv_to_json/test.csv_to_json.json
 	$(ve) && echo $$'λ,two\nthree,four' | ./data_tools/csv_to_json.py > output/csv_to_json/unicode.json
 	$(ve) && echo $$'λ,two\nthree,four' \
@@ -147,19 +146,19 @@ test.csv_to_tab: | csv-to-tab output/csv_to_tab
 
 
 .PHONY: test.sv_to_xlsx
-test.csv_to_xlsx: | output/csv_to_xlsx
+test.csv_to_xlsx: ve | output/csv_to_xlsx
 	$(ve) && ./data_tools/csv_to_xlsx.py -o output/csv_to_xlsx/output.xlsx \
 	test/csv_files/no-header.csv \
 	test/csv_files/unicode.csv
 
 .PHONY: test.date_fill
-test.date_fill: | output/date_fill
+test.date_fill: ve | output/date_fill
 	$(ve) && ./data_tools/date_fill.py --date-column=0 --format=%Y-%m-%dT%H -i test/date_fill/input.tsv \
 	> output/date_fill/output.tsv
 	diff output/date_fill/output.tsv test/date_fill/expected.output.tsv
 
 .PHONY: test.highlight
-test.highlight: highlight/input.txt | output/highlight
+test.highlight: highlight/input.txt ve | output/highlight
 	$(ve) && ./data_tools/highlight.py control < $< > output/highlight/output1.txt
 	diff test/highlight/expected.output.txt output/highlight/output1.txt
 	$(ve) && ./data_tools/highlight.py control $< > output/highlight/output2.txt
@@ -170,14 +169,14 @@ test.highlight: highlight/input.txt | output/highlight
 	diff test/highlight/expected.output.txt output/highlight/output4.txt
 
 .PHONY: test.html_table_to_csv
-test.html_table_to_csv: | output/html_table_to_csv
+test.html_table_to_csv: ve | output/html_table_to_csv
 	$(ve) && ./data_tools/html_table_to_csv.py \
 	  < test/html_table_to_csv/test.html \
 	  > output/html_table_to_csv/output.test.csv
 	diff output/html_table_to_csv/output.test.csv test/html_table_to_csv/expected.test.csv
 
 .PHONY: test.join_tsv
-test.join_tsv: | output/join_tsv
+test.join_tsv: ve | output/join_tsv
 	$(ve) && ./data_tools/join_tsv.py --column=url \
 	test/join_tsv/input1.tsv \
 	test/join_tsv/input2.tsv \
@@ -228,7 +227,7 @@ test.json_diff: | output/json_diff
 	diff -w test/json_diff/expected.output2.txt output/json_diff/output2.txt
 
 .PHONY: test.normalize_utf8
-test.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
+test.normalize_utf8: normalize_utf8/input.txt ve | output/normalize_utf8
 	$(ve) && ./data_tools/normalize_utf8.py < $< > output/normalize_utf8/output.nfc.txt
 	diff test/normalize_utf8/expected.output.nfc.txt output/normalize_utf8/output.nfc.txt
 	$(ve) && ./data_tools/normalize_utf8.py $< > output/normalize_utf8/output.nfc.2.txt
@@ -237,7 +236,7 @@ test.normalize_utf8: normalize_utf8/input.txt | output/normalize_utf8
 	diff test/normalize_utf8/expected.output.nfd.txt output/normalize_utf8/output.nfd.txt
 
 .PHONY: test.reservoir_sample
-test.reservoir_sample: reservoir_sample/input.txt | output/reservoir_sample
+test.reservoir_sample: reservoir_sample/input.txt ve | output/reservoir_sample
 	$(ve) && ./data_tools/reservoir_sample.py -r 17 -s 3 < $< > output/reservoir_sample/output.txt
 	diff test/reservoir_sample/expected.output.txt output/reservoir_sample/output.txt
 
@@ -247,7 +246,7 @@ test.tsv_header: | output/tsv_header
 	diff test/tsv_header/expected.output.txt output/tsv_header/output.txt
 
 .PHONY: test.trim_tsv
-test.trim_tsv: | output/trim_tsv
+test.trim_tsv: ve | output/trim_tsv
 	$(ve) && echo -n $$' one \t two \n three \t four' \
 	  | ./data_tools/trim_tsv.py > output/trim_tsv/trim_tsv.tsv
 	diff test/trim_tsv/expected.trim_tsv.tsv output/trim_tsv/trim_tsv.tsv
@@ -260,11 +259,11 @@ test.trim_tsv: | output/trim_tsv
 #	diff $< output/tab_to_csv/escape.tsv
 
 .PHONY: test.tsv_to_json
-test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
+test.tsv_to_json: tsv_to_json/test.tsv ve | output/tsv_to_json
 	$(ve) && ./data_tools/tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
 
 .PHONY: test.xlsx_to_csv
-test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
+test.xlsx_to_csv: xlsx_to_csv/test.xlsx ve | output/xlsx_to_csv
 	$(ve) && ./data_tools/xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
 	$(ve) && ./data_tools/xlsx_to_csv.py --sheet=three_rows_three_cols $< output/xlsx_to_csv/3r3c.csv
 	$(ve) && ./data_tools/xlsx_to_csv.py --sheet=unicode $< output/xlsx_to_csv/unicode.csv
@@ -277,7 +276,7 @@ test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	diff output/xlsx_to_csv/dates.csv test/xlsx_to_csv/expected.dates.csv
 
 .PHONY: test.yaml_to_json
-test.yaml_to_json: yaml_to_json/input.yaml | output/yaml_to_json
+test.yaml_to_json: yaml_to_json/input.yaml ve | output/yaml_to_json
 	$(ve) && ./data_tools/yaml_to_json.py $< > output/yaml_to_json/ouptut1.json
 	$(ve) && ./data_tools/yaml_to_json.py < $< > output/yaml_to_json/output2.json
 
@@ -285,15 +284,22 @@ python_base := convert_date counting_sort csv_to_json csv_to_tab
 python_base += csv_to_xlsx date_fill highlight html_table_to_csv join_tsv
 python_base += normalize_utf8 reservoir_sample trim_tsv tsv_to_json
 python_base += xlsx_to_csv yaml_to_json
-python_harnesses := $(patsubst %,test.%,$(python_base))
+python_tests := $(patsubst %,test.%,$(python_base))
 
-.PHONY: python.harness
-python.harness: $(python_harnesses)
+.PHONY: test.c
+test.c:
+	cd src/csv-to-tab && make test
+	cd src/json-pluck && make test
+	cd src/tab-to-csv && make test
+	cd src/utf8-script && make test
 
-shell.harness: test.check_tsv test.json_diff test.tsv_header
+.PHONY: test.python
+test.python: $(python_tests)
 
-.PHONY: test.harness
-test.harness: python.harness shell.harness
+test.shell: test.check_tsv test.json_diff test.tsv_header
+
+.PHONY: test
+test: test.python test.shell
 
 .PHONY: pep8
 pep8: ve
@@ -311,13 +317,36 @@ shell_scripts := $(shell grep -l '/usr/bin/env bash' data_tools/* 2> /dev/null)
 shellcheck:
 	echo $(shell_scripts) | xargs shellcheck
 
-# TODO: no shellcheck
+.PHONY: check.c
+check.c:
+	cd src/csv-to-tab && make check
+	cd src/json-pluck && make check
+	cd src/tab-to-csv && make check
+	cd src/utf8-script && make check
+
 .PHONY: check
-check: pylint pep8 test.harness
+check: pylint pep8 shellcheck check.c test
+
+.PHONY: clean.test
+clean.test:
+	-rm -rf output
+	cd src/csv-to-tab && make $@
+	cd src/json-pluck && make $@
+	cd src/tab-to-csv && make $@
+	cd src/utf8-script && make $@
+
+.PHONY: clean.build
+clean.build:
+	rm -rf ve
+	-find . -name '*.pyc' | xargs rm
+	cd src/csv-to-tab && make $@
+	cd src/json-pluck && make $@
+	cd src/tab-to-csv && make $@
+	cd src/utf8-script && make $@
+
+.PHONY: clean.generate
+clean.generate:
+	cd src/utf8-script && make $@
 
 .PHONY: clean
-clean:
-	-find . -name '*.pyc' | xargs rm
-	-find doc -name '*.[0-9]' | xargs rm
-	-find . -name '*.html' | xargs rm
-	-rm -rf output
+clean: clean.test

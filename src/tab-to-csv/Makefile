@@ -53,7 +53,13 @@ cppcheck:
 .PHONY: check
 check: cppcheck test
 
-.PHONY: clean
-clean:
-	rm -rf output
+.PHONY: clean.build
+clean.build:
 	rm tab-to-csv
+
+.PHONY: clean.test
+clean.test:
+	rm -rf output
+
+.PHONY: clean
+clean: clean.test

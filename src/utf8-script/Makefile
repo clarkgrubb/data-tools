@@ -9,10 +9,10 @@ scripts_url := http://unicode.org/Public/UNIDATA/Scripts.txt
 unicode_data_url := ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 Scripts.txt:
-	curl $(scripts_url) > Scripts.txt
+	curl $(scripts_url) > $@
 
 UnicodeData.txt:
-	curl $(unicode_data_url) > UnicodeData.txt
+	curl $(unicode_data_url) > $@
 
 utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate_script.rb $^ > $@
@@ -50,11 +50,23 @@ test_files := $(utf8_script_test_files) $(utf8_category_test_files)
 .PHONY: test
 test: $(test_files)
 
+.PHONY: check
+check: test
+
 rubocop:
 	find . -name '*.rb' | xargs rubocop -D
 
-clean:
+.PHONY: clean.test
+clean.test:
 	rm -rf output
 
-clobber: clean
-	rm utf8-script utf8-category utf8_script.c utf8_category.c
+.PHONY: clean.build
+clean.build:
+	rm utf8-script utf8-category
+
+.PHONY: clean.generate
+clean.generate:
+	rm utf8_script.c utf8_category.c Scripts.txt UnicodeData.txt
+
+.PHONY: clean
+clean: clean.test
