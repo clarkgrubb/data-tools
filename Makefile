@@ -20,12 +20,8 @@ VPATH = test
 setup.python:
 	pip3 install -r requirements.txt
 
-bin:
-	mkdir $@
-	LOCAL_INSTALL_DIR=$(shell pwd)/bin make install-script install-c
-
 .PHONY: setup
-setup: ve bin setup.python
+setup: ve setup.python
 
 ve := . ve/bin/activate
 
@@ -35,58 +31,22 @@ ve:
 
 .PHONY: utf8-script
 utf8-script:
-	(cd data_tools/$@; make)
+	(cd src/$@; make)
 
 .PHONY: csv-to-tab
 csv-to-tab:
-	(cd data_tools/$@; make)
+	(cd src/$@; make)
 
 .PHONY: json-pluck
 json-pluck:
-	(cd data_tools/$@; make)
+	(cd src/$@; make)
 
 .PHONY: tab-to-csv
 tab-to-csv:
-	(cd data_tools/$@; make)
+	(cd src/$@; make)
 
 .PHONY: build
 build: utf8-script csv-to-tab tab-to-csv json-pluck
-
-.PHONY: install-c
-install-c: build
-	ln -sf $(pwd)/data_tools/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)/utf8-script
-	ln -sf $(pwd)/data_tools/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)/utf8-category
-	ln -sf $(pwd)/data_tools/csv-to-tab/csv-to-tab $(LOCAL_INSTALL_DIR)/csv-to-tab
-	ln -sf $(pwd)/data_tools/tab-to-csv/tab-to-csv $(LOCAL_INSTALL_DIR)/tab-to-csv
-	ln -sf $(pwd)/data_tools/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)/json-pluck
-
-.PHONY: install-script
-install-script:
-	ln -sf $(src)/check-tsv $(LOCAL_INSTALL_DIR)/check-tsv
-	ln -sf $(src)/convert_date.py $(LOCAL_INSTALL_DIR)/convert-date
-	ln -sf $(src)/counting_sort.py $(LOCAL_INSTALL_DIR)/counting-sort
-	ln -sf $(src)/csv_to_json.py $(LOCAL_INSTALL_DIR)/csv-to-json
-	ln -sf $(src)/csv-to-postgres $(LOCAL_INSTALL_DIR)/csv-to-postgres
-	ln -sf $(src)/csv_to_xlsx.py $(LOCAL_INSTALL_DIR)/csv-to-xlsx
-	ln -sf $(src)/date_fill.py $(LOCAL_INSTALL_DIR)/date-fill
-	ln -sf $(src)/date_seq.py $(LOCAL_INSTALL_DIR)/date-seq
-	ln -sf $(src)/header-sort $(LOCAL_INSTALL_DIR)/header-sort
-	ln -sf $(src)/highlight.py $(LOCAL_INSTALL_DIR)/highlight
-	ln -sf $(src)/html_table_to_csv.py $(LOCAL_INSTALL_DIR)/html-table-to-csv
-	ln -sf $(src)/join_tsv.py $(LOCAL_INSTALL_DIR)/join-tsv
-	ln -sf $(src)/json-diff $(LOCAL_INSTALL_DIR)/json-diff
-	ln -sf $(src)/normalize_utf8.py $(LOCAL_INSTALL_DIR)/normalize-utf8
-	ln -sf $(src)/postgres-to-csv $(LOCAL_INSTALL_DIR)/postgres-to-csv
-	ln -sf $(src)/reservoir_sample.py $(LOCAL_INSTALL_DIR)/reservoir-sample
-	ln -sf $(src)/set-diff $(LOCAL_INSTALL_DIR)/set-diff
-	ln -sf $(src)/set-intersect $(LOCAL_INSTALL_DIR)/set-intersect
-	ln -sf $(src)/tokenize $(LOCAL_INSTALL_DIR)/tokenize
-	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
-	ln -sf $(src)/tsv-header $(LOCAL_INSTALL_DIR)/tsv-header
-	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
-	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
-	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
-	ln -sf $(src)/yaml_to_json.py $(LOCAL_INSTALL_DIR)/yaml-to-json
 
 # To generate the man pages `pandoc` must be installed.  On Mac go to
 #
@@ -108,6 +68,14 @@ man_targets: $(man1_targets)
 
 $(local_man1_dir):
 	mkdir -p $@
+
+.PHONY: install-script
+install-script:
+	./setup.py install
+
+.PHONY: install-c
+istall-c: build
+	echo 'NOT IMPLEMENTED: install-c'
 
 .PHONY: install-man
 install-man: $(local_man1_dir)
@@ -170,11 +138,11 @@ test.csv_to_json: csv_to_json/test.csv | output/csv_to_json
 
 .PHONY: test.csv_to_tab
 test.csv_to_tab: | csv-to-tab output/csv_to_tab
-	echo -n $$'one,two\nthree,four' | ./data_tools/csv-to-tab/csv-to-tab > output/csv_to_tab/test.csv_to_tab.tab
+	echo -n $$'one,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/test.csv_to_tab.tab
 	diff test/csv_to_tab/expected.tab output/csv_to_tab/test.csv_to_tab.tab
-	echo $$'λ,two\nthree,four' | ./data_tools/csv-to-tab/csv-to-tab > output/csv_to_tab/unicode.tab
+	echo $$'λ,two\nthree,four' | ./src/csv-to-tab/csv-to-tab > output/csv_to_tab/unicode.tab
 	diff test/csv_to_tab/expected.unicode.tab output/csv_to_tab/unicode.tab
-	echo -n $$'one,two\ttwo\nthree,four' | ./data_tools/csv-to-tab/csv-to-tab --escape > output/csv_to_tab/test.csv_to_tab.escape.tab
+	echo -n $$'one,two\ttwo\nthree,four' | ./src/csv-to-tab/csv-to-tab --escape > output/csv_to_tab/test.csv_to_tab.escape.tab
 	diff test/csv_to_tab/expected.escape.tab output/csv_to_tab/test.csv_to_tab.escape.tab
 
 
