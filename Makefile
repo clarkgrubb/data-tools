@@ -15,15 +15,6 @@ pwd := $(shell pwd)
 src := $(pwd)/src
 pip_pkgs := openpyxl xlrd PyYAML pylint pep8
 VPATH = test
-GEM_HOME = .gems
-
-.PHONY: setup.ruby
-setup.ruby: $(GEM_HOME)
-
-$(GEM_HOME):
-	GEM_HOME=$(GEM_HOME) gem install bundler
-	GEM_HOME=$(GEM_HOME) gem install rake
-	GEM_HOME=$(GEM_HOME) gem install rubocop
 
 .PHONY: setup.python
 setup.python:
@@ -37,7 +28,7 @@ dt.sh:
 	./data_tools/install-dt.sh .
 
 .PHONY: setup
-setup: ve bin setup.ruby setup.python
+setup: ve bin setup.python
 
 ve := . ve/bin/activate
 
@@ -100,7 +91,6 @@ install-script:
 	ln -sf $(src)/trim_tsv.py $(LOCAL_INSTALL_DIR)/trim-tsv
 	ln -sf $(src)/tsv-header.sh $(LOCAL_INSTALL_DIR)/tsv-header
 	ln -sf $(src)/tsv_to_json.py $(LOCAL_INSTALL_DIR)/tsv-to-json
-	ln -sf $(src)/utf8_viewer.rb $(LOCAL_INSTALL_DIR)/utf8-viewer
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xls-to-csv
 	ln -sf $(src)/xlsx_to_csv.py $(LOCAL_INSTALL_DIR)/xlsx-to-csv
 	ln -sf $(src)/yaml_to_json.py $(LOCAL_INSTALL_DIR)/yaml-to-json
@@ -143,7 +133,7 @@ install: install-build install-script install-man
 .PHONY: all
 all: build
 	@echo
-	@echo 'To install Ruby gems and Python packages:'
+	@echo 'To install Python packages:'
 	@echo
 	@echo '   $$ sudo make setup'
 	@echo
@@ -269,13 +259,6 @@ test.join_tsv: | output/join_tsv
 	> output/join_tsv/output.diff.tsv
 	diff test/join_tsv/expected.output.diff.tsv output/join_tsv/output.diff.tsv
 
-.PHONY: test.json_ruby
-test.json_ruby: json_ruby/input.json | output/json_ruby
-	./data_tools/json_ruby.rb 'puts $$_["foo"]' $< > output/json_ruby/output1.txt
-	diff test/json_ruby/expected.output.txt output/json_ruby/output1.txt
-	./data_tools/json_ruby.rb 'puts $$_["foo"]' < $< > output/json_ruby/output2.txt
-	diff test/json_ruby/expected.output.txt output/json_ruby/output2.txt
-
 .PHONY: test.json_diff
 test.json_diff: | output/json_diff
 	-./data_tools/json-diff.sh test/json_diff/1a.json test/json_diff/1b.json > output/json_diff/output1.txt
@@ -319,21 +302,6 @@ test.trim_tsv: | output/trim_tsv
 test.tsv_to_json: tsv_to_json/test.tsv | output/tsv_to_json
 	$(ve) && ./data_tools/tsv_to_json.py $< > output/tsv_to_json/test.tsv_to_json.json
 
-# doesn't pass with Ruby 1.8:
-#
-.PHONY: test.utf8_viewer
-test.utf8_viewer: | output/utf8_viewer
-	-ruby -e '(0..255).each { |i| print i.chr }' \
-	| ./data_tools/utf8_viewer.rb -bc \
-	> output/utf8_viewer/bytes.bcr.out
-	diff test/utf8_viewer/expected.bytes.bcr.out output/utf8_viewer/bytes.bcr.out
-	#
-	./data_tools/utf8_viewer.rb -a 33 34 35 > output/utf8_viewer/arg.decimal.out
-	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.decimal.out
-	#
-	./data_tools/utf8_viewer.rb -a 041 042 043 > output/utf8_viewer/arg.octal.out
-	diff test/utf8_viewer/expected.arg.out output/utf8_viewer/arg.octal.out
-
 .PHONY: test.xlsx_to_csv
 test.xlsx_to_csv: xlsx_to_csv/test.xlsx | output/xlsx_to_csv
 	$(ve) && ./data_tools/xlsx_to_csv.py --list $< > output/xlsx_to_csv/list.out
@@ -361,21 +329,10 @@ python_harnesses := $(patsubst %,test.%,$(python_base))
 .PHONY: python.harness
 python.harness: $(python_harnesses)
 
-ruby_base := json_ruby utf8_viewer
-ruby_harnesses := $(patsubst %,test.%,$(ruby_base))
-
 shell.harness: test.check_tsv test.json_diff test.tsv_header
-
-.PHONY: ruby.harness
-ruby.harness: $(ruby_harnesses)
 
 .PHONY: test.harness
 test.harness: python.harness shell.harness
-
-.PHONY: rubocop
-rubocop: $(GEM_HOME)
-	find data_tools -name '*.rb' \
-	  | GEM_HOME=$(GEM_HOME) xargs $(GEM_HOME)/bin/rubocop -c .rubocop.yml
 
 .PHONY: pep8
 pep8: ve
