@@ -15,13 +15,6 @@ pwd := $(shell pwd)
 src := $(pwd)/src
 VPATH = test
 
-.PHONY: setup.python
-setup.python:
-	pip3 install -r requirements.txt
-
-.PHONY: setup
-setup: ve setup.python
-
 ve := . ve/bin/activate
 
 ve:
@@ -44,8 +37,11 @@ json-pluck:
 tab-to-csv:
 	(cd src/$@; make)
 
+.PHONY: build.c
+build.c: utf8-script csv-to-tab tab-to-csv json-pluck
+
 .PHONY: build
-build: ve utf8-script csv-to-tab tab-to-csv json-pluck
+build: ve build.c
 
 # To generate the man pages `pandoc` must be installed.  On Mac go to
 #
@@ -69,15 +65,19 @@ $(local_man1_dir):
 	mkdir -p $@
 
 .PHONY: install-script
-install-script:
-	./setup.py install
+install.script:
+	./setup.py sdist
 
 .PHONY: install-c
-install-c: build
-	echo 'NOT IMPLEMENTED: install-c'
+install.c: build.c
+	cp src/csv-to-tab/csv-to-tab $(LOCAL_INSTALL_DIR)
+	cp src/json-pluck/json-pluck $(LOCAL_INSTALL_DIR)
+	cp src/tab-to-csv/tab-to-csv $(LOCAL_INSTALL_DIR)
+	cp src/utf8-script/utf8-category $(LOCAL_INSTALL_DIR)
+	cp src/utf8-script/utf8-script $(LOCAL_INSTALL_DIR)
 
 .PHONY: install-man
-install-man: $(local_man1_dir)
+install.man: $(local_man1_dir)
 	if [ ! -d $(LOCAL_MAN_DIR)/man1 ]; then \
 	echo directory does not exist: $(LOCAL_MAN_DIR)/man1; \
 	false; \
@@ -88,19 +88,24 @@ install-man: $(local_man1_dir)
 	done
 
 .PHONY: install
-install: install-c install-script install-man
+install:
+	@echo
+	@echo 'To install Python and Bash scripts:'
+	@echo
+	@echo '   $$ ./setup.py sdist'
+	@echo '   $$ pip3 install dist/data-tools-0.1.0.tar.gz'
+	@echo
+	@echo 'To install C tools:'
+	@echo
+	@echo '   $$ make install.c'
+	@echo
+	@echo 'To install man pages:'
+	@echo
+	@echo '   $$ make install.man'
+	@echo
 
 .PHONY: all
-all: build
-	@echo
-	@echo 'To install Python packages:'
-	@echo
-	@echo '   $$ sudo make setup'
-	@echo
-	@echo 'To install data tools and man pages:'
-	@echo
-	@echo '   $$ make install'
-	@echo
+all: install
 
 output:
 	mkdir -p $@

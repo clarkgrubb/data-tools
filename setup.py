@@ -27,7 +27,7 @@ def build():
 scripts = []
 if sys.platform != 'win32':
     build()
-    scripts = SHELL_TOOLS + C_TOOLS
+    scripts = SHELL_TOOLS
 
 setup(
     name='data-tools',
