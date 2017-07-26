@@ -38,8 +38,6 @@ Command line tools for data extraction, data manipulation, and file format conve
 
     json-pluck             convert JSON array to JSON stream
 
-    json-ruby              read JSON objects from standard input and process them with Ruby
-
     json-diff              show differences between two JSON documents
 
     normalize-utf8         write UTF-8 encoded input to standard out in normalized form
@@ -86,12 +84,20 @@ Only tools which read from standard input or write to standard output can partic
 
 # SETUP
 
-If `gcc`, `python3` and `pip3` are install on your system, then this should work:
+`python3`, `pip3` and `gcc` are required.
 
-    $ git clone https://github.com/clarkgrubb/data-tools.git
-    $ cd data-tools
-    $ make setup
-    $ make install
+To install Python and Bash scripts:
+
+    $ ./setup.py sdist
+    $ pip3 install dist/data-tools-0.1.0.tar.gz
+
+To install C tools:
+
+    $ make install.c
+
+To install man pages:
+
+    $ make install.man
 
 <a name="how-to-run"/>
 
@@ -126,8 +132,6 @@ If `gcc`, `python3` and `pip3` are install on your system, then this should work
     join-tsv               -c NAME [-l|-r|-f] [-n VALUE] TSV_FILE1 TSV_FILE2
 
     json-pluck             < FILE
-
-    json-ruby              [-j|-t] [-i] (-f SCRIPT_FILE | SCRIPT) [JSON_FILE] ...
 
     json-diff              [DIFF_OPTIONS] JSON_FILE1 JSON_FILE2
 
