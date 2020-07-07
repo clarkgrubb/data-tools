@@ -5,15 +5,6 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-scripts_url := http://unicode.org/Public/UNIDATA/Scripts.txt
-unicode_data_url := ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
-
-Scripts.txt:
-	curl $(scripts_url) > $@
-
-UnicodeData.txt:
-	curl $(unicode_data_url) > $@
-
 utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate_script.rb $^ > $@
 
