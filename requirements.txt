@@ -3,5 +3,5 @@ html5lib==0.999999999
 openpyxl==2.4.5
 pep8==1.7.0
 pylint==1.6.5
-PyYAML==3.12
+PyYAML==5.4
 xlrd==1.0.0
