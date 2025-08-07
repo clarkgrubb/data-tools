@@ -920,7 +920,7 @@ can be replaced with:
       "address.state": "VA"
     }
 
-Use plural names for keys when the values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
+Consider using plural names for keys whose values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
 
     ["123 Main", "Jamestown", "VA"]
     
