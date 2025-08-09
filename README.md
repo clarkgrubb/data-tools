@@ -998,7 +998,7 @@ JSON objects can be used to represent a row of relational data:
       "state": "MA"
     }
 
-XML provides at least two different ways to do the same thing:
+XML seems to provide at least two different ways to do the same thing:
 
     <address street="123 Main" city="Jamestown" state="MA"/>
     
@@ -1007,6 +1007,8 @@ XML provides at least two different ways to do the same thing:
       <city>Jamestown</city>
       <state>MA</state>
     </address>
+
+A potential difficulty is that JSON allows the keys of objects to be arbitrary strings, whereas XML tag names and attribute names cannot contain any of the characters `` !"#$%&'()*+,/;<=>?@[\]^`{|}~``. Furthermore they cannot begin with a hyphen, period, or numeric digit.
 
 To check whether an XML file is *well-formed*, use:
 
