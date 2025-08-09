@@ -958,7 +958,27 @@ This can also be used to verify that YAML is valid.
 
 ## html
 
-TODO: a replacement for `dom-ruby`.
+[CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors) can be provided to `pup` to extract parts of an HTML document:
+
+    $ brew install pup
+
+    $ curl https://google.com | pup a                                            
+    <a href="https://www.google.com/">
+     here
+    </a>
+
+When used without an arguments, `pup` cleans up the HTML and prints it with a configurable amount of indentation:
+
+    $ echo '<html><body><p>Hello</p></body></html>' | pup --indent 4                               
+    <html>
+        <head>
+        </head>
+        <body>
+            <p>
+                Hello
+            </p>
+        </body>
+    </html>
 
 To extract the content of an HTML table from an HTML document:
 
