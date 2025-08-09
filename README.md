@@ -990,18 +990,6 @@ The `-t` flag specifies which table to extract. By default the first table, numb
 
 ## xml
 
-To check whether an XML file is well-formed, use:
-
-    $ xmllint FILE.xml
-
-To pretty-print XML:
-
-    $ xmllint --format FILE.xml
-
-XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document.
-
-Another advantage is schemas.  However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated.  Libraries such as `libxml2` don't implement namespaces completely.
-
 XML provides two different ways for representing relational data:
 
     <address street="123 Main" city="Jamestown" state="MA"/>
@@ -1011,3 +999,31 @@ XML provides two different ways for representing relational data:
       <city>Jamestown</city>
       <state>MA</state>
     </address>
+
+To check whether an XML file is well-formed, use:
+
+    $ xmllint FILE.xml
+
+To pretty-print XML:
+
+    $ xmllint --format FILE.xml
+
+To extract an element using an [XPath](https://developer.mozilla.org/en-US/docs/Web/XML/XPath) expression:
+
+    $ cat <<EOF > books2.xml
+    <books>
+        <book id="1" category="linux">
+            <title lang="en">Linux Device Drivers</title>
+            <author>Jonathan Corbet</author>
+        </book>
+        <book id="4" category="novel">
+            <title lang="fr">The Little Prince</title>
+            <author>Antoine de Saint-Exupéry</author>
+        </book>
+    </books>
+    EOF
+
+    $ xmllint --xpath "//title[@lang='fr']" books2.xml
+    <title lang="fr">The Little Prince</title>
+
+XML has schemas. However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated. Libraries such as libxml2 don't implement namespaces completely.
