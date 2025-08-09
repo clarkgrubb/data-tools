@@ -930,6 +930,20 @@ for
     
 This forces the client to determine the meaning of the positions and hard code those positions in code.
 
+The [JSON Schema](https://json-schema.org/) standard can be used make sure that JSON is as expected:
+
+    $ brew install check-jsonschema
+
+    $ echo '{"type": "object", "required": ["id"]}' > schema.json
+
+    $ echo '[1,2,3]' | check-jsonschema --schemafile schema.json -
+    Schema validation errors were encountered.
+      -::$: [1, 2, 3] is not of type 'object'
+
+    $ echo '{"foo": 3}' | check-jsonschema --schemafile schema.json -
+    Schema validation errors were encountered.
+      -::$: 'id' is a required property
+
 <a name="yaml"/>
 
 ## yaml
