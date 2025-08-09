@@ -930,7 +930,7 @@ for
     
 This forces the client to determine the meaning of the positions and hard code those positions in code.
 
-The [JSON Schema](https://json-schema.org/) standard can be used make sure that JSON is as expected:
+The [JSON Schema](https://json-schema.org/) standard can be used make sure that JSON data is as expected:
 
     $ brew install check-jsonschema
 
