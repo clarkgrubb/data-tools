@@ -811,7 +811,7 @@ Usually a join condition is a test of equality between one or more columns from 
 
     > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name;
 
-Usually, the columns should be a candidate key for either the left or the right relation.  Consider the following perverse query:
+Typically it is an error condition if the join columns for neither the left nor the right relation are a candidate key. Consider the following perverse query:
     
     > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.name = o.customer_name GROUP BY c.name;
 
