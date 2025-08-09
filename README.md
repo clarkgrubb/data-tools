@@ -969,7 +969,7 @@ This can also be used to verify that YAML is valid.
 
 When used without an arguments, `pup` cleans up the HTML and prints it with a configurable amount of indentation:
 
-    $ echo '<html><body><p>Hello</p></body></html>' | pup --indent 4                               
+    $ echo '<html><body><p>Hello' | pup --indent 4                               
     <html>
         <head>
         </head>
