@@ -997,11 +997,11 @@ XML seems to provide at least two different ways to do the same thing:
       <state>MA</state>
     </address>
 
-A potential difficulty is that JSON allows the keys of objects to be arbitrary strings, whereas XML tag names and attribute names cannot contain any of the characters `` !"#$%&'()*+,/;<=>?@[\]^`{|}~``. Furthermore they cannot begin with a hyphen, period, or numeric digit.
+When converting JSON to XML, a potential difficulty is that JSON allows the keys of objects to be arbitrary strings, whereas XML tag names and attribute names cannot contain any of the characters `` !"#$%&'()*+,/;<=>?@[\]^`{|}~``. Furthermore they cannot begin with a hyphen, period, or numeric digit.
 
-In JSON strings, the double quote and backslash characters must be escaped with ``\"`` and ``\\`` sequences.
+In JSON strings, the double quote `"` and backslash `\` characters must be escaped with ``\"`` and ``\\`` sequences.
 
-In XML, the greater than, less than, and ampersand characters must be escaped with ``&gt;``, ``&lt;``, and ``&amp;``. But there is no way to escape these characters in tag names and attribute names.
+In XML, the greater than `>`, less than `<`, and ampersand `&` characters must be escaped with ``&gt;``, ``&lt;``, and ``&amp;``. But there is no way to escape these characters in tag names and attribute names.
 
 To check whether an XML file is *well-formed*, use:
 
