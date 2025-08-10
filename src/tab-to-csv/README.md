@@ -8,7 +8,7 @@ TSV format: [IANA](https://www.iana.org/assignments/media-types/text/tab-separat
 
 CSV format: [RFC 4180](https://tools.ietf.org/html/rfc4180).
 
-One goal of this code is to never produce invalid input.  That is, the output should always be in CSV format.
+One goal of this code is to never produce invalid output.  That is, the output should always be in CSV format.
 
 According to RFC 4180, CSV files use CRLF for EOL.
 
