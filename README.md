@@ -880,13 +880,9 @@ There are some practices which producers of JSON should follow to reduce the com
 
 When processing JSON, a first task might be to determine what the top level keys in each object are: 
 
-    $ cat foo.json | json-ruby 'puts $_.keys.join("\n")' | sort | uniq -c
+    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'keys | .[]' | sort | uniq -c
 
-This code assumes that the top level keys don't contain newlines.  One could check whether this is true:
-
-    $ cat foo.json | json-ruby 'puts $_.keys.select {|k| /\n/.match(k)}'
-
-The value associated with each key can be null, boolean, numeric, string, array, or JSON object.  The value associated with a key should have a consistent type in all of the data.  As a point of style, rather than having a key with a null value, consider omitting the key entirely.
+The value associated with each key can be null, boolean, numeric, string, array, or JSON object. As a point of style, rather than having a key with a null value, consider omitting the key entirely. Processing multiple JSON objects will be easier if the values associated with a key all have the same type.   
 
 This code lists the top level keys and their values:
 
