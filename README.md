@@ -872,17 +872,9 @@ Other tools for pretty printing JSON are `jq` and `json` which can be installed 
 
 The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
 
-The *data tools* utility `json-ruby` can be used to convert JSON to TSV.
+The utility `jq` can be used to convert JSON to TSV.
 
-    $ json-ruby 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
-
-The script passed to `json-ruby` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-ruby` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
-
-An alternative to `python -mjson.tool` and `json-ruby` is the `node` based `json` command line tool:
-
-    $ npm install json
-
-    $ echo '{"foo": 1, "bar": 2, "baz": [1,2,3]}' | json
+    $ echo '["foo", "bar", "baz"]' | jq -r 'join("\t")'
 
 There are some practices which producers of JSON should follow to reduce the complexity of the client.
 
