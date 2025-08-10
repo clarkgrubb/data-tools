@@ -876,19 +876,17 @@ The utility `jq` can be used to convert JSON to TSV.
 
     $ echo '["foo", "bar", "baz"]' | jq -r 'join("\t")'
 
-There are some practices which producers of JSON should follow to reduce the complexity of the client.
-
 When processing JSON, a first task might be to determine what the top level keys in each object are: 
 
     $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'keys | .[]' | sort | uniq -c
-
-The value associated with each key can be null, boolean, numeric, string, array, or JSON object. As a point of style, rather than having a key with a null value, consider omitting the key entirely. Processing multiple JSON objects will be easier if the values associated with a key all have the same type.   
-
+  
 This code lists the top level keys and their values:
 
-    $ cat foo.json | json-ruby 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
+    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'to_entries | .[] | to_entries | map(.value) | join("\t")'
 
 If any key has a JSON object as a value, then the above analysis must be repeated.  Note that such data can be flattened:
+
+The following two JSON objects contain the same information:
 
     {
       "name": "John Smith",
@@ -899,24 +897,27 @@ If any key has a JSON object as a value, then the above analysis must be repeate
       }
     }
 
-can be replaced with:
-
     {
       "name": "John Smith",
-      "address.street": "123 Main",
-      "address.city": "Jamestown",
-      "address.state": "VA"
+      "address_street": "123 Main",
+      "address_city": "Jamestown",
+      "address_state": "VA"
     }
 
-Consider using plural names for keys whose values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
+If you want to insert the data into a database table, the second version might be preferred. Here is how to make the conversion with `jq`:
 
-    ["123 Main", "Jamestown", "VA"]
-    
-for
-    
-    {"street": "123 Main", "city": "Jamestown", "state": "VA"}
-    
-This forces the client to determine the meaning of the positions and hard code those positions in code.
+    $ cat <<EOF > embedded.json
+    {
+      "name": "John Smith",
+      "address": {
+        "street": "123 Main",
+        "city": "Jamestown",
+        "state": "VA"
+      }
+    }
+    EOF
+
+    $ cat embedded.json | jq '[paths(scalars) as $p | { "key": $p | join("_"), "value": getpath($p)}] | from_entries'
 
 The [JSON Schema](https://json-schema.org/) standard can be used make sure that JSON data is as expected:
 
