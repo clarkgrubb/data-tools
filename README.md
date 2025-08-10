@@ -880,11 +880,20 @@ When processing JSON, a first task might be to determine what the top level keys
 
     $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'keys | .[]' | sort | uniq -c
   
-This code lists the top level keys and their values:
+This command lists the top level keys and their values:
 
-    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'to_entries | .[] | to_entries | map(.value) | join("\t")'
+    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'to_entries | .[] | [.key, .value] | join("\t")'  
+    foo	1
+    bar	2
+    foo	1
+    baz	3
 
-If any key has a JSON object as a value, then the above analysis must be repeated.  Note that such data can be flattened:
+The command counts how often top level keys are used with values of a certain type:
+
+    $ echo $'{"foo":1,"bar":2}\n{"foo":"one","bar":3}' | jq -r 'to_entries | .[] | [.key, (.value | type)] | join("\t")' | sort | uniq -c
+    2 bar	number
+    1 foo	number
+    1 foo	string
 
 The following two JSON objects contain the same information:
 
