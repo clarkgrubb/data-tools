@@ -936,7 +936,7 @@ The [JSON Schema](https://json-schema.org/) standard can be used make sure that 
 
 ## yaml
 
-To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
+To process YAML, convert it to JSON and use tools such as `jq` and `json`:
 
     $ yaml-to-json .travis.yml | jq '.script'
 
