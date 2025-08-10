@@ -942,6 +942,10 @@ The [JSON Schema](https://json-schema.org/) standard can be used make sure that 
     Schema validation errors were encountered.
       -::$: 'id' is a required property
 
+Producers of JSON can follow some guidelines to make the data easier to understand and process. Although arrays can be used for tuples of data, objects will be clearer since the elements will be labled. Having arrays always contain elements of the same type, and having the value associated with a given key in a JSON object always have the same type will make the code that consumes the JSON simpler.
+
+JSON objects can be used for both mappings which are inherent in the data, such as an actual dictionary where the keys are the words and the values are definitions of the words. The more typical case is where the object represents a tuple of data and the keys are names chosen by the developer. In this case, following good practices in regards to naming will make the data easier to understand. Using plural nouns for keys whose values are arrays will provide a strong hint to the consumer what the type of the value is.
+
 <a name="yaml"/>
 
 ## yaml
@@ -983,10 +987,6 @@ To extract the content of an HTML table from an HTML document:
     $ curl 'http://hyperpolyglot.org/scripting' | html-table-to-csv -t 0
 
 The `-t` flag specifies which table to extract. By default the first table, numbered 0, is extracted.
-
-Producers of JSON can follow some guidelines to make the data easier to understand and process. Although arrays can be used for tuples of data, objects will be clearer since the elements will be labled. Having arrays always contain elements of the same type, and having the value associated with a given key in a JSON object always have the same type will make the code that consumes the JSON simpler.
-
-JSON objects can be used for both mappings which are inherent in the data, such as an actual dictionary where the keys are the words and the values are definitions of the words. The more typical case is where the object represents a tuple of data and the keys are names chosen by the developer. In this case, following good practices in regards to naming will make the data easier to understand. Using plural nouns for keys whose values are arrays will provide a strong hint to the consumer what the type of the value is.
 
 <a name="xml"/>
 
