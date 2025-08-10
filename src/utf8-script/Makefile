@@ -11,7 +11,7 @@ utf8_script.c: Scripts.txt utf8_script.c.erb
 utf8-script: utf8_script.c
 	gcc -O2 -o $@ $<
 
-utf8_category.c: UnicodeData.txt utf8_category.c.erb
+utf8_category.c: utf8_category.c.erb
 	./generate_category.rb $^ > $@
 
 utf8-category: utf8_category.c
@@ -57,7 +57,7 @@ clean.build:
 
 .PHONY: clean.generate
 clean.generate:
-	rm utf8_script.c utf8_category.c Scripts.txt UnicodeData.txt
+	rm utf8_script.c utf8_category.c Scripts.txt
 
 .PHONY: clean
 clean: clean.test
