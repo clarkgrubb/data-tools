@@ -86,8 +86,10 @@ Only tools which read from standard input or write to standard output can partic
 
 `python3`, `pip3` and `gcc` are required.
 
-To install Python and Bash scripts:
+To install Python and Bash scripts in a virtual environment:
 
+    $ virtualenv ve
+    $ . ve/bin/activate
     $ git clone git@github.com:clarkgrubb/data-tools.git
     $ cd data-tools
     $ pip3 install -r requirements.txt
