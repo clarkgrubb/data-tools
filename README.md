@@ -946,6 +946,8 @@ Producers of JSON should give some thought to making the data easier to understa
 
 JSON objects can be used for both mappings which are inherent in the data, such as an actual dictionary where the keys are the words and the values are definitions of the words. The more typical case is where the object represents a tuple of data and the keys are names chosen by the developer. In this case, following good practices in regards to naming will make the data easier to understand. Using plural nouns for keys whose values are arrays will provide a strong hint to the consumer what the type of the value is.
 
+Some clients treat a key with a null value and the absense of the key the same. That is, if the client looks up the value for a key in an object and the key isn't present, a null is returned. For this reason, the producer could opt to simply omit keys with null values and keep the data concise. Other clients might treat the two situations differently, but the code might not handle one of the situations correctly. In this case consistency on the part of the producer can result in simpler code and fewer bugs in the consumer.
+
 <a name="yaml"/>
 
 ## yaml
