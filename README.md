@@ -89,7 +89,7 @@ Only tools which read from standard input or write to standard output can partic
 To install Python and Bash scripts:
 
     $ virualenv ve
-    $ . ve/bin/acitvate
+    $ . ve/bin/activate
     $  pip install -r requirements.txt
     $ ./setup.py sdist
     $ pip install  dist/data_tools-0.1.0.tar.gz
