@@ -84,7 +84,7 @@ Only tools which read from standard input or write to standard output can partic
 
 # SETUP
 
-`python3`, `pip3` and `gcc` are required.
+`python3`, `pip3`, `virtualenv`, and `gcc` are required.
 
 To install Python and Bash scripts in a virtual environment:
 
