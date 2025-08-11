@@ -84,12 +84,17 @@ Only tools which read from standard input or write to standard output can partic
 
 # SETUP
 
-`python3`, `pip3` and `gcc` are required.
+`python3`, `pip3`, `virtualenv`, and `gcc` are required.
 
-To install Python and Bash scripts:
+To install Python and Bash scripts in a virtual environment:
 
+    $ virtualenv ve
+    $ . ve/bin/activate
+    $ git clone git@github.com:clarkgrubb/data-tools.git
+    $ cd data-tools
+    $ pip3 install -r requirements.txt
     $ ./setup.py sdist
-    $ pip install dist/data-tools-0.1.0.tar.gz
+    $ pip3 install  dist/data_tools-0.1.0.tar.gz
 
 To install C tools:
 
@@ -624,7 +629,7 @@ The tool `xls-to-csv` is available for converting the older (pre 2007) Excel spr
 
 The tool `csv-to-xlsx` is available for creating XLSX workbooks.  Each CSV file on the command line becomes a worksheet in the workbook.  The worksheet names are derived from the CSV file names; see the man page for details.
 
-Importing UTF-8 encoded data into Excel is not effortless. What I have found to work is to convert the data to a tab delimited `.tab` format, but change the suffix to `.txt` since otherwise Excel will not allow the path to be selected.  Then use `File | Import...` and select `Text file`.  After the file path is selected, Excel drops the user into a wizard which allows the format of the file to be specified. The default file origin on Macintosh is `Macintosh`, which is an 8-bit encoding.  Change it to `Unicode (UTF-8)`.  Select `Delimited`.  One the second screen, set `Delimiters` to `Tab`, and `Text qualifier`, which controls to quote character, to `{none}`.  The optional third screen allows the user to set the date formats of the columns.
+Importing UTF-8 encoded data into Excel is not effortless. What I have found to work is to convert the data to a tab delimited `.tab` format, but change the suffix to `.txt` since otherwise Excel will not allow the path to be selected.  Then use `File | Import...` and select `Text file`.  After the file path is selected, Excel drops the user into a wizard which allows the format of the file to be specified. The default file origin on Macintosh is `Macintosh`, which is an 8-bit encoding.  Change it to `Unicode (UTF-8)`.  Select `Delimited`.  On the second screen, set `Delimiters` to `Tab`, and `Text qualifier`, which controls to quote character, to `{none}`.  The optional third screen allows the user to set the date formats of the columns.
 
 <a name="joins"/>
 
@@ -811,7 +816,7 @@ Usually a join condition is a test of equality between one or more columns from 
 
     > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name;
 
-Usually, the columns should be a candidate key for either the left or the right relation.  Consider the following perverse query:
+Typically it is an error condition if the join columns for neither the left nor the right relation are a candidate key. Consider the following perverse query:
     
     > SELECT c.name, sum(o.amount) FROM customers c JOIN orders o ON c.name = o.customer_name GROUP BY c.name;
 
@@ -872,35 +877,30 @@ Other tools for pretty printing JSON are `jq` and `json` which can be installed 
 
 The `json-diff` script uses `python -mjson.tool` and `diff` to compare two JSON documents.
 
-The *data tools* utility `json-ruby` can be used to convert JSON to TSV.
+The utility `jq` can be used to convert JSON to TSV.
 
-    $ json-ruby 'BEGIN{ puts ["foo", "bar", "baz"].join("\t")}; puts [$_["foo"], $_["bar"], $_["baz"]].join("\t")' < dump.json
-
-The script passed to `json-ruby` is Ruby.  The JSON is parsed, and the data is stored in the `$_` variable.  If the input is a MongoDB style export with one JSON object per line, then `json-ruby` iterates over the file in an awk-like manner, setting the `$_` variable to each object in turn.
-
-An alternative to `python -mjson.tool` and `json-ruby` is the `node` based `json` command line tool:
-
-    $ npm install json
-
-    $ echo '{"foo": 1, "bar": 2, "baz": [1,2,3]}' | json
-
-There are some practices which producers of JSON should follow to reduce the complexity of the client.
+    $ echo '["foo", "bar", "baz"]' | jq -r 'join("\t")'
 
 When processing JSON, a first task might be to determine what the top level keys in each object are: 
 
-    $ cat foo.json | json-ruby 'puts $_.keys.join("\n")' | sort | uniq -c
+    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'keys | .[]' | sort | uniq -c
+  
+This command lists the top level keys and their values:
 
-This code assumes that the top level keys don't contain newlines.  One could check whether this is true:
+    $ echo $'{"foo":1,"bar":2}\n{"foo":1,"baz":3}' | jq -r 'to_entries | .[] | [.key, .value] | join("\t")'  
+    foo	1
+    bar	2
+    foo	1
+    baz	3
 
-    $ cat foo.json | json-ruby 'puts $_.keys.select {|k| /\n/.match(k)}'
+The command counts how often top level keys are used with values of a certain type:
 
-The value associated with each key can be null, boolean, numeric, string, array, or JSON object.  The value associated with a key should have a consistent type in all of the data.  As a point of style, rather than having a key with a null value, consider omitting the key entirely.
+    $ echo $'{"foo":1,"bar":2}\n{"foo":"one","bar":3}' | jq -r 'to_entries | .[] | [.key, (.value | type)] | join("\t")' | sort | uniq -c
+    2 bar	number
+    1 foo	number
+    1 foo	string
 
-This code lists the top level keys and their values:
-
-    $ cat foo.json | json-ruby 'puts $_.keys.map {|k| k + " " + $_[k].class.to_s}.join("\n")' | sort | uniq -c
-
-If any key has a JSON object as a value, then the above analysis must be repeated.  Note that such data can be flattened:
+The following two JSON objects contain the same information:
 
     {
       "name": "John Smith",
@@ -911,30 +911,53 @@ If any key has a JSON object as a value, then the above analysis must be repeate
       }
     }
 
-can be replaced with:
-
     {
       "name": "John Smith",
-      "address.street": "123 Main",
-      "address.city": "Jamestown",
-      "address.state": "VA"
+      "address_street": "123 Main",
+      "address_city": "Jamestown",
+      "address_state": "VA"
     }
 
-Use plural names for keys when the values are arrays.  The values in an array should have the same type.  One can imagine using an array as a shortcut for a JSON object, e.g.:
+If you want to insert the data into a database table, the second version might be preferred. Here is how to make the conversion with `jq`:
 
-    ["123 Main", "Jamestown", "VA"]
-    
-for
-    
-    {"street": "123 Main", "city": "Jamestown", "state": "VA"}
-    
-This forces the client to determine the meaning of the positions and hard code those positions in code.
+    $ cat <<EOF > embedded.json
+    {
+      "name": "John Smith",
+      "address": {
+        "street": "123 Main",
+        "city": "Jamestown",
+        "state": "VA"
+      }
+    }
+    EOF
+
+    $ cat embedded.json | jq '[paths(scalars) as $p | { "key": $p | join("_"), "value": getpath($p)}] | from_entries'
+
+The [JSON Schema](https://json-schema.org/) standard can be used make sure that JSON data is as expected:
+
+    $ brew install check-jsonschema
+
+    $ echo '{"type": "object", "required": ["id"]}' > schema.json
+
+    $ echo '[1,2,3]' | check-jsonschema --schemafile schema.json -
+    Schema validation errors were encountered.
+      -::$: [1, 2, 3] is not of type 'object'
+
+    $ echo '{"foo": 3}' | check-jsonschema --schemafile schema.json -
+    Schema validation errors were encountered.
+      -::$: 'id' is a required property
+
+Producers of JSON should give some thought to making the data easier to understand and process. Arrays can be used for tuples of data, but objects will be clearer since the elements will be labeled. Having arrays contain elements of the same type will make the code that consumes the JSON simpler. Similarly, if the values associated with a key in an array of JSON objects is always the same, the code that consumes them will be simpler.
+
+JSON objects can be used for both mappings which are inherent in the data, such as an actual dictionary where the keys are the words and the values are definitions of the words. The more typical case is where the object represents a tuple of data and the keys are names chosen by the developer. In this case, following good practices in regards to naming will make the data easier to understand. Using plural nouns for keys whose values are arrays will provide a strong hint to the consumer what the type of the value is.
+
+Some clients treat a key with a null value and the absense of the key the same. That is, if the client looks up the value for a key in an object and the key isn't present, a null is returned. For this reason, the producer could opt to simply omit keys with null values and keep the data concise. Other clients might treat the two situations differently, but the code might not handle one of the situations correctly. In this case consistency on the part of the producer can result in simpler code and fewer bugs in the consumer.
 
 <a name="yaml"/>
 
 ## yaml
 
-To process YAML, convert it to JSON and use tools such as `json-ruby`, `jq` and `json`:
+To process YAML, convert it to JSON and use tools such as `jq` and `json`:
 
     $ yaml-to-json .travis.yml | jq '.script'
 
@@ -944,7 +967,27 @@ This can also be used to verify that YAML is valid.
 
 ## html
 
-TODO: a replacement for `dom-ruby`.
+[CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors) can be provided to `pup` to extract parts of an HTML document:
+
+    $ brew install pup
+
+    $ curl https://google.com | pup a                                            
+    <a href="https://www.google.com/">
+     here
+    </a>
+
+When used without arguments, `pup` cleans up the HTML and prints it with a configurable amount of indentation:
+
+    $ echo '<html><body><p>Hello' | pup --indent 4                               
+    <html>
+        <head>
+        </head>
+        <body>
+            <p>
+                Hello
+            </p>
+        </body>
+    </html>
 
 To extract the content of an HTML table from an HTML document:
 
@@ -956,19 +999,15 @@ The `-t` flag specifies which table to extract. By default the first table, numb
 
 ## xml
 
-To check whether an XML file is well-formed, use:
+JSON objects can be used to represent a row of relational data:
 
-    $ xmllint FILE.xml
+    {
+      "street": "123 Main",
+      "city": "Jamestwon",
+      "state": "MA"
+    }
 
-To pretty-print XML:
-
-    $ xmllint --format FILE.xml
-
-XML has some advantages over JSON.  One is XPATH, which can be used to extract data from deep within a document.
-
-Another advantage is schemas.  However, the move from DTDs to XML schemas means one must deal with namespaces, which are complicated.  Libraries such as `libxml2` don't implement namespaces completely.
-
-XML provides two different ways for representing relational data:
+XML seems to provide at least two different ways to do the same thing:
 
     <address street="123 Main" city="Jamestown" state="MA"/>
     
@@ -977,3 +1016,37 @@ XML provides two different ways for representing relational data:
       <city>Jamestown</city>
       <state>MA</state>
     </address>
+
+When converting JSON to XML, a potential difficulty is that JSON allows the keys of objects to be arbitrary strings, whereas XML tag names and attribute names cannot contain any of the characters ``! "#$%&'()*+,/;<=>?@[\]^`{|}~``. Furthermore they cannot begin with a hyphen, period, or numeric digit.
+
+In JSON strings, the double quote `"` and backslash `\` characters must be escaped with ``\"`` and ``\\`` sequences.
+
+In XML, the greater than `>`, less than `<`, and ampersand `&` characters must be escaped with ``&gt;``, ``&lt;``, and ``&amp;``. But there is no way to escape these characters in tag names and attribute names.
+
+To check whether an XML file is *well-formed*, use:
+
+    $ xmllint FILE.xml
+
+To pretty-print XML:
+
+    $ xmllint --format FILE.xml
+
+To extract an element using an [XPath](https://developer.mozilla.org/en-US/docs/Web/XML/XPath) expression:
+
+    $ cat <<EOF > books2.xml
+    <books>
+        <book id="1" category="linux">
+            <title lang="en">Linux Device Drivers</title>
+            <author>Jonathan Corbet</author>
+        </book>
+        <book id="4" category="novel">
+            <title lang="fr">The Little Prince</title>
+            <author>Antoine de Saint-Exupéry</author>
+        </book>
+    </books>
+    EOF
+
+    $ xmllint --xpath "//title[@lang='fr']" books2.xml
+    <title lang="fr">The Little Prince</title>
+
+XML has schemas and an XML document is *valid* if it conforms to one. However, the move from DTDs to XML schemas means one must deal with namespaces which are complicated. Libraries such as libxml2 don't implement namespaces completely.

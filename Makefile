@@ -92,6 +92,8 @@ install:
 	@echo
 	@echo 'To install Python and Bash scripts:'
 	@echo
+	@echo '   $$ virtualenv ve'
+	@echo '   $$ . ve/bin/activate'
 	@echo '   $$ ./setup.py sdist'
 	@echo '   $$ pip3 install dist/data-tools-0.1.0.tar.gz'
 	@echo

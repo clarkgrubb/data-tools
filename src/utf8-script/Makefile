@@ -5,22 +5,13 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-scripts_url := http://unicode.org/Public/UNIDATA/Scripts.txt
-unicode_data_url := ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
-
-Scripts.txt:
-	curl $(scripts_url) > $@
-
-UnicodeData.txt:
-	curl $(unicode_data_url) > $@
-
 utf8_script.c: Scripts.txt utf8_script.c.erb
 	./generate_script.rb $^ > $@
 
 utf8-script: utf8_script.c
 	gcc -O2 -o $@ $<
 
-utf8_category.c: UnicodeData.txt utf8_category.c.erb
+utf8_category.c: utf8_category.c.erb
 	./generate_category.rb $^ > $@
 
 utf8-category: utf8_category.c
@@ -66,7 +57,7 @@ clean.build:
 
 .PHONY: clean.generate
 clean.generate:
-	rm utf8_script.c utf8_category.c Scripts.txt UnicodeData.txt
+	rm utf8_script.c utf8_category.c Scripts.txt
 
 .PHONY: clean
 clean: clean.test

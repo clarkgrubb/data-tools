@@ -1,7 +1,8 @@
-beautifulsoup4==4.5.3
-html5lib==0.999999999
+beautifulsoup4==4.13.4
+html5lib==1.1
+lxml==6.0.0
 openpyxl==2.4.5
 pep8==1.7.0
 pylint==1.6.5
-PyYAML==3.12
+PyYAML==6.0.2
 xlrd==1.0.0
