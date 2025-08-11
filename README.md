@@ -1011,7 +1011,7 @@ When converting JSON to XML, a potential difficulty is that JSON allows the keys
 
 In JSON strings, the double quote `"` and backslash `\` characters must be escaped with ``\"`` and ``\\`` sequences.
 
-In XML, the greater than `>`, less than `<`, and ampersand `&` characters must be escaped with ``&gt;``, ``&lt;``, and ``&amp;``. But there is no way to escape these characters in tag names and attribute names.
+In XML, the greater than `>`, less than `<`, and ampersand `&` characters must be escaped with ``&gt;``, ``&lt;``, and ``&amp;``. But again there is no way to escape these characters in tag names and attribute names.
 
 To check whether an XML file is *well-formed*, use:
 
