@@ -215,11 +215,11 @@ To get a list of supported encodings:
 
 Not all sequences of bytes are valid UTF-8; the *data tools* throw exceptions when invalid bytes are encountered.  A drastic way to deal with the problem is to strip the invalid bytes:
 
-    $ iconv -c -f UTF-8 -t UTF-8 < INPUT_FILE > OUTPUT_FILE
+    $ printf 'bad bytes: \ud835\n' | iconv -c -f UTF-8 -t UTF-8
 
 This command strips all non-ASCII characters:
 
-    $ iconv -c -f UTF-8 -t ASCII < INPUT_FILE > OUTPUT_FILE
+    $ echo 'αλφα alpha' | iconv -cs -f UTF-8 -t ASCII
 
 Here is a way to find non-ASCII bytes:
 
