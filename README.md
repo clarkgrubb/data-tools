@@ -202,6 +202,7 @@ The *data tools* expect and produce UTF-8 encoded data.  8-bit encoded ASCII is 
 
 Use `iconv` to convert a file in a different encoding:
 
+    $ echo あ | iconv -f UTF-8 -t UTF-16 > foo.utf16.txt
     $ iconv -t UTF-8 -f UTF-16 foo.utf16.txt > foo.utf8.txt
 
 To get a list of supported encodings:
