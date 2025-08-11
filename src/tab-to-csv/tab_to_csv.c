@@ -37,6 +37,7 @@ write_wchars(wchar_t buf[], size_t start, size_t end, bool escape,
   }
 }
 
+
 int tab_to_csv(FILE *input_stream, bool unescape_char) {
   wchar_t ch;
   wchar_t buf[BUFSIZE];
@@ -46,7 +47,8 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
   bool open_field = true;
   bool last_char_backslash = false;
 
- while ((ch = fgetwc(input_stream)) != WEOF) {
+  while ((ch = fgetwc(input_stream)) != WEOF) {
+
     switch(ch) {
 
     case L'\\':
@@ -58,7 +60,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
             escape_field = true;
             write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
             open_field = false;
-            write_i = i;
+            write_i = i = 0;
           }
         }
         buf[IDX(i)] = L'\\';
@@ -67,7 +69,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
           escape_field = true;
           write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
           open_field = false;
-          write_i = i;
+          write_i = i = 0;
         }
       }
       last_char_backslash = !last_char_backslash;
@@ -76,7 +78,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
     case L'\t':
       write_wchars(buf, write_i, i - 1, escape_field, open_field, true);
       putwchar(L',');
-      write_i = i;
+      write_i = i = 0;
       open_field = true;
       escape_field = false;
       break;
@@ -85,7 +87,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
       write_wchars(buf, write_i, i - 1, escape_field, open_field, true);
       putwchar(L'\r');
       putwchar(L'\n');
-      write_i = i;
+      write_i = i = 0;
       open_field = true;
       escape_field = false;
       break;
@@ -100,7 +102,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
           escape_field = true;
           write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
           open_field = false;
-          write_i = i;
+          write_i = i = 0;
         }
         buf[IDX(i)] = L't';
       }
@@ -113,7 +115,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
         escape_field = true;
         write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
         open_field = false;
-        write_i = i;
+        write_i = i = 0;
       }
       break;
 
@@ -129,7 +131,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
           escape_field = true;
           write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
           open_field = false;
-          write_i = i;
+          write_i = i = 0;
         }
         buf[IDX(i)] = L'n';
       }
@@ -142,7 +144,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
         escape_field = true;
         write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
         open_field = false;
-        write_i = i;
+        write_i = i = 0;
       }
       break;
 
@@ -158,7 +160,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
           escape_field = true;
           write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
           open_field = false;
-          write_i = i;
+          write_i = i = 0;
         }
         buf[IDX(i)] = L'r';
       }
@@ -171,7 +173,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
         escape_field = true;
         write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
         open_field = false;
-        write_i = i;
+        write_i = i = 0;
       }
       break;
 
@@ -192,7 +194,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
             escape_field = true;
             write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
             open_field = false;
-            write_i = i;
+            write_i = i = 0;
           }
         }
       }
@@ -202,7 +204,7 @@ int tab_to_csv(FILE *input_stream, bool unescape_char) {
         escape_field = true;
         write_wchars(buf, write_i, i - 1, escape_field, open_field, false);
         open_field = false;
-        write_i = i;
+        write_i = i = 0;
       }
     }
   }
