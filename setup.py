@@ -55,7 +55,7 @@ setup(
             'counting-sort = data_tools.counting_sort:main',
             'csv-to-xlsx = data_tools.csv_to_xlsx:main',
             'data-fill = data_tools.data_fill:main',
-            'date-seq = data_tools.data_seq:main',
+            'date-seq = data_tools.date_seq:main',
             'highlight = data_tools.highlight:main',
             'html-table-to-csv = data_tools.html_table_to_csv:main',
             'join-tsv = data_tools.join_tsv:main',
