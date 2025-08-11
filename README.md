@@ -96,6 +96,12 @@ To install Python and Bash scripts in a virtual environment:
     $ ./setup.py sdist
     $ pip3 install  dist/data_tools-0.1.0.tar.gz
 
+To install `utf8-viewer`:
+
+    $ git clone git@github.com:clarkgrubb/utf8-viewer.git
+    $ cd utf8-viewer
+    $ make install
+
 To install C tools:
 
     $ make install.c
