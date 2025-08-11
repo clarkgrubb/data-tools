@@ -180,7 +180,7 @@ To install man pages:
 
 <a name="plaintext"/><a name="txt"/>
 
-# PLAIN TEXT: .TXT
+# PLAIN TEXT
 
 *Plain text* is a sequence of bytes which use an encoding to represent printable characters.
 
