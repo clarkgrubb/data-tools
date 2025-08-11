@@ -221,19 +221,6 @@ This command strips all non-ASCII characters:
 
     $ echo 'αλφα alpha' | iconv -cs -f UTF-8 -t ASCII
 
-Here is a way to find non-ASCII bytes:
-
-    $ grep --color='auto' -P -n "[\x80-\xFF]+"
-
-The `-P` option is not provided by the version of `grep` distributed with Mac OS X.  One can use the `highlight` command in this repo:
-
-    $ highlight '[\x80-\xFF]+'
-
-To find the first occurrence of bytes which are not valid UTF-8, use `iconv`:
-
-    $ iconv -f utf-8 -t utf-8 < /bin/ls > /dev/null
-    iconv: illegal input sequence at position 24
-
 `utf8-viewer` will render invalid UTF-8 bytes with black squares.  The black square is itself a Unicode character (U+25A0), so there is ambiguity.  The Unicode points are displayed next to the rendered characters, however, and the point will be ---- for invalid characters.
 
     $ utf8-viewer /bin/ls
